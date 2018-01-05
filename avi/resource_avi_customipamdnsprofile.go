@@ -52,7 +52,6 @@ func resourceAviCustomIpamDnsProfile() *schema.Resource {
 func ResourceAviCustomIpamDnsProfileRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceCustomIpamDnsProfileSchema()
 	err := ApiRead(d, meta, "customipamdnsprofile", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

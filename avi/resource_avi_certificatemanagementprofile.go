@@ -52,7 +52,6 @@ func resourceAviCertificateManagementProfile() *schema.Resource {
 func ResourceAviCertificateManagementProfileRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceCertificateManagementProfileSchema()
 	err := ApiRead(d, meta, "certificatemanagementprofile", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

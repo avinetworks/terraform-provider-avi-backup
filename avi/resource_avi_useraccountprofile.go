@@ -64,7 +64,6 @@ func resourceAviUserAccountProfile() *schema.Resource {
 func ResourceAviUserAccountProfileRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceUserAccountProfileSchema()
 	err := ApiRead(d, meta, "useraccountprofile", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

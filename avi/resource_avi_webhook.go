@@ -55,7 +55,6 @@ func resourceAviWebhook() *schema.Resource {
 func ResourceAviWebhookRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceWebhookSchema()
 	err := ApiRead(d, meta, "webhook", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

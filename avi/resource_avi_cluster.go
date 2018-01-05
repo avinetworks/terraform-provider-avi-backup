@@ -61,7 +61,6 @@ func resourceAviCluster() *schema.Resource {
 func ResourceAviClusterRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceClusterSchema()
 	err := ApiRead(d, meta, "cluster", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

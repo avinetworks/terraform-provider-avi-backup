@@ -58,7 +58,6 @@ func resourceAviCloudProperties() *schema.Resource {
 func ResourceAviCloudPropertiesRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceCloudPropertiesSchema()
 	err := ApiRead(d, meta, "cloudproperties", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

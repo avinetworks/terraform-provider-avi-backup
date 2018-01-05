@@ -262,7 +262,6 @@ func resourceAviControllerProperties() *schema.Resource {
 func ResourceAviControllerPropertiesRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceControllerPropertiesSchema()
 	err := ApiRead(d, meta, "controllerproperties", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

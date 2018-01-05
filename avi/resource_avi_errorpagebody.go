@@ -47,7 +47,6 @@ func resourceAviErrorPageBody() *schema.Resource {
 func ResourceAviErrorPageBodyRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceErrorPageBodySchema()
 	err := ApiRead(d, meta, "errorpagebody", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

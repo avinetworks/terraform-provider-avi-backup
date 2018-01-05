@@ -60,7 +60,6 @@ func resourceAviTenant() *schema.Resource {
 func ResourceAviTenantRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceTenantSchema()
 	err := ApiRead(d, meta, "tenant", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

@@ -105,7 +105,6 @@ func resourceAviServerAutoScalePolicy() *schema.Resource {
 func ResourceAviServerAutoScalePolicyRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceServerAutoScalePolicySchema()
 	err := ApiRead(d, meta, "serverautoscalepolicy", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

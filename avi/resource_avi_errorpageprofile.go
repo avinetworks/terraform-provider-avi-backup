@@ -63,7 +63,6 @@ func resourceAviErrorPageProfile() *schema.Resource {
 func ResourceAviErrorPageProfileRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceErrorPageProfileSchema()
 	err := ApiRead(d, meta, "errorpageprofile", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

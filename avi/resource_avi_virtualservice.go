@@ -355,7 +355,6 @@ func resourceAviVirtualService() *schema.Resource {
 func ResourceAviVirtualServiceRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceVirtualServiceSchema()
 	err := ApiRead(d, meta, "virtualservice", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

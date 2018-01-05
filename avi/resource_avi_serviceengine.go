@@ -114,7 +114,6 @@ func resourceAviServiceEngine() *schema.Resource {
 func ResourceAviServiceEngineRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceServiceEngineSchema()
 	err := ApiRead(d, meta, "serviceengine", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

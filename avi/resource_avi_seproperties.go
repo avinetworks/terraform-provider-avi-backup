@@ -59,7 +59,6 @@ func resourceAviSeProperties() *schema.Resource {
 func ResourceAviSePropertiesRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceSePropertiesSchema()
 	err := ApiRead(d, meta, "seproperties", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

@@ -57,7 +57,6 @@ func resourceAviGslbGeoDbProfile() *schema.Resource {
 func ResourceAviGslbGeoDbProfileRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceGslbGeoDbProfileSchema()
 	err := ApiRead(d, meta, "gslbgeodbprofile", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

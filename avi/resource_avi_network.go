@@ -81,7 +81,6 @@ func resourceAviNetwork() *schema.Resource {
 func ResourceAviNetworkRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceNetworkSchema()
 	err := ApiRead(d, meta, "network", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

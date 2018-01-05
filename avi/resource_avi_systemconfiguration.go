@@ -140,7 +140,6 @@ func resourceAviSystemConfiguration() *schema.Resource {
 func ResourceAviSystemConfigurationRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceSystemConfigurationSchema()
 	err := ApiRead(d, meta, "systemconfiguration", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

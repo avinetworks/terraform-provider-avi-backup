@@ -563,7 +563,6 @@ func resourceAviServiceEngineGroup() *schema.Resource {
 func ResourceAviServiceEngineGroupRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceServiceEngineGroupSchema()
 	err := ApiRead(d, meta, "serviceenginegroup", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

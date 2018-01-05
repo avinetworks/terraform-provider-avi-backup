@@ -60,7 +60,6 @@ func resourceAviWafProfile() *schema.Resource {
 func ResourceAviWafProfileRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceWafProfileSchema()
 	err := ApiRead(d, meta, "wafprofile", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

@@ -84,7 +84,6 @@ func resourceAviIpAddrGroup() *schema.Resource {
 func ResourceAviIpAddrGroupRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceIpAddrGroupSchema()
 	err := ApiRead(d, meta, "ipaddrgroup", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

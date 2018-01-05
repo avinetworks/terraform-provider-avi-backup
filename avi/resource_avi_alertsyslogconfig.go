@@ -52,7 +52,6 @@ func resourceAviAlertSyslogConfig() *schema.Resource {
 func ResourceAviAlertSyslogConfigRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceAlertSyslogConfigSchema()
 	err := ApiRead(d, meta, "alertsyslogconfig", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

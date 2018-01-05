@@ -56,7 +56,6 @@ func resourceAviDnsPolicy() *schema.Resource {
 func ResourceAviDnsPolicyRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceDnsPolicySchema()
 	err := ApiRead(d, meta, "dnspolicy", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

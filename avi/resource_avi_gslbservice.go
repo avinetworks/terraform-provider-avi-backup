@@ -131,7 +131,6 @@ func resourceAviGslbService() *schema.Resource {
 func ResourceAviGslbServiceRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceGslbServiceSchema()
 	err := ApiRead(d, meta, "gslbservice", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

@@ -128,7 +128,6 @@ func resourceAviHealthMonitor() *schema.Resource {
 func ResourceAviHealthMonitorRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceHealthMonitorSchema()
 	err := ApiRead(d, meta, "healthmonitor", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

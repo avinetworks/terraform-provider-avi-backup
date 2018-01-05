@@ -67,7 +67,6 @@ func resourceAviCloudConnectorUser() *schema.Resource {
 func ResourceAviCloudConnectorUserRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceCloudConnectorUserSchema()
 	err := ApiRead(d, meta, "cloudconnectoruser", s)
-	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
 	return err
 }
 

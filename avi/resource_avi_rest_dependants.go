@@ -354,36 +354,16 @@ func ResourceDisableSeMigrateEventDetailsSchema() *schema.Resource {
 	}
 }
 
-func ResourceMetricThresoldUpDetailsSchema() *schema.Resource {
+func ResourceAlertFilterSchema() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"current_value": &schema.Schema{
-				Type:     schema.TypeFloat,
-				Optional: true,
-			},
-			"entity_uuid": &schema.Schema{
+			"filter_action": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"metric_id": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"metric_name": &schema.Schema{
+			"filter_string": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
-			},
-			"pool_uuid": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"server": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"threshold": &schema.Schema{
-				Type:     schema.TypeFloat,
-				Optional: true,
 			},
 		},
 	}
@@ -2814,25 +2794,36 @@ func ResourcePoolDeploymentSuccessInfoSchema() *schema.Resource {
 	}
 }
 
-func ResourceVIDCInfoSchema() *schema.Resource {
+func ResourceMetricThresoldUpDetailsSchema() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"managed_object_id": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
+			"current_value": &schema.Schema{
+				Type:     schema.TypeFloat,
+				Optional: true,
 			},
-			"name": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"tenant_ref": &schema.Schema{
+			"entity_uuid": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"uuid": &schema.Schema{
+			"metric_id": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
-				Computed: true,
+			},
+			"metric_name": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"pool_uuid": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"server": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"threshold": &schema.Schema{
+				Type:     schema.TypeFloat,
+				Optional: true,
 			},
 		},
 	}
@@ -4953,6 +4944,30 @@ func ResourceIpAddrPortSchema() *schema.Resource {
 			"port": &schema.Schema{
 				Type:     schema.TypeInt,
 				Required: true,
+			},
+		},
+	}
+}
+
+func ResourceVIDCInfoSchema() *schema.Resource {
+	return &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"managed_object_id": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"name": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"tenant_ref": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"uuid": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
 			},
 		},
 	}
@@ -11722,50 +11737,6 @@ func ResourceSchedulerActionDetailsSchema() *schema.Resource {
 	}
 }
 
-func ResourceMetricsQueryResponseSchema() *schema.Resource {
-	return &schema.Resource{
-		Schema: map[string]*schema.Schema{
-			"entity_uuid": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"id": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"limit": &schema.Schema{
-				Type:     schema.TypeInt,
-				Required: true,
-			},
-			"metric_entity": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"metric_id": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"series": &schema.Schema{
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem:     ResourceMetricsDataSeriesSchema(),
-			},
-			"start": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"step": &schema.Schema{
-				Type:     schema.TypeInt,
-				Required: true,
-			},
-			"stop": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
-			},
-		},
-	}
-}
-
 func ResourceDNSConfigurationSchema() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
@@ -15791,21 +15762,6 @@ func ResourceCloudDnsUpdateSchema() *schema.Resource {
 			"vtype": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
-			},
-		},
-	}
-}
-
-func ResourceAlertFilterSchema() *schema.Resource {
-	return &schema.Resource{
-		Schema: map[string]*schema.Schema{
-			"filter_action": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"filter_string": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
 			},
 		},
 	}
@@ -21885,6 +21841,50 @@ func ResourceNetworkSecurityMatchTargetSchema() *schema.Resource {
 				Set: func(v interface{}) int {
 					return 0
 				},
+			},
+		},
+	}
+}
+
+func ResourceMetricsQueryResponseSchema() *schema.Resource {
+	return &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"entity_uuid": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"id": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"limit": &schema.Schema{
+				Type:     schema.TypeInt,
+				Required: true,
+			},
+			"metric_entity": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"metric_id": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"series": &schema.Schema{
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem:     ResourceMetricsDataSeriesSchema(),
+			},
+			"start": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"step": &schema.Schema{
+				Type:     schema.TypeInt,
+				Required: true,
+			},
+			"stop": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
 			},
 		},
 	}
