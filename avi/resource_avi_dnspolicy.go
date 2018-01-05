@@ -55,25 +55,9 @@ func resourceAviDnsPolicy() *schema.Resource {
 
 func ResourceAviDnsPolicyRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceDnsPolicySchema()
-	client := meta.(*clients.AviClient)
-	var obj interface{}
-	if uuid, ok := d.GetOk("uuid"); ok {
-		path := "api/dnspolicy/" + uuid.(string)
-		err := client.AviSession.Get(path, &obj)
-		if err != nil {
-			d.SetId("")
-			return nil
-		}
-	} else {
-		d.SetId("")
-		return nil
-	}
-	if _, err := ApiDataToSchema(obj, d, s); err == nil {
-		if err != nil {
-			log.Printf("[ERROR] in setting read object %v\n", err)
-		}
-	}
-	return nil
+	err := ApiRead(d, meta, "dnspolicy", s)
+	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
+	return err
 }
 
 func resourceAviDnsPolicyCreate(d *schema.ResourceData, meta interface{}) error {

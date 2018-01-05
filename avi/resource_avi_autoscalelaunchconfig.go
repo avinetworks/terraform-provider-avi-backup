@@ -71,25 +71,9 @@ func resourceAviAutoScaleLaunchConfig() *schema.Resource {
 
 func ResourceAviAutoScaleLaunchConfigRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceAutoScaleLaunchConfigSchema()
-	client := meta.(*clients.AviClient)
-	var obj interface{}
-	if uuid, ok := d.GetOk("uuid"); ok {
-		path := "api/autoscalelaunchconfig/" + uuid.(string)
-		err := client.AviSession.Get(path, &obj)
-		if err != nil {
-			d.SetId("")
-			return nil
-		}
-	} else {
-		d.SetId("")
-		return nil
-	}
-	if _, err := ApiDataToSchema(obj, d, s); err == nil {
-		if err != nil {
-			log.Printf("[ERROR] in setting read object %v\n", err)
-		}
-	}
-	return nil
+	err := ApiRead(d, meta, "autoscalelaunchconfig", s)
+	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
+	return err
 }
 
 func resourceAviAutoScaleLaunchConfigCreate(d *schema.ResourceData, meta interface{}) error {

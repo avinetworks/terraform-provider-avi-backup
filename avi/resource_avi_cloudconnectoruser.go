@@ -66,25 +66,9 @@ func resourceAviCloudConnectorUser() *schema.Resource {
 
 func ResourceAviCloudConnectorUserRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceCloudConnectorUserSchema()
-	client := meta.(*clients.AviClient)
-	var obj interface{}
-	if uuid, ok := d.GetOk("uuid"); ok {
-		path := "api/cloudconnectoruser/" + uuid.(string)
-		err := client.AviSession.Get(path, &obj)
-		if err != nil {
-			d.SetId("")
-			return nil
-		}
-	} else {
-		d.SetId("")
-		return nil
-	}
-	if _, err := ApiDataToSchema(obj, d, s); err == nil {
-		if err != nil {
-			log.Printf("[ERROR] in setting read object %v\n", err)
-		}
-	}
-	return nil
+	err := ApiRead(d, meta, "cloudconnectoruser", s)
+	log.Printf("[DEBUG] data read as %v uuid %v id %v\n", d.Get("name"), d.Get("uuid"), d.Id())
+	return err
 }
 
 func resourceAviCloudConnectorUserCreate(d *schema.ResourceData, meta interface{}) error {
