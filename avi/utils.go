@@ -6,12 +6,13 @@
 package avi
 
 import (
-	"github.com/avinetworks/sdk/go/clients"
-	"github.com/hashicorp/terraform/helper/hashcode"
-	"github.com/hashicorp/terraform/helper/schema"
 	"log"
 	"reflect"
 	"strings"
+
+	"github.com/avinetworks/sdk/go/clients"
+	"github.com/hashicorp/terraform/helper/hashcode"
+	"github.com/hashicorp/terraform/helper/schema"
 )
 
 func SchemaToAviData(d interface{}, s map[string]*schema.Schema) (interface{}, error) {
@@ -217,7 +218,8 @@ func ApiRead(d *schema.ResourceData, meta interface{}, objType string, s map[str
 }
 
 func ResourceImporter(d *schema.ResourceData, meta interface{}, objType string, s map[string]*schema.Schema) ([]*schema.ResourceData, error) {
-	if d.Id() != "" {
+	// Import only one object until `all` is explicitly specified
+	if d.Id() != "all" {
 		// return the ID based import
 		return []*schema.ResourceData{d}, nil
 	}
