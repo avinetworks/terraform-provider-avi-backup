@@ -99,9 +99,19 @@ func ApiDataToSchema(adata interface{}, d *schema.ResourceData, t map[string]*sc
 				if _, ok := t[k]; ok {
 					// found in the schema
 					if obj, err := ApiDataToSchema(v, nil, nil); err == nil {
-						err := d.Set(k, obj)
-						if err != nil {
-							log.Print("ApiDataToSchema err %v in setting %v", err, obj)
+						if object, ok := obj.(float64); ok {
+							obj = int(object)
+						}
+						if t[k].Default != nil && t[k].Default == obj {
+							err := d.Set(k, obj)
+							if err != nil {
+								log.Print("ApiDataToSchema err %v in setting %v", err, obj)
+							}
+						} else if t[k].Optional {
+							err := d.Set(k, obj)
+							if err != nil {
+								log.Print("ApiDataToSchema err %v in setting %v", err, obj)
+							}
 						}
 					}
 				}
@@ -249,10 +259,16 @@ func ResourceImporter(d *schema.ResourceData, meta interface{}, objType string, 
 				url = strings.SplitN(url, "#", 2)[0]
 				result.SetId(url)
 				result.Set("uuid", uuid)
+				log.Println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+				log.Println("index and result is ", index, result)
+				log.Println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 				result.SetType("avi_" + objType)
 				results[index] = result
 			}
 		}
+		log.Println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+		log.Println("result is ", results)
+		log.Println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 		return results, nil
 	}
 	return nil, nil
