@@ -6,12 +6,13 @@
 package avi
 
 import (
-	"github.com/avinetworks/sdk/go/clients"
-	"github.com/hashicorp/terraform/helper/hashcode"
-	"github.com/hashicorp/terraform/helper/schema"
 	"log"
 	"reflect"
 	"strings"
+
+	"github.com/avinetworks/sdk/go/clients"
+	"github.com/hashicorp/terraform/helper/hashcode"
+	"github.com/hashicorp/terraform/helper/schema"
 )
 
 func SchemaToAviData(d interface{}, s map[string]*schema.Schema) (interface{}, error) {
@@ -71,16 +72,21 @@ func CommonHash(v interface{}) int {
 	return hashcode.String("avi")
 }
 
-func ApiDataToSchema(adata interface{}, d *schema.ResourceData, t map[string]*schema.Schema) (interface{}, error) {
+func ApiDataToSchema(adata interface{}, d *schema.ResourceData, t map[string]*schema.Schema, key interface{}) (interface{}, error) {
+	// converting api data to tf schema
+	log.Println("%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+	log.Println("Value of adata is ", adata, "=>", reflect.TypeOf(adata))
+	log.Println("%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 	switch adata.(type) {
 	default:
 	case map[string]interface{}:
 		// resolve d interface into a set
-		if t == nil {
+		if key == nil {
+			log.Println("INTO NIL FIRST")
 			var m map[string]interface{}
 			m = map[string]interface{}{}
 			for k, v := range adata.(map[string]interface{}) {
-				if obj, err := ApiDataToSchema(v, nil, nil); err == nil {
+				if obj, err := ApiDataToSchema(v, d, t, nil); err == nil {
 					m[k] = obj
 				} else if err != nil {
 					log.Printf("Error in converting k: %v v: %v", k, v)
@@ -94,13 +100,29 @@ func ApiDataToSchema(adata interface{}, d *schema.ResourceData, t map[string]*sc
 			//s.Add(m)
 			return s, nil
 		} else {
+			log.Println("INTO ELSE NIL ")
 			for k, v := range adata.(map[string]interface{}) {
 				if _, ok := t[k]; ok {
 					// found in the schema
-					if obj, err := ApiDataToSchema(v, nil, nil); err == nil {
-						err := d.Set(k, obj)
-						if err != nil {
-							log.Print("ApiDataToSchema err %v in setting %v", err, obj)
+					if obj, err := ApiDataToSchema(v, nil, nil, 1); err == nil {
+						// set only if not equal default &
+						if object, ok := obj.(float64); ok {
+							obj = int(object)
+						}
+						switch obj.(type) {
+						case []interface{}:
+							ApiDataToSchema(obj, d, t, k)
+						default:
+							log.Println("Key & Default & optional : ", k, "=>", t[k].Default, " => ", t[k].Optional, "=%>", d.Get(k))
+							if t[k].Default != nil && t[k].Optional && t[k].Default == obj || t[k].Optional && d.Get(k) != obj {
+								log.Println("SKIPPED : ", k, " => ", obj)
+							} else {
+								log.Println("******** Setting OBj ******* ", obj)
+								err := d.Set(k, obj)
+								if err != nil {
+									log.Printf("ApiDataToSchema err %v in setting %v", err, obj)
+								}
+							}
 						}
 					}
 				}
@@ -108,22 +130,51 @@ func ApiDataToSchema(adata interface{}, d *schema.ResourceData, t map[string]*sc
 			return d, nil
 		}
 	case []interface{}:
+		log.Println("INTO CASE INTERFACE")
 		var objList []interface{}
 		varray := adata.([]interface{})
 		for i := 0; i < len(varray); i++ {
-			obj, err := ApiDataToSchema(varray[i], nil, nil)
-			if err == nil {
-				switch obj.(type) {
-				default:
-					objList = append(objList, obj)
-				case *schema.Set:
-					objList = append(objList, obj.(*schema.Set).List()[0])
+			log.Println("$$$$$$$$ Varray value ====> ", varray[i], " @ ", reflect.TypeOf(varray[i]))
+			switch varray[i].(type) {
+			case map[string]interface{}:
+				log.Println("######### Mapped inside", varray[i])
+				obj, err := ApiDataToSchema(varray[i], d, t, nil)
+				log.Println("&&&& VAL of VARRAY IS ", obj)
+				if err == nil {
+					switch obj.(type) {
+					case *schema.Set:
+						objList = append(objList, obj.(*schema.Set).List()[0])
+					default:
+						objList = append(objList, obj)
+					}
+				}
+			default:
+				log.Println("######### Mapped default ", varray[i])
+				obj, err := ApiDataToSchema(varray[i], d, t, 1)
+				log.Println("&&&& VAL of VARRAY IS ", obj)
+				if err == nil {
+					switch obj.(type) {
+					case *schema.Set:
+						objList = append(objList, obj.(*schema.Set).List()[0])
+					default:
+						objList = append(objList, obj)
+					}
 				}
 			}
 		}
+		log.Println("^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+		log.Println("Other val is  ", adata, "->", reflect.TypeOf(adata))
+		log.Println("^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+		log.Println("Obj LIST is ", objList)
+		log.Println("^^^^^^^^^^^^^^^^^^^^^^^^^^^")
 		return objList, nil
 		/** Return the same object as there is nothing special about **/
+		// default:
 	}
+	log.Println("~~~~~~~~~~~~~~")
+	log.Println("ALL DATA IS ", adata)
+	log.Println("~~~~~~~~~~~~~~")
+
 	return adata, nil
 }
 
@@ -194,7 +245,7 @@ func ApiRead(d *schema.ResourceData, meta interface{}, objType string, s map[str
 		log.Printf("[ERROR] application profile not found %v\n", d.Get("uuid"))
 		return nil
 	}
-	if _, err := ApiDataToSchema(obj, d, s); err == nil {
+	if _, err := ApiDataToSchema(obj, d, s, 1); err == nil {
 		url := obj.(map[string]interface{})["url"].(string)
 		uuid := obj.(map[string]interface{})["uuid"].(string)
 		url = strings.SplitN(url, "#", 2)[0]
