@@ -34,6 +34,10 @@ func ResourceCloudConnectorUserSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Required: true,
 		},
+		"password": &schema.Schema{
+			Type:     schema.TypeString,
+			Optional: true,
+		},
 		"private_key": &schema.Schema{
 			Type:     schema.TypeString,
 			Optional: true,

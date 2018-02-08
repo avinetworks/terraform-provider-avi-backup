@@ -6,11 +6,10 @@
 package avi
 
 import (
-	"log"
-	"strings"
-
 	"github.com/avinetworks/sdk/go/clients"
 	"github.com/hashicorp/terraform/helper/schema"
+	"log"
+	"strings"
 )
 
 func ResourceNetworkSchema() map[string]*schema.Schema {
@@ -57,10 +56,6 @@ func ResourceNetworkSchema() map[string]*schema.Schema {
 			Type:     schema.TypeBool,
 			Optional: true,
 			Default:  true,
-		},
-		"vimgrnw_ref": &schema.Schema{
-			Type:     schema.TypeString,
-			Optional: true,
 		},
 		"vrf_context_ref": &schema.Schema{
 			Type:     schema.TypeString,
