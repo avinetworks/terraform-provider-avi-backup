@@ -8,6 +8,7 @@ package avi
 import (
 	"github.com/avinetworks/sdk/go/clients"
 	"github.com/hashicorp/terraform/helper/schema"
+	"strings"
 )
 
 func ResourceUserAccountSchema() map[string]*schema.Schema {
@@ -58,6 +59,14 @@ func ResourceAviUserAccountRead(d *schema.ResourceData, meta interface{}) error 
 }
 
 func resourceAviUserAccountCreate(d *schema.ResourceData, meta interface{}) error {
+	if strings.Compare(d.Get("old_password").(string), d.Get("password").(string)) == 0 {
+		return nil
+	}
+	err := resourceAviUserAccountUpdate(d, meta)
+	return err
+}
+
+func resourceAviUserAccountUpdate(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceUserAccountSchema()
 	var err error
 	client := meta.(*clients.AviClient)
@@ -68,10 +77,6 @@ func resourceAviUserAccountCreate(d *schema.ResourceData, meta interface{}) erro
 		err = client.AviSession.Put(path, data, &robj)
 	}
 	return err
-}
-
-func resourceAviUserAccountUpdate(d *schema.ResourceData, meta interface{}) error {
-	return nil
 }
 
 func resourceAviUserAccountDelete(d *schema.ResourceData, meta interface{}) error {

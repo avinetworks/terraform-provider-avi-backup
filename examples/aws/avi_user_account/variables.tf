@@ -12,8 +12,8 @@ variable "avi_username" {
   default = "admin"
 }
 
-variable "avi_old_password" {}
+variable "avi_current_password" {}
 
-variable "avi_password" {}
+variable "avi_new_password" {}
 
 variable "project_name" {}
