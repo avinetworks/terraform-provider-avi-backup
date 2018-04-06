@@ -19,11 +19,6 @@ func ResourcePoolGroupDeploymentPolicySchema() map[string]*schema.Schema {
 			Optional: true,
 			Default:  true,
 		},
-		"cloud_ref": &schema.Schema{
-			Type:     schema.TypeString,
-			Optional: true,
-			Default:  "/api/cloud?name=Default-Cloud",
-		},
 		"description": &schema.Schema{
 			Type:     schema.TypeString,
 			Optional: true,
@@ -111,7 +106,8 @@ func resourceAviPoolGroupDeploymentPolicyCreate(d *schema.ResourceData, meta int
 
 func resourceAviPoolGroupDeploymentPolicyUpdate(d *schema.ResourceData, meta interface{}) error {
 	s := ResourcePoolGroupDeploymentPolicySchema()
-	err := ApiCreateOrUpdate(d, meta, "poolgroupdeploymentpolicy", s)
+	var err error
+	err = ApiCreateOrUpdate(d, meta, "poolgroupdeploymentpolicy", s)
 	if err == nil {
 		err = ResourceAviPoolGroupDeploymentPolicyRead(d, meta)
 	}
@@ -120,12 +116,15 @@ func resourceAviPoolGroupDeploymentPolicyUpdate(d *schema.ResourceData, meta int
 
 func resourceAviPoolGroupDeploymentPolicyDelete(d *schema.ResourceData, meta interface{}) error {
 	objType := "poolgroupdeploymentpolicy"
+	if ApiDeleteSystemDefaultCheck(d) {
+		return nil
+	}
 	client := meta.(*clients.AviClient)
 	uuid := d.Get("uuid").(string)
 	if uuid != "" {
 		path := "api/" + objType + "/" + uuid
 		err := client.AviSession.Delete(path)
-		if err != nil && !(strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "204")) {
+		if err != nil && !(strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "204") || strings.Contains(err.Error(), "403")) {
 			log.Println("[INFO] resourceAviPoolGroupDeploymentPolicyDelete not found")
 			return err
 		}

@@ -82,7 +82,8 @@ func resourceAviPriorityLabelsCreate(d *schema.ResourceData, meta interface{}) e
 
 func resourceAviPriorityLabelsUpdate(d *schema.ResourceData, meta interface{}) error {
 	s := ResourcePriorityLabelsSchema()
-	err := ApiCreateOrUpdate(d, meta, "prioritylabels", s)
+	var err error
+	err = ApiCreateOrUpdate(d, meta, "prioritylabels", s)
 	if err == nil {
 		err = ResourceAviPriorityLabelsRead(d, meta)
 	}
@@ -91,12 +92,15 @@ func resourceAviPriorityLabelsUpdate(d *schema.ResourceData, meta interface{}) e
 
 func resourceAviPriorityLabelsDelete(d *schema.ResourceData, meta interface{}) error {
 	objType := "prioritylabels"
+	if ApiDeleteSystemDefaultCheck(d) {
+		return nil
+	}
 	client := meta.(*clients.AviClient)
 	uuid := d.Get("uuid").(string)
 	if uuid != "" {
 		path := "api/" + objType + "/" + uuid
 		err := client.AviSession.Delete(path)
-		if err != nil && !(strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "204")) {
+		if err != nil && !(strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "204") || strings.Contains(err.Error(), "403")) {
 			log.Println("[INFO] resourceAviPriorityLabelsDelete not found")
 			return err
 		}

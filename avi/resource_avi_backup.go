@@ -88,7 +88,8 @@ func resourceAviBackupCreate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceAviBackupUpdate(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceBackupSchema()
-	err := ApiCreateOrUpdate(d, meta, "backup", s)
+	var err error
+	err = ApiCreateOrUpdate(d, meta, "backup", s)
 	if err == nil {
 		err = ResourceAviBackupRead(d, meta)
 	}
@@ -97,12 +98,15 @@ func resourceAviBackupUpdate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceAviBackupDelete(d *schema.ResourceData, meta interface{}) error {
 	objType := "backup"
+	if ApiDeleteSystemDefaultCheck(d) {
+		return nil
+	}
 	client := meta.(*clients.AviClient)
 	uuid := d.Get("uuid").(string)
 	if uuid != "" {
 		path := "api/" + objType + "/" + uuid
 		err := client.AviSession.Delete(path)
-		if err != nil && !(strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "204")) {
+		if err != nil && !(strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "204") || strings.Contains(err.Error(), "403")) {
 			log.Println("[INFO] resourceAviBackupDelete not found")
 			return err
 		}

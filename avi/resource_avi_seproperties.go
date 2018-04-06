@@ -84,7 +84,8 @@ func resourceAviSePropertiesCreate(d *schema.ResourceData, meta interface{}) err
 
 func resourceAviSePropertiesUpdate(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceSePropertiesSchema()
-	err := ApiCreateOrUpdate(d, meta, "seproperties", s)
+	var err error
+	err = ApiCreateOrUpdate(d, meta, "seproperties", s)
 	if err == nil {
 		err = ResourceAviSePropertiesRead(d, meta)
 	}
@@ -93,12 +94,15 @@ func resourceAviSePropertiesUpdate(d *schema.ResourceData, meta interface{}) err
 
 func resourceAviSePropertiesDelete(d *schema.ResourceData, meta interface{}) error {
 	objType := "seproperties"
+	if ApiDeleteSystemDefaultCheck(d) {
+		return nil
+	}
 	client := meta.(*clients.AviClient)
 	uuid := d.Get("uuid").(string)
 	if uuid != "" {
 		path := "api/" + objType + "/" + uuid
 		err := client.AviSession.Delete(path)
-		if err != nil && !(strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "204")) {
+		if err != nil && !(strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "204") || strings.Contains(err.Error(), "403")) {
 			log.Println("[INFO] resourceAviSePropertiesDelete not found")
 			return err
 		}

@@ -102,7 +102,8 @@ func resourceAviPKIProfileCreate(d *schema.ResourceData, meta interface{}) error
 
 func resourceAviPKIProfileUpdate(d *schema.ResourceData, meta interface{}) error {
 	s := ResourcePKIProfileSchema()
-	err := ApiCreateOrUpdate(d, meta, "pkiprofile", s)
+	var err error
+	err = ApiCreateOrUpdate(d, meta, "pkiprofile", s)
 	if err == nil {
 		err = ResourceAviPKIProfileRead(d, meta)
 	}
@@ -111,12 +112,15 @@ func resourceAviPKIProfileUpdate(d *schema.ResourceData, meta interface{}) error
 
 func resourceAviPKIProfileDelete(d *schema.ResourceData, meta interface{}) error {
 	objType := "pkiprofile"
+	if ApiDeleteSystemDefaultCheck(d) {
+		return nil
+	}
 	client := meta.(*clients.AviClient)
 	uuid := d.Get("uuid").(string)
 	if uuid != "" {
 		path := "api/" + objType + "/" + uuid
 		err := client.AviSession.Delete(path)
-		if err != nil && !(strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "204")) {
+		if err != nil && !(strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "204") || strings.Contains(err.Error(), "403")) {
 			log.Println("[INFO] resourceAviPKIProfileDelete not found")
 			return err
 		}
