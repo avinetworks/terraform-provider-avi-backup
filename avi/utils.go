@@ -19,7 +19,7 @@ import (
 func SchemaToAviData(d interface{}, s map[string]*schema.Schema) (interface{}, error) {
 	switch d.(type) {
 	default:
-		log.Printf("[INFO] SchemaToAviData: resource d: %v(%v)", d, reflect.TypeOf(d))
+		log.Printf("SchemaToAviData: resource d: %v(%v)", d, reflect.TypeOf(d))
 		//return d, nil
 	case map[string]interface{}:
 		m := make(map[string]interface{})
@@ -27,7 +27,7 @@ func SchemaToAviData(d interface{}, s map[string]*schema.Schema) (interface{}, e
 			if obj, err := SchemaToAviData(v, nil); err == nil && obj != nil && obj != "" {
 				m[k] = obj
 			} else if err != nil {
-				log.Printf("[ERROR] SchemaToAviData %v in parsing k: %v v: %v", err, k, v)
+				log.Printf("Error in parsing k: %v v: %v", k, v)
 			}
 		}
 		return m, nil
@@ -60,7 +60,7 @@ func SchemaToAviData(d interface{}, s map[string]*schema.Schema) (interface{}, e
 			if obj, err := SchemaToAviData(r.Get(k), nil); err == nil && obj != nil && obj != "" {
 				m[k] = obj
 			} else if err != nil {
-				log.Printf("[ERROR] SchemaToAviData %v in converting k: %v v: %v", err, k, v)
+				log.Printf("Error in converting k: %v v: %v", k, v)
 			}
 		}
 		return m, nil
@@ -85,7 +85,7 @@ func ApiDataToSchema(adata interface{}, d *schema.ResourceData, t map[string]*sc
 				if obj, err := ApiDataToSchema(v, nil, nil); err == nil {
 					m[k] = obj
 				} else if err != nil {
-					log.Printf("[ERROR] ApiDataToSchema %v in converting k: %v v: %v", err, k, v)
+					log.Printf("Error in converting k: %v v: %v", k, v)
 				}
 
 			}
@@ -102,7 +102,7 @@ func ApiDataToSchema(adata interface{}, d *schema.ResourceData, t map[string]*sc
 					if obj, err := ApiDataToSchema(v, nil, nil); err == nil {
 						err := d.Set(k, obj)
 						if err != nil {
-							log.Printf("[ERROR] ApiDataToSchema %v in setting %v", err, obj)
+							log.Print("ApiDataToSchema err %v in setting %v", err, obj)
 						}
 					}
 				}
@@ -121,8 +121,6 @@ func ApiDataToSchema(adata interface{}, d *schema.ResourceData, t map[string]*sc
 				case *schema.Set:
 					objList = append(objList, obj.(*schema.Set).List()[0])
 				}
-			} else {
-				log.Printf("[ERROR] ApiDataToSchema %v", err)
 			}
 		}
 		return objList, nil
@@ -136,51 +134,37 @@ func ApiCreateOrUpdate(d *schema.ResourceData, meta interface{}, objType string,
 	client := meta.(*clients.AviClient)
 	var robj interface{}
 	obj := d
-
 	if data, err := SchemaToAviData(obj, s); err == nil {
 		path := "api/" + objType
 		if uuid, ok := d.GetOk("uuid"); ok {
-			path = path + "/" + uuid.(string) + "?include_name=true&skip_default=true"
+			path = path + "/" + uuid.(string)
 			err = client.AviSession.Put(path, data, &robj)
-		} else {
-			if name, ok := d.GetOk("name"); ok {
-				var existing_obj interface{}
-				if cloudRef, ok := d.GetOk("cloud_ref"); ok && strings.Contains(cloudRef.(string), "api/cloud/") {
-					cloudUUID := strings.SplitN(cloudRef.(string), "api/cloud/", 2)[1]
-					// strip the # if it exists
-					cloudUUID = strings.Split(cloudUUID, "#")[0]
-					log.Printf("[INFO] ApiCreateOrUpdate: using cloud %v for obj %v name %s \n",
-						cloudUUID, objType, name)
-					err = client.AviSession.GetObject(objType, session.SetName(name.(string)),
-						session.SetResult(&existing_obj), session.SetCloudUUID(cloudUUID),
-						session.SetIncludeName(true))
-				} else {
-					log.Printf("[INFO] ApiCreateOrUpdate: reading obj %v name %s \n",
-						objType, name)
-					err = client.AviSession.GetObject(objType, session.SetName(name.(string)),
-						session.SetResult(&existing_obj), session.SetIncludeName(true))
-				}
-				if err != nil {
-					// object not found
-					log.Printf("[INFO] ApiCreateOrUpdate: Creating obj type %v schema %v data %v\n", objType, d, data)
-					err = client.AviSession.Post(path, data, &robj)
-					if err != nil {
-						log.Printf("[ERROR] ApiCreateOrUpdate creation failed %v object with name %v\n", err, name)
-					}
-				} else {
-					// found existing object.
-					uuid = existing_obj.(map[string]interface{})["uuid"].(string)
-					d.Set("uuid", uuid)
-					d.SetId(uuid.(string))
-					path = path + "/" + uuid.(string) + "?include_name=true&skip_default=true"
-					err = client.AviSession.Put(path, data, &robj)
-				}
+		} else if name, ok := d.GetOk("name"); ok {
+			var existing_obj interface{}
+			var err error
+			if cloudRef, ok := d.GetOk("cloud_ref"); ok {
+				cloudUUID := strings.SplitN(cloudRef.(string), "api/cloud/", 2)[1]
+				log.Printf("[INFO] using cloud %v \n", cloudUUID)
+
+				err = client.AviSession.GetObject(objType, session.SetName(name.(string)),
+					session.SetResult(&existing_obj), session.SetCloudUUID(cloudUUID))
 			} else {
-				log.Printf("[INFO] ApiCreateOrUpdate: Creating obj %v schema %v data %v\n", objType, d, data)
+				err = client.AviSession.GetObject(objType, session.SetName(name.(string)),
+					session.SetResult(&existing_obj))
+			}
+			if err != nil {
+				// object not found
 				err = client.AviSession.Post(path, data, &robj)
 				if err != nil {
-					log.Printf("[ERROR] ApiCreateOrUpdate creation failed %v\n", err)
+					log.Printf("[ERROR] object with name %v not found\n", name)
 				}
+			} else {
+				// found existing object.
+				uuid = existing_obj.(map[string]interface{})["uuid"].(string)
+				d.Set("uuid", uuid)
+				d.SetId(uuid.(string))
+				path = path + "/" + uuid.(string)
+				err = client.AviSession.Put(path, data, &robj)
 			}
 		}
 		if err != nil {
@@ -188,14 +172,13 @@ func ApiCreateOrUpdate(d *schema.ResourceData, meta interface{}, objType string,
 			log.Printf("[ERROR] ApiCreateOrUpdate: Error %v path %v id %v\n", err, path, d.Id())
 			return err
 		}
-		log.Printf("[DEBUG] ApiCreateOrUpdate: object %v\n", robj)
 		url := robj.(map[string]interface{})["url"].(string)
 		uuid := robj.(map[string]interface{})["uuid"].(string)
-		//url = strings.SplitN(url, "#", 2)[0]
+		url = strings.SplitN(url, "#", 2)[0]
 		d.SetId(url)
 		d.Set("uuid", uuid)
 	} else {
-		log.Printf("[ERROR] ApiCreateOrUpdate: Error %v", err)
+		log.Printf("Error %v", err)
 	}
 	return err
 }
@@ -204,64 +187,57 @@ func ApiRead(d *schema.ResourceData, meta interface{}, objType string, s map[str
 	client := meta.(*clients.AviClient)
 	var obj interface{}
 	uuid := ""
-	log.Printf("[DEBUG] ApiRead reading object with objType %v id %v\n",
+	log.Printf("[DEBUG] reading object with objType %v id %v\n",
 		objType, d.Id())
 
 	if d.Id() != "" {
 		// extract the uuid from it.
-		log.Printf("[DEBUG] ApiRead reading object with objType %v id %v \n", objType, d.Id())
+		log.Printf("[DEBUG] reading object with objType %v id %v \n", objType, d.Id())
 		url_parts := strings.Split(d.Id(), "/")
 		uuid = url_parts[len(url_parts)-1]
-		// need to strip #xxx if present
-		uuid = strings.Split(uuid, "#")[0]
 	} else if u, ok := d.GetOk("uuid"); ok {
 		uuid = u.(string)
-		log.Printf("[DEBUG] ApiRead reading object with uuid %v \n", uuid)
+		log.Printf("[DEBUG] reading object with uuid %v \n", uuid)
 	}
 	if uuid != "" {
-		path := "api/" + objType + "/" + uuid + "?include_name=true&skip_default=true"
-		log.Printf("[DEBUG] ApiRead reading object with id %v path %v\n", uuid, path)
+		path := "api/" + objType + "/" + uuid
+		log.Printf("[DEBUG] reading object with id %v path %v\n", uuid, path)
 		err := client.AviSession.Get(path, &obj)
 		if err != nil {
 			d.SetId("")
-			log.Printf("[ERROR] ApiRead object with uuid %v not found err %v\n", uuid, err)
+			log.Printf("[ERROR] object with uuid %v not found\n", uuid)
 			return nil
 		}
 	} else if name, ok := d.GetOk("name"); ok {
 		var err error
-		if cloudRef, ok := d.GetOk("cloud_ref"); ok && strings.Contains(cloudRef.(string), "api/cloud/") {
+		if cloudRef, ok := d.GetOk("cloud_ref"); ok {
 			cloudUUID := strings.SplitN(cloudRef.(string), "api/cloud/", 2)[1]
-			cloudUUID = strings.Split(cloudUUID, "#")[0]
-			log.Printf("[DEBUG] ApiRead using cloud %v obj %v name %v\n", cloudUUID,
-				objType, name)
+			log.Printf("[DEBUG] using cloud %v \n", cloudUUID)
 			err = client.AviSession.GetObject(objType, session.SetName(name.(string)),
-				session.SetResult(&obj), session.SetCloudUUID(cloudUUID),
-				session.SetIncludeName(true), session.SetSkipDefault(true))
+				session.SetResult(&obj), session.SetCloudUUID(cloudUUID))
 		} else {
-			log.Printf("[DEBUG] ApiRead using name %v \n", name)
+			log.Printf("[DEBUG] using name %v \n", name)
 			err = client.AviSession.GetObject(objType, session.SetName(name.(string)),
-				session.SetResult(&obj), session.SetIncludeName(true),
-				session.SetSkipDefault(true))
+				session.SetResult(&obj))
 		}
 		if err != nil {
 			d.SetId("")
-			log.Printf("[ERROR] ApiRead object with name %v:%v not found err %v\n", objType, name, err)
+			log.Printf("[ERROR] object with name %v not found\n", name)
 			return nil
 		}
 	} else {
 		d.SetId("")
-		log.Printf("[ERROR] ApiRead not found %v\n", d.Get("uuid"))
+		log.Printf("[ERROR] not found %v\n", d.Get("uuid"))
 		return nil
 	}
 	if _, err := ApiDataToSchema(obj, d, s); err == nil {
 		url := obj.(map[string]interface{})["url"].(string)
 		uuid := obj.(map[string]interface{})["uuid"].(string)
-		//url = strings.SplitN(url, "#", 2)[0]
-		log.Printf("[DEBUG] ApiRead read object with id %v\n", url)
+		url = strings.SplitN(url, "#", 2)[0]
 		d.SetId(url)
 		d.Set("uuid", uuid)
 	} else {
-		log.Printf("[ERROR] ApiRead in setting read object %v\n", err)
+		log.Printf("[ERROR] in setting read object %v\n", err)
 	}
 	return nil
 }
@@ -273,28 +249,28 @@ func ResourceImporter(d *schema.ResourceData, meta interface{}, objType string, 
 	}
 	var data interface{}
 	client := meta.(*clients.AviClient)
-	path := "api/" + objType + "/?skip_default=true&include_name=true"
-	log.Printf("[DEBUG] ResourceImporter reading object with path %v\n", path)
+	path := "api/" + objType + "/"
+	log.Printf("[DEBUG] reading object with path %v\n", path)
 
 	err := client.AviSession.Get(path, &data)
 	if err != nil {
-		log.Printf("[ERROR] ResourceImporter %v in GET of path %v\n", err, path)
+		log.Printf("[ERROR] in GET of path %v\n", path)
 		return nil, err
 	}
 	count := int((data.(map[string]interface{})["count"]).(float64))
-	log.Printf("[DEBUG] ResourceImporter read data with path %v -> count %v\n", path, count)
+	log.Printf("[DEBUG] read data with path %v -> count %v\n", path, count)
 	if count > 0 {
 		results := make([]*schema.ResourceData, count)
 		apiResults := (data.(map[string]interface{})["results"]).([]interface{})
 		for index := 0; index < count; index++ {
 			obj := apiResults[index].(map[string]interface{})
-			log.Printf("[DEBUG] ResourceImporter processing obj %v results %v\n", obj, results[index])
+			log.Printf("[DEBUG] processing obj %v results %v\n", obj, results[index])
 			result := new(schema.ResourceData)
 			if _, err := ApiDataToSchema(obj, result, s); err == nil {
-				log.Printf("[DEBUG] ResourceImporter Processing obj %v\n", obj)
+				log.Printf("[DEBUG] Processing obj %v\n", obj)
 				url := obj["url"].(string)
 				uuid := obj["uuid"].(string)
-				//url = strings.SplitN(url, "#", 2)[0]
+				url = strings.SplitN(url, "#", 2)[0]
 				result.SetId(url)
 				result.Set("uuid", uuid)
 				result.SetType("avi_" + objType)
@@ -304,20 +280,4 @@ func ResourceImporter(d *schema.ResourceData, meta interface{}, objType string, 
 		return results, nil
 	}
 	return nil, nil
-}
-
-func ApiDeleteSystemDefaultCheck(d *schema.ResourceData) bool {
-	var systemDefault bool
-	var sysName string
-	if sysdef, ok := d.GetOk("system_default"); ok {
-		systemDefault = sysdef.(bool)
-	}
-	if name, ok := d.GetOk("name"); ok {
-		sysName = name.(string)
-	}
-	if systemDefault || strings.HasPrefix(sysName, "System-") || sysName == "Default-Group" {
-		d.SetId("")
-		return true
-	}
-	return false
 }
