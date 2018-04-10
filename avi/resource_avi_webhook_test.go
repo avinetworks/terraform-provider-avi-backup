@@ -21,7 +21,7 @@ func TestAVIWebhookBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIWebhookExists("avi_webhook.testwebhook"),
 					resource.TestCheckResourceAttr(
-						"avi_webhook.testwebhook", "name", "wb-%s")),
+						"avi_webhook.testwebhook", "name", "wb-test")),
 			},
 			{
 				Config: updatetestAccAVIWebhookConfig,
@@ -84,7 +84,7 @@ data "avi_tenant" "default_tenant"{
 }
 
 resource "avi_webhook" "testwebhook" {
-	name = "wb-%s"
+	name = "wb-test"
 	tenant_ref= "${data.avi_tenant.default_tenant.id}"
 }
 `

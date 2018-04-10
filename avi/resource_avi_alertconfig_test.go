@@ -10,7 +10,6 @@ import (
 )
 
 func TestAVIAlertConfigBasic(t *testing.T) {
-	updatedConfig := fmt.Sprintf(testAccAVIAlertConfig, "abc")
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -21,10 +20,10 @@ func TestAVIAlertConfigBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIAlertConfigExists("avi_alertconfig.testalertconfig"),
 					resource.TestCheckResourceAttr(
-						"avi_alertconfig.testalertconfig", "name", "ac-%s")),
+						"avi_alertconfig.testalertconfig", "name", "ac-test")),
 			},
 			{
-				Config: updatedConfig,
+				Config: testAccUpdatedAVIAlertConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIAlertConfigExists("avi_alertconfig.testalertconfig"),
 					resource.TestCheckResourceAttr(
@@ -84,7 +83,29 @@ data "avi_tenant" "default_tenant"{
 }
 
 resource "avi_alertconfig" "testalertconfig" {
-	name = "ac-%s"
+	name = "ac-test"
+	category= "REALTIME"
+	expiry_time= 86400
+	enabled= true
+	summary= "System-CC-Alert System Alert Triggered"
+	rolling_window= 300
+	source= "EVENT_LOGS"
+	threshold= 1
+	throttle= 0
+	tenant_ref= "${data.avi_tenant.default_tenant.id}"
+	alert_rule= {
+		operator= "OPERATOR_OR"
+	}
+}
+`
+
+const testAccUpdatedAVIAlertConfig = `
+data "avi_tenant" "default_tenant"{
+	name= "admin"
+}
+
+resource "avi_alertconfig" "testalertconfig" {
+	name = "ac-abc"
 	category= "REALTIME"
 	expiry_time= 86400
 	enabled= true

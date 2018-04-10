@@ -10,7 +10,6 @@ import (
 )
 
 func TestAVICertificateManagementProfileBasic(t *testing.T) {
-	updatedConfig := fmt.Sprintf(testAccAVICertificateManagementProfileConfig, "abc")
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -21,10 +20,10 @@ func TestAVICertificateManagementProfileBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVICertificateManagementProfileExists("avi_certificatemanagementprofile.testcertificatemanagementprofile"),
 					resource.TestCheckResourceAttr(
-						"avi_certificatemanagementprofile.testcertificatemanagementprofile", "name", "cert-%s")),
+						"avi_certificatemanagementprofile.testcertificatemanagementprofile", "name", "cert-test")),
 			},
 			{
-				Config: updatedConfig,
+				Config: testAccUpdatedAVICertificateManagementProfileConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVICertificateManagementProfileExists("avi_certificatemanagementprofile.testcertificatemanagementprofile"),
 					resource.TestCheckResourceAttr(
@@ -84,7 +83,19 @@ data "avi_tenant" "default_tenant"{
 }
 
 resource "avi_certificatemanagementprofile" "testcertificatemanagementprofile" {
-	name = "cert-%s"
+	name = "cert-test"
+	script_path= "test script path"
+	tenant_ref= "${data.avi_tenant.default_tenant.id}"
+}
+`
+
+const testAccUpdatedAVICertificateManagementProfileConfig = `
+data "avi_tenant" "default_tenant"{
+	name= "admin"
+}
+
+resource "avi_certificatemanagementprofile" "testcertificatemanagementprofile" {
+	name = "cert-abc"
 	script_path= "test script path"
 	tenant_ref= "${data.avi_tenant.default_tenant.id}"
 }

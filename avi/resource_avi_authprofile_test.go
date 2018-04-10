@@ -10,7 +10,6 @@ import (
 )
 
 func TestAVIAuthProfileBasic(t *testing.T) {
-	updatedConfig := fmt.Sprintf(testAccAVIAuthProfileConfig, "abc")
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -21,10 +20,10 @@ func TestAVIAuthProfileBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIAuthProfileExists("avi_authprofile.testauthprofile"),
 					resource.TestCheckResourceAttr(
-						"avi_authprofile.testauthprofile", "name", "ap-%s")),
+						"avi_authprofile.testauthprofile", "name", "ap-test")),
 			},
 			{
-				Config: updatedConfig,
+				Config: testAccUpdatedAVIAuthProfileConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIAuthProfileExists("avi_authprofile.testauthprofile"),
 					resource.TestCheckResourceAttr(
@@ -84,7 +83,47 @@ data "avi_tenant" "default_tenant"{
 }
 
 resource "avi_authprofile" "testauthprofile" {
-	name = "ap-%s"
+	name = "ap-test"
+	http= {
+		cache_expiration_time= 5
+		group_member_is_full_dn= false
+	}
+	ldap= {
+		security_mode= "AUTH_LDAP_SECURE_NONE"
+		settings= {
+			group_search_scope= "AUTH_LDAP_SCOPE_SUBTREE"
+			group_member_is_full_dn= true
+			user_search_scope= "AUTH_LDAP_SCOPE_ONE"
+			user_id_attribute= "gg"
+			group_member_attribute= "member"
+			group_filter= "(objectClass=*)"
+			ignore_referrals= false
+			password= "avi123"
+			admin_bind_dn= "avinetworkstest.com"
+		}
+		bind_as_administrator= true
+		server= [
+			"10.0.0.1"
+		]
+		user_bind= {
+			token= "<user>"
+		}
+		full_name_attribute= "name"
+		email_attribute= "email"
+		port= 389
+	}
+	type= "AUTH_PROFILE_LDAP"
+	tenant_ref= "${data.avi_tenant.default_tenant.id}"
+}
+`
+
+const testAccUpdatedAVIAuthProfileConfig = `
+data "avi_tenant" "default_tenant"{
+	name= "admin"
+}
+
+resource "avi_authprofile" "testauthprofile" {
+	name = "ap-abc"
 	http= {
 		cache_expiration_time= 5
 		group_member_is_full_dn= false

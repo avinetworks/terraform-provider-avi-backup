@@ -10,7 +10,6 @@ import (
 )
 
 func TestAVINetworkSecuritypolicyBasic(t *testing.T) {
-	updatedConfig := fmt.Sprintf(testAccAVINetworkSecuritypolicyConfig, "abc")
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -21,10 +20,10 @@ func TestAVINetworkSecuritypolicyBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVINetworkSecuritypolicyExists("avi_networksecuritypolicy.testnetworksecuritypolicy"),
 					resource.TestCheckResourceAttr(
-						"avi_networksecuritypolicy.testnetworksecuritypolicy", "name", "ns-%s")),
+						"avi_networksecuritypolicy.testnetworksecuritypolicy", "name", "ns-test")),
 			},
 			{
-				Config: updatedConfig,
+				Config: testAccUpdatedAVINetworkSecuritypolicyConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVINetworkSecuritypolicyExists("avi_networksecuritypolicy.testnetworksecuritypolicy"),
 					resource.TestCheckResourceAttr(
@@ -84,7 +83,19 @@ data "avi_tenant" "default_tenant"{
 }
 
 resource "avi_networksecuritypolicy" "testnetworksecuritypolicy" {
-	name = "ns-%s"
+	name = "ns-test"
+	description= "test network policy"
+	tenant_ref= "${data.avi_tenant.default_tenant.id}"
+}
+`
+
+const testAccUpdatedAVINetworkSecuritypolicyConfig = `
+data "avi_tenant" "default_tenant"{
+	name= "admin"
+}
+
+resource "avi_networksecuritypolicy" "testnetworksecuritypolicy" {
+	name = "ns-abc"
 	description= "test network policy"
 	tenant_ref= "${data.avi_tenant.default_tenant.id}"
 }

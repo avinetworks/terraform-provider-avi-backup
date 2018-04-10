@@ -10,7 +10,6 @@ import (
 )
 
 func TestAVIPriorityLabelsBasic(t *testing.T) {
-	updatedConfig := fmt.Sprintf(testAccAVIPriorityLabelsConfig, "abc")
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -21,10 +20,10 @@ func TestAVIPriorityLabelsBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIPriorityLabelsExists("avi_prioritylabels.testprioritylabels"),
 					resource.TestCheckResourceAttr(
-						"avi_prioritylabels.testprioritylabels", "name", "pl-%s")),
+						"avi_prioritylabels.testprioritylabels", "name", "pl-test")),
 			},
 			{
-				Config: updatedConfig,
+				Config: testAccUpdatedAVIPriorityLabelsConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIPriorityLabelsExists("avi_prioritylabels.testprioritylabels"),
 					resource.TestCheckResourceAttr(
@@ -87,7 +86,23 @@ data "avi_cloud" "default_cloud" {
 }
 
 resource "avi_prioritylabels" "testprioritylabels" {
-	name = "pl-%s"
+	name = "pl-test"
+	description = "test priority labels"
+	tenant_ref= "${data.avi_tenant.default_tenant.id}"
+	cloud_ref= "${data.avi_cloud.default_cloud.id}"
+}
+`
+
+const testAccUpdatedAVIPriorityLabelsConfig = `
+data "avi_tenant" "default_tenant"{
+	name= "admin"
+}
+data "avi_cloud" "default_cloud" {
+	name= "Default-Cloud"
+}
+
+resource "avi_prioritylabels" "testprioritylabels" {
+	name = "pl-abc"
 	description = "test priority labels"
 	tenant_ref= "${data.avi_tenant.default_tenant.id}"
 	cloud_ref= "${data.avi_cloud.default_cloud.id}"

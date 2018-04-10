@@ -10,7 +10,6 @@ import (
 )
 
 func TestAVIIPAMDNSProviderProfileBasic(t *testing.T) {
-	updatedConfig := fmt.Sprintf(testAccAVIIPAMDNSProviderProfileConfig, "abc")
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -21,10 +20,10 @@ func TestAVIIPAMDNSProviderProfileBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIIPAMDNSProviderProfileExists("avi_ipamdnsproviderprofile.testipamdnsproviderprofile"),
 					resource.TestCheckResourceAttr(
-						"avi_ipamdnsproviderprofile.testipamdnsproviderprofile", "name", "ipam-%s")),
+						"avi_ipamdnsproviderprofile.testipamdnsproviderprofile", "name", "ipam-test")),
 			},
 			{
-				Config: updatedConfig,
+				Config: testAccUpdatedAVIIPAMDNSProviderProfileConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIIPAMDNSProviderProfileExists("avi_ipamdnsproviderprofile.testipamdnsproviderprofile"),
 					resource.TestCheckResourceAttr(
@@ -90,7 +89,29 @@ data "avi_vrfcontext" "global_vrf" {
 	name= "global"
 }
 resource "avi_ipamdnsproviderprofile" "testipamdnsproviderprofile" {
-	name = "ipam-%s"
+	name = "ipam-test"
+	allocate_ip_in_vrf= false
+  	internal_profile= {
+    	ttl= 30
+  	}
+  	type= "IPAMDNS_TYPE_INTERNAL"
+	tenant_ref= "${data.avi_tenant.default_tenant.id}"
+}
+`
+
+const testAccUpdatedAVIIPAMDNSProviderProfileConfig = `
+data "avi_tenant" "default_tenant"{
+	name= "admin"
+}
+
+data "avi_cloud" "default_cloud" {
+	name= "Default-Cloud"
+}
+data "avi_vrfcontext" "global_vrf" {
+	name= "global"
+}
+resource "avi_ipamdnsproviderprofile" "testipamdnsproviderprofile" {
+	name = "ipam-abc"
 	allocate_ip_in_vrf= false
   	internal_profile= {
     	ttl= 30

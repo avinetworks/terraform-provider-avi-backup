@@ -10,7 +10,6 @@ import (
 )
 
 func TestAVIAlertSyslogConfigBasic(t *testing.T) {
-	updatedConfig := fmt.Sprintf(testAccAVIAlertSyslogConfig, "abc")
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -21,10 +20,10 @@ func TestAVIAlertSyslogConfigBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIAlertSyslogConfigExists("avi_alertsyslogconfig.testalertsyslogconfig"),
 					resource.TestCheckResourceAttr(
-						"avi_alertsyslogconfig.testalertsyslogconfig", "name", "asyc-%s")),
+						"avi_alertsyslogconfig.testalertsyslogconfig", "name", "asyc-test")),
 			},
 			{
-				Config: updatedConfig,
+				Config: testAccUpdatedAVIAlertSyslogConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIAlertSyslogConfigExists("avi_alertsyslogconfig.testalertsyslogconfig"),
 					resource.TestCheckResourceAttr(
@@ -84,7 +83,19 @@ data "avi_tenant" "default_tenant"{
 }
 
 resource "avi_alertsyslogconfig" "testalertsyslogconfig" {
-	name = "asyc-%s"
+	name = "asyc-test"
+	description= "test alert syslog"
+	tenant_ref= "${data.avi_tenant.default_tenant.id}"
+}
+`
+
+const testAccUpdatedAVIAlertSyslogConfig = `
+data "avi_tenant" "default_tenant"{
+	name= "admin"
+}
+
+resource "avi_alertsyslogconfig" "testalertsyslogconfig" {
+	name = "asyc-abc"
 	description= "test alert syslog"
 	tenant_ref= "${data.avi_tenant.default_tenant.id}"
 }

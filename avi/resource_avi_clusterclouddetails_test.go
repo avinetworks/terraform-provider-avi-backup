@@ -10,7 +10,6 @@ import (
 )
 
 func TestAVIClusterCloudDetailsBasic(t *testing.T) {
-	updatedConfig := fmt.Sprintf(testAccAVIClusterCloudDetailsConfig, "abc")
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -21,10 +20,10 @@ func TestAVIClusterCloudDetailsBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIClusterCloudDetailsExists("avi_clusterclouddetails.testclusterclouddetails"),
 					resource.TestCheckResourceAttr(
-						"avi_clusterclouddetails.testclusterclouddetails", "name", "ccd-%s")),
+						"avi_clusterclouddetails.testclusterclouddetails", "name", "ccd-test")),
 			},
 			{
-				Config: updatedConfig,
+				Config: testAccUpdatedAVIClusterCloudDetailsConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIClusterCloudDetailsExists("avi_clusterclouddetails.testclusterclouddetails"),
 					resource.TestCheckResourceAttr(
@@ -84,7 +83,18 @@ data "avi_tenant" "default_tenant"{
 }
 
 resource "avi_clusterclouddetails" "testclusterclouddetails" {
-	name = "ccd-%s"
+	name = "ccd-test"
+	tenant_ref= "${data.avi_tenant.default_tenant.id}"
+}
+`
+
+const testAccUpdatedAVIClusterCloudDetailsConfig = `
+data "avi_tenant" "default_tenant"{
+	name= "admin"
+}
+
+resource "avi_clusterclouddetails" "testclusterclouddetails" {
+	name = "ccd-abc"
 	tenant_ref= "${data.avi_tenant.default_tenant.id}"
 }
 `

@@ -10,7 +10,6 @@ import (
 )
 
 func TestAVISNMPTrapProfileBasic(t *testing.T) {
-	updatedConfig := fmt.Sprintf(testAccAVISNMPTrapProfileConfig, "abc")
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -21,10 +20,10 @@ func TestAVISNMPTrapProfileBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVISNMPTrapProfileExists("avi_snmptrapprofile.testsnmptrapprofile"),
 					resource.TestCheckResourceAttr(
-						"avi_snmptrapprofile.testsnmptrapprofile", "name", "snmp-%s")),
+						"avi_snmptrapprofile.testsnmptrapprofile", "name", "snmp-test")),
 			},
 			{
-				Config: updatedConfig,
+				Config: testAccUpdatedAVISNMPTrapProfileConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVISNMPTrapProfileExists("avi_snmptrapprofile.testsnmptrapprofile"),
 					resource.TestCheckResourceAttr(
@@ -84,7 +83,18 @@ data "avi_tenant" "default_tenant"{
 }
 
 resource "avi_snmptrapprofile" "testsnmptrapprofile" {
-	name = "snmp-%s"
+	name = "snmp-test"
+	tenant_ref= "${data.avi_tenant.default_tenant.id}"
+}
+`
+
+const testAccUpdatedAVISNMPTrapProfileConfig = `
+data "avi_tenant" "default_tenant"{
+	name= "admin"
+}
+
+resource "avi_snmptrapprofile" "testsnmptrapprofile" {
+	name = "snmp-abc"
 	tenant_ref= "${data.avi_tenant.default_tenant.id}"
 }
 `

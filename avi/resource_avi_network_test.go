@@ -10,7 +10,6 @@ import (
 )
 
 func TestAVINetworkBasic(t *testing.T) {
-	updatedConfig := fmt.Sprintf(testAccAVINetworkConfig, "abc")
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -21,10 +20,10 @@ func TestAVINetworkBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVINetworkExists("avi_network.testnetwork"),
 					resource.TestCheckResourceAttr(
-						"avi_network.testnetwork", "name", "network-%s")),
+						"avi_network.testnetwork", "name", "network-test")),
 			},
 			{
-				Config: updatedConfig,
+				Config: testAccUpdatedAVINetworkConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVINetworkExists("avi_network.testnetwork"),
 					resource.TestCheckResourceAttr(
@@ -90,7 +89,30 @@ data "avi_vrfcontext" "global_vrf" {
 	name= "global"
 }
 resource "avi_network" "testnetwork" {
-	name = "network-%s"
+	name = "network-test"
+	vrf_context_ref="${data.avi_vrfcontext.global_vrf.id}"
+	tenant_ref= "${data.avi_tenant.default_tenant.id}"
+	cloud_ref= "${data.avi_cloud.default_cloud.id}"
+	exclude_discovered_subnets= false
+	synced_from_se= true
+    dhcp_enabled= true
+	vcenter_dvs= true
+}
+`
+
+const testAccUpdatedAVINetworkConfig = `
+data "avi_tenant" "default_tenant"{
+	name= "admin"
+}
+
+data "avi_cloud" "default_cloud" {
+	name= "Default-Cloud"
+}
+data "avi_vrfcontext" "global_vrf" {
+	name= "global"
+}
+resource "avi_network" "testnetwork" {
+	name = "network-abc"
 	vrf_context_ref="${data.avi_vrfcontext.global_vrf.id}"
 	tenant_ref= "${data.avi_tenant.default_tenant.id}"
 	cloud_ref= "${data.avi_cloud.default_cloud.id}"

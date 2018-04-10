@@ -10,7 +10,6 @@ import (
 )
 
 func TestAVIPoolGroupBasic(t *testing.T) {
-	updatedConfig := fmt.Sprintf(testAccAVIPoolGroupConfig, "abc")
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -21,10 +20,10 @@ func TestAVIPoolGroupBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIPoolGroupExists("avi_poolgroup.testpoolgroup"),
 					resource.TestCheckResourceAttr(
-						"avi_poolgroup.testpoolgroup", "name", "pg-%s")),
+						"avi_poolgroup.testpoolgroup", "name", "pg-test")),
 			},
 			{
-				Config: updatedConfig,
+				Config: testAccUpdatedAVIPoolGroupConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIPoolGroupExists("avi_poolgroup.testpoolgroup"),
 					resource.TestCheckResourceAttr(
@@ -87,7 +86,27 @@ data "avi_cloud" "default_cloud" {
 }
 
 resource "avi_poolgroup" "testpoolgroup" {
-	name = "pg-%s"
+	name = "pg-test"
+	implicit_priority_labels= false
+	min_servers= 0
+	fail_action= {
+		type= "FAIL_ACTION_CLOSE_CONN"
+	}
+	tenant_ref= "${data.avi_tenant.default_tenant.id}"
+	cloud_ref= "${data.avi_cloud.default_cloud.id}"
+}
+`
+
+const testAccUpdatedAVIPoolGroupConfig = `
+data "avi_tenant" "default_tenant"{
+	name= "admin"
+}
+data "avi_cloud" "default_cloud" {
+	name= "Default-Cloud"
+}
+
+resource "avi_poolgroup" "testpoolgroup" {
+	name = "pg-abc"
 	implicit_priority_labels= false
 	min_servers= 0
 	fail_action= {

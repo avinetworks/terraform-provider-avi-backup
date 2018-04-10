@@ -10,7 +10,6 @@ import (
 )
 
 func TestAVIServerAutoScalePolicyBasic(t *testing.T) {
-	updatedConfig := fmt.Sprintf(testAccAVIServerAutoScalePolicyConfig, "abc")
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -21,10 +20,10 @@ func TestAVIServerAutoScalePolicyBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIServerAutoScalePolicyBExists("avi_serverautoscalepolicy.testserverautoscalepolicy"),
 					resource.TestCheckResourceAttr(
-						"avi_serverautoscalepolicy.testserverautoscalepolicy", "name", "ssp-%s")),
+						"avi_serverautoscalepolicy.testserverautoscalepolicy", "name", "ssp-test")),
 			},
 			{
-				Config: updatedConfig,
+				Config: testAccUpdatedAVIServerAutoScalePolicyConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIServerAutoScalePolicyBExists("avi_serverautoscalepolicy.testserverautoscalepolicy"),
 					resource.TestCheckResourceAttr(
@@ -84,7 +83,18 @@ data "avi_tenant" "default_tenant"{
 }
 
 resource "avi_serverautoscalepolicy" "testserverautoscalepolicy" {
-	name = "ssp-%s"
+	name = "ssp-test"
+	tenant_ref= "${data.avi_tenant.default_tenant.id}"
+}
+`
+
+const testAccUpdatedAVIServerAutoScalePolicyConfig = `
+data "avi_tenant" "default_tenant"{
+	name= "admin"
+}
+
+resource "avi_serverautoscalepolicy" "testserverautoscalepolicy" {
+	name = "ssp-abc"
 	tenant_ref= "${data.avi_tenant.default_tenant.id}"
 }
 `
