@@ -98,8 +98,8 @@ resource "avi_pool" "testpool" {
 		  addr= "10.90.64.66"
 		}
 		port= 8080
-		enabled = true
-		ratio = 1
+		enabled = false
+		ratio = 7
 	}
 	fail_action= {
 		type= "FAIL_ACTION_CLOSE_CONN"
@@ -131,8 +131,8 @@ resource "avi_pool" "testpool" {
 		  addr= "10.90.64.66"
 		}
 		port= 8080
-		enabled = true
-		ratio = 1
+		enabled = false
+		ratio = 7
 	}
 	fail_action= {
 		type= "FAIL_ACTION_CLOSE_CONN"
