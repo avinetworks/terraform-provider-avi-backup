@@ -10,7 +10,6 @@ import (
 )
 
 func TestAVIAlertScriptConfigBasic(t *testing.T) {
-	updatedConfig := fmt.Sprintf(testAccAVIAlertScriptConfig, "abc")
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -21,10 +20,10 @@ func TestAVIAlertScriptConfigBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIAlertScriptConfigExists("avi_alertscriptconfig.testalertscriptconfig"),
 					resource.TestCheckResourceAttr(
-						"avi_alertscriptconfig.testalertscriptconfig", "name", "asc-%s")),
+						"avi_alertscriptconfig.testalertscriptconfig", "name", "asc-test")),
 			},
 			{
-				Config: updatedConfig,
+				Config: testAccUpdatedAVIAlertScriptConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIAlertScriptConfigExists("avi_alertscriptconfig.testalertscriptconfig"),
 					resource.TestCheckResourceAttr(
@@ -84,7 +83,19 @@ data "avi_tenant" "default_tenant"{
 }
 
 resource "avi_alertscriptconfig" "testalertscriptconfig" {
-	name = "asc-%s"
+	name = "asc-test"
+	action_script= "test script"
+	tenant_ref= "${data.avi_tenant.default_tenant.id}"
+}
+`
+
+const testAccUpdatedAVIAlertScriptConfig = `
+data "avi_tenant" "default_tenant"{
+	name= "admin"
+}
+
+resource "avi_alertscriptconfig" "testalertscriptconfig" {
+	name = "asc-abc"
 	action_script= "test script"
 	tenant_ref= "${data.avi_tenant.default_tenant.id}"
 }

@@ -10,7 +10,6 @@ import (
 )
 
 func TestAVIPoolGroupDeploymentPolicyBasic(t *testing.T) {
-	updatedConfig := fmt.Sprintf(testAccAVIPoolGroupDeploymentPolicyConfig, "abc")
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -21,10 +20,10 @@ func TestAVIPoolGroupDeploymentPolicyBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIPoolGroupDeploymentPolicyExists("avi_poolgroupdeploymentpolicy.testpoolgroupdeploymentpolicy"),
 					resource.TestCheckResourceAttr(
-						"avi_poolgroupdeploymentpolicy.testpoolgroupdeploymentpolicy", "name", "pgpp-%s")),
+						"avi_poolgroupdeploymentpolicy.testpoolgroupdeploymentpolicy", "name", "pgpp-test")),
 			},
 			{
-				Config: updatedConfig,
+				Config: testAccUpdatedAVIPoolGroupDeploymentPolicyConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIPoolGroupDeploymentPolicyExists("avi_poolgroupdeploymentpolicy.testpoolgroupdeploymentpolicy"),
 					resource.TestCheckResourceAttr(
@@ -87,7 +86,22 @@ data "avi_cloud" "default_cloud" {
 }
 
 resource "avi_poolgroupdeploymentpolicy" "testpoolgroupdeploymentpolicy" {
-	name = "pgpp-%s"
+	name = "pgpp-test"
+	tenant_ref= "${data.avi_tenant.default_tenant.id}"
+	cloud_ref= "${data.avi_cloud.default_cloud.id}"
+}
+`
+
+const testAccUpdatedAVIPoolGroupDeploymentPolicyConfig = `
+data "avi_tenant" "default_tenant"{
+	name= "admin"
+}
+data "avi_cloud" "default_cloud" {
+	name= "Default-Cloud"
+}
+
+resource "avi_poolgroupdeploymentpolicy" "testpoolgroupdeploymentpolicy" {
+	name = "pgpp-abc"
 	tenant_ref= "${data.avi_tenant.default_tenant.id}"
 	cloud_ref= "${data.avi_cloud.default_cloud.id}"
 }

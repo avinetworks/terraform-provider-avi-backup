@@ -10,7 +10,6 @@ import (
 )
 
 func TestAVIPoolBasic(t *testing.T) {
-	updatedConfig := fmt.Sprintf(testAccAVIPoolConfig, "abc")
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -21,10 +20,10 @@ func TestAVIPoolBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIPoolExists("avi_pool.testpool"),
 					resource.TestCheckResourceAttr(
-						"avi_pool.testpool", "name", "p42-%s")),
+						"avi_pool.testpool", "name", "p42-test")),
 			},
 			{
-				Config: updatedConfig,
+				Config: testAccUpdatedAVIPoolConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIPoolExists("avi_pool.testpool"),
 					resource.TestCheckResourceAttr(
@@ -90,7 +89,7 @@ data "avi_vrfcontext" "global_vrf" {
 	name= "global"
 }
 resource "avi_pool" "testpool" {
-	name = "p42-%s"
+	name = "p42-test"
 	server_count = 1
 	servers {
 		hostname= "10.90.64.66"
@@ -99,6 +98,41 @@ resource "avi_pool" "testpool" {
 		  addr= "10.90.64.66"
 		}
 		port= 8080
+		enabled = true
+		ratio = 1
+	}
+	fail_action= {
+		type= "FAIL_ACTION_CLOSE_CONN"
+	}
+	vrf_ref="${data.avi_vrfcontext.global_vrf.id}"
+	tenant_ref= "${data.avi_tenant.default_tenant.id}"
+	cloud_ref= "${data.avi_cloud.default_cloud.id}"
+}
+`
+
+const testAccUpdatedAVIPoolConfig = `
+data "avi_tenant" "default_tenant"{
+	name= "admin"
+}
+
+data "avi_cloud" "default_cloud" {
+	name= "Default-Cloud"
+}
+data "avi_vrfcontext" "global_vrf" {
+	name= "global"
+}
+resource "avi_pool" "testpool" {
+	name = "p42-abc"
+	server_count = 1
+	servers {
+		hostname= "10.90.64.66"
+		ip= {
+		  type= "V4"
+		  addr= "10.90.64.66"
+		}
+		port= 8080
+		enabled = true
+		ratio = 1
 	}
 	fail_action= {
 		type= "FAIL_ACTION_CLOSE_CONN"

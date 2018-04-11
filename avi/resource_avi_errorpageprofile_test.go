@@ -10,7 +10,6 @@ import (
 )
 
 func TestAVIErrorPageProfileBasic(t *testing.T) {
-	updatedConfig := fmt.Sprintf(testAccAVIErrorPageProfileConfig, "abc")
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -21,10 +20,10 @@ func TestAVIErrorPageProfileBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIErrorPageProfileExists("avi_errorpageprofile.testerrorpageprofile"),
 					resource.TestCheckResourceAttr(
-						"avi_errorpageprofile.testerrorpageprofile", "name", "epp-%s")),
+						"avi_errorpageprofile.testerrorpageprofile", "name", "epp-test")),
 			},
 			{
-				Config: updatedConfig,
+				Config: testAccUpdatedAVIErrorPageProfileConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIErrorPageProfileExists("avi_errorpageprofile.testerrorpageprofile"),
 					resource.TestCheckResourceAttr(
@@ -84,7 +83,18 @@ data "avi_tenant" "default_tenant"{
 }
 
 resource "avi_errorpageprofile" "testerrorpageprofile" {
-	name = "epp-%s"
+	name = "epp-test"
+	tenant_ref= "${data.avi_tenant.default_tenant.id}"
+}
+`
+
+const testAccUpdatedAVIErrorPageProfileConfig = `
+data "avi_tenant" "default_tenant"{
+	name= "admin"
+}
+
+resource "avi_errorpageprofile" "testerrorpageprofile" {
+	name = "epp-abc"
 	tenant_ref= "${data.avi_tenant.default_tenant.id}"
 }
 `

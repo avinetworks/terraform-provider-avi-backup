@@ -10,7 +10,6 @@ import (
 )
 
 func TestAVIVSVipBasic(t *testing.T) {
-	updatedConfig := fmt.Sprintf(testAccAVIVSVipConfig, "abc")
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -21,10 +20,10 @@ func TestAVIVSVipBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIVSVipExists("avi_vsvip.testvsvip"),
 					resource.TestCheckResourceAttr(
-						"avi_vsvip.testvsvip", "name", "vsvip-%s")),
+						"avi_vsvip.testvsvip", "name", "vsvip-test")),
 			},
 			{
-				Config: updatedConfig,
+				Config: testAccUpdatedAVIVSVipConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIVSVipExists("avi_vsvip.testvsvip"),
 					resource.TestCheckResourceAttr(
@@ -90,7 +89,7 @@ data "avi_vrfcontext" "global_vrf" {
 }
 
 resource "avi_vsvip" "testvsvip" {
-	name = "vsvip-%s"
+	name = "vsvip-test"
 	tenant_ref= "${data.avi_tenant.default_tenant.id}"
 	cloud_ref= "${data.avi_cloud.default_cloud.id}"
 	vrf_context_ref= "${data.avi_vrfcontext.global_vrf.id}"
@@ -98,7 +97,38 @@ resource "avi_vsvip" "testvsvip" {
 		vip_id= "1"
 		avi_allocated_fip= false
 		auto_allocate_ip= false
-		enabled= true
+		enabled= false
+		auto_allocate_floating_ip= false
+		avi_allocated_vip= false
+		ip_address= {
+			type= "V4"
+			addr= "1.2.3.1"
+		}
+	}]
+}
+`
+
+const testAccUpdatedAVIVSVipConfig = `
+data "avi_tenant" "default_tenant"{
+	name= "admin"
+}
+data "avi_cloud" "default_cloud" {
+	name= "Default-Cloud"
+}
+data "avi_vrfcontext" "global_vrf" {
+	name= "global"
+}
+
+resource "avi_vsvip" "testvsvip" {
+	name = "vsvip-abc"
+	tenant_ref= "${data.avi_tenant.default_tenant.id}"
+	cloud_ref= "${data.avi_cloud.default_cloud.id}"
+	vrf_context_ref= "${data.avi_vrfcontext.global_vrf.id}"
+	vip= [{
+		vip_id= "1"
+		avi_allocated_fip= false
+		auto_allocate_ip= false
+		enabled= false
 		auto_allocate_floating_ip= false
 		avi_allocated_vip= false
 		ip_address= {

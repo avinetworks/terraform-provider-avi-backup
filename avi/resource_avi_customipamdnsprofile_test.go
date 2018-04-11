@@ -10,7 +10,6 @@ import (
 )
 
 func TestAVICustomipamdnsProfileBasic(t *testing.T) {
-	updatedConfig := fmt.Sprintf(testAccAVICustomipamdnsProfileConfig, "abc")
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -21,10 +20,10 @@ func TestAVICustomipamdnsProfileBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVICustomipamdnsProfileExists("avi_customipamdnsprofile.testipam"),
 					resource.TestCheckResourceAttr(
-						"avi_customipamdnsprofile.testipam", "name", "ipam-%s")),
+						"avi_customipamdnsprofile.testipam", "name", "ipam-test")),
 			},
 			{
-				Config: updatedConfig,
+				Config: testAccUpdatedAVICustomipamdnsProfileConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVICustomipamdnsProfileExists("avi_customipamdnsprofile.testipam"),
 					resource.TestCheckResourceAttr(
@@ -84,7 +83,19 @@ data "avi_tenant" "default_tenant"{
 }
 
 resource "avi_customipamdnsprofile" "testipam" {
-	name = "ipam-%s"
+	name = "ipam-test"
+	script_uri = "/"
+	tenant_ref= "${data.avi_tenant.default_tenant.id}"
+}
+`
+
+const testAccUpdatedAVICustomipamdnsProfileConfig = `
+data "avi_tenant" "default_tenant"{
+	name= "admin"
+}
+
+resource "avi_customipamdnsprofile" "testipam" {
+	name = "ipam-abc"
 	script_uri = "/"
 	tenant_ref= "${data.avi_tenant.default_tenant.id}"
 }

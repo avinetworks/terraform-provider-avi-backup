@@ -10,7 +10,6 @@ import (
 )
 
 func TestAVIVSDataScriptSetBasic(t *testing.T) {
-	updatedConfig := fmt.Sprintf(testAccAVIVSDataScriptSetConfig, "abc")
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -21,10 +20,10 @@ func TestAVIVSDataScriptSetBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIVSDataScriptSetExists("avi_vsdatascriptset.testvsdatascriptset"),
 					resource.TestCheckResourceAttr(
-						"avi_vsdatascriptset.testvsdatascriptset", "name", "vsd-%s")),
+						"avi_vsdatascriptset.testvsdatascriptset", "name", "vsd-test")),
 			},
 			{
-				Config: updatedConfig,
+				Config: testAccUpdatedAVIVSDataScriptSetConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIVSDataScriptSetExists("avi_vsdatascriptset.testvsdatascriptset"),
 					resource.TestCheckResourceAttr(
@@ -87,7 +86,21 @@ data "avi_cloud" "default_cloud" {
 }
 
 resource "avi_vsdatascriptset" "testvsdatascriptset" {
-	name = "vsd-%s"
+	name = "vsd-test"
+	tenant_ref= "${data.avi_tenant.default_tenant.id}"
+}
+`
+
+const testAccUpdatedAVIVSDataScriptSetConfig = `
+data "avi_tenant" "default_tenant"{
+	name= "admin"
+}
+data "avi_cloud" "default_cloud" {
+	name= "Default-Cloud"
+}
+
+resource "avi_vsdatascriptset" "testvsdatascriptset" {
+	name = "vsd-abc"
 	tenant_ref= "${data.avi_tenant.default_tenant.id}"
 }
 `

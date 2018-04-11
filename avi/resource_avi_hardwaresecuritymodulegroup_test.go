@@ -10,7 +10,6 @@ import (
 )
 
 func TestAVIHardwareSecurityModuleGroupBasic(t *testing.T) {
-	updatedConfig := fmt.Sprintf(testAccAVIHardwareSecurityModuleGroupConfig, "abc")
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -21,10 +20,10 @@ func TestAVIHardwareSecurityModuleGroupBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIHardwareSecurityModuleGroupExists("avi_hardwaresecuritymodulegroup.testhardwaresecuritymodulegroup"),
 					resource.TestCheckResourceAttr(
-						"avi_hardwaresecuritymodulegroup.testhardwaresecuritymodulegroup", "name", "hsmg-%s")),
+						"avi_hardwaresecuritymodulegroup.testhardwaresecuritymodulegroup", "name", "hsmg-test")),
 			},
 			{
-				Config: updatedConfig,
+				Config: testAccUpdatedAVIHardwareSecurityModuleGroupConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIHardwareSecurityModuleGroupExists("avi_hardwaresecuritymodulegroup.testhardwaresecuritymodulegroup"),
 					resource.TestCheckResourceAttr(
@@ -84,7 +83,7 @@ data "avi_tenant" "default_tenant"{
 }
 
 resource "avi_hardwaresecuritymodulegroup" "testhardwaresecuritymodulegroup" {
-	name = "hsmg-%s"
+	name = "hsmg-test"
 	tenant_ref= "${data.avi_tenant.default_tenant.id}"
 	hsm= {
    		type= "HSM_TYPE_THALES_NETHSM"
@@ -93,11 +92,37 @@ resource "avi_hardwaresecuritymodulegroup" "testhardwaresecuritymodulegroup" {
 				addr= "10.10.15.1"
 				type= "V4"
      		}
-     	esn= "580A-F79E-BCD9"
-		priority= 100
-     	module_id= 0
-     	keyhash= "198644ebcba88ba1421ae0c34cdd541edf01deb8"
-   }
- }
+			remote_port= "3450"
+			esn= "580A-F79E-BCD9"
+			priority= 100
+			module_id= 0
+			keyhash= "198644ebcba88ba1421ae0c34cdd541edf01deb8"
+   		}
+ 	}
+}
+`
+
+const testAccUpdatedAVIHardwareSecurityModuleGroupConfig = `
+data "avi_tenant" "default_tenant"{
+	name= "admin"
+}
+
+resource "avi_hardwaresecuritymodulegroup" "testhardwaresecuritymodulegroup" {
+	name = "hsmg-abc"
+	tenant_ref= "${data.avi_tenant.default_tenant.id}"
+	hsm= {
+   		type= "HSM_TYPE_THALES_NETHSM"
+   		nethsm= {
+     		remote_ip= {
+				addr= "10.10.15.1"
+				type= "V4"
+     		}
+			remote_port= "3450"
+			esn= "580A-F79E-BCD9"
+			priority= 100
+			module_id= 0
+			keyhash= "198644ebcba88ba1421ae0c34cdd541edf01deb8"
+   		}
+ 	}
 }
 `

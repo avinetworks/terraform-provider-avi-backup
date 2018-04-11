@@ -10,7 +10,6 @@ import (
 )
 
 func TestAVITenantBasic(t *testing.T) {
-	updatedConfig := fmt.Sprintf(testAccAVITenantConfig, "abc")
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -21,10 +20,10 @@ func TestAVITenantBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVITenantExists("avi_tenant.test_tenant"),
 					resource.TestCheckResourceAttr(
-						"avi_tenant.test_tenant", "name", "tenant-%s")),
+						"avi_tenant.test_tenant", "name", "tenant-test")),
 			},
 			{
-				Config: updatedConfig,
+				Config: testAccUpdatedAVITenantConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIVSVipExists("avi_tenant.test_tenant"),
 					resource.TestCheckResourceAttr(
@@ -79,11 +78,12 @@ func testAccCheckAVITenantDestroy(s *terraform.State) error {
 
 const testAccAVITenantConfig = `
 resource "avi_tenant" "test_tenant"{
-	name= "tenant-%s"
-	config_settings {
-		se_in_provider_context = true
-		tenant_access_to_provider_se = true
-		tenant_vrf = false
-	}
+	name= "tenant-test"
+}
+`
+
+const testAccUpdatedAVITenantConfig = `
+resource "avi_tenant" "test_tenant"{
+	name= "tenant-abc"
 }
 `

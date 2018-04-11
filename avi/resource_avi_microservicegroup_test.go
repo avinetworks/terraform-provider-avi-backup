@@ -10,7 +10,6 @@ import (
 )
 
 func TestAVIMicroServiceGroupBasic(t *testing.T) {
-	updatedConfig := fmt.Sprintf(testAccAVIMicroServiceGroupConfig, "abc")
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -21,10 +20,10 @@ func TestAVIMicroServiceGroupBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIMicroServiceGroupExists("avi_microservicegroup.testmicroservicegroup"),
 					resource.TestCheckResourceAttr(
-						"avi_microservicegroup.testmicroservicegroup", "name", "msg-%s")),
+						"avi_microservicegroup.testmicroservicegroup", "name", "msg-test")),
 			},
 			{
-				Config: updatedConfig,
+				Config: testAccUpdatedAVIMicroServiceGroupConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAVIMicroServiceGroupExists("avi_microservicegroup.testmicroservicegroup"),
 					resource.TestCheckResourceAttr(
@@ -84,7 +83,18 @@ data "avi_tenant" "default_tenant"{
 }
 
 resource "avi_microservicegroup" "testmicroservicegroup" {
-	name = "msg-%s"
+	name = "msg-test"
+	tenant_ref= "${data.avi_tenant.default_tenant.id}"
+}
+`
+
+const testAccUpdatedAVIMicroServiceGroupConfig = `
+data "avi_tenant" "default_tenant"{
+	name= "admin"
+}
+
+resource "avi_microservicegroup" "testmicroservicegroup" {
+	name = "msg-abc"
 	tenant_ref= "${data.avi_tenant.default_tenant.id}"
 }
 `
