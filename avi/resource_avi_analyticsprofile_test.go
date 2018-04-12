@@ -2,11 +2,12 @@ package avi
 
 import (
 	"fmt"
+	"strings"
+	"testing"
+
 	"github.com/avinetworks/sdk/go/clients"
 	"github.com/hashicorp/terraform/helper/resource"
 	"github.com/hashicorp/terraform/terraform"
-	"strings"
-	"testing"
 )
 
 func TestAVIAnalyticsProfileBasic(t *testing.T) {
@@ -45,7 +46,9 @@ func testAccCheckAVIAnalyticsProfileExists(resourcename string) resource.TestChe
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No AVI AnalyticsProfile ID is set")
 		}
-		path := "api" + strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		uuid := strings.Split(url, "#")[0]
+		path := "api" + uuid
 		err := conn.Get(path, &obj)
 		if err != nil {
 			return err
@@ -62,7 +65,9 @@ func testAccCheckAVIAnalyticsProfileDestroy(s *terraform.State) error {
 		if rs.Type != "avi_analyticsprofile" {
 			continue
 		}
-		path := "api" + strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		uuid := strings.Split(url, "#")[0]
+		path := "api" + uuid
 		err := conn.Get(path, &obj)
 		if err != nil {
 			if strings.Contains(err.Error(), "404") {
@@ -105,12 +110,6 @@ resource "avi_analyticsprofile" "testAnalyticsProfile" {
 "hs_max_anomaly_penalty" = "10"
 "exclude_gs_down_as_error" = false
 "apdex_server_response_tolerated_factor" = "4.0"
-"client_log_config" {
-"enable_significant_log_collection" = true
-"non_significant_log_processing" = "LOGS_PROCESSING_SYNC_AND_INDEX_ON_DEMAND"
-"significant_log_processing" = "LOGS_PROCESSING_SYNC_AND_INDEX_ON_DEMAND"
-"filtered_log_processing" = "LOGS_PROCESSING_SYNC_AND_INDEX_ON_DEMAND"
-}
 "disable_server_analytics" = false
 "conn_server_lossy_timeo_rexmt_threshold" = "20"
 "exclude_client_close_before_request_as_error" = true
@@ -181,12 +180,6 @@ resource "avi_analyticsprofile" "testAnalyticsProfile" {
 "hs_max_anomaly_penalty" = "10"
 "exclude_gs_down_as_error" = false
 "apdex_server_response_tolerated_factor" = "4.0"
-"client_log_config" {
-"enable_significant_log_collection" = true
-"non_significant_log_processing" = "LOGS_PROCESSING_SYNC_AND_INDEX_ON_DEMAND"
-"significant_log_processing" = "LOGS_PROCESSING_SYNC_AND_INDEX_ON_DEMAND"
-"filtered_log_processing" = "LOGS_PROCESSING_SYNC_AND_INDEX_ON_DEMAND"
-}
 "disable_server_analytics" = false
 "conn_server_lossy_timeo_rexmt_threshold" = "20"
 "exclude_client_close_before_request_as_error" = true

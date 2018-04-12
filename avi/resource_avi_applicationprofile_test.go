@@ -2,11 +2,12 @@ package avi
 
 import (
 	"fmt"
+	"strings"
+	"testing"
+
 	"github.com/avinetworks/sdk/go/clients"
 	"github.com/hashicorp/terraform/helper/resource"
 	"github.com/hashicorp/terraform/terraform"
-	"strings"
-	"testing"
 )
 
 func TestAVIApplicationProfileBasic(t *testing.T) {
@@ -45,7 +46,9 @@ func testAccCheckAVIApplicationProfileExists(resourcename string) resource.TestC
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No AVI ApplicationProfile ID is set")
 		}
-		path := "api" + strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		uuid := strings.Split(url, "#")[0]
+		path := "api" + uuid
 		err := conn.Get(path, &obj)
 		if err != nil {
 			return err
@@ -62,7 +65,9 @@ func testAccCheckAVIApplicationProfileDestroy(s *terraform.State) error {
 		if rs.Type != "avi_applicationprofile" {
 			continue
 		}
-		path := "api" + strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		uuid := strings.Split(url, "#")[0]
+		path := "api" + uuid
 		err := conn.Get(path, &obj)
 		if err != nil {
 			if strings.Contains(err.Error(), "404") {
@@ -111,12 +116,13 @@ resource "avi_applicationprofile" "testApplicationProfile" {
 "ssl_client_certificate_mode" = "SSL_CLIENT_CERTIFICATE_NONE"
 "http_to_https" = true
 "spdy_enabled" = false
+"respond_with_100_continue" = true
 "client_body_timeout" = "30000"
 "httponly_enabled" = true
 "hsts_max_age" = "365"
-"max_bad_rps_cip" = "0"
-"server_side_redirect_to_https" = true
 "client_max_header_size" = "12"
+"server_side_redirect_to_https" = true
+"max_bad_rps_cip" = "0"
 "client_max_request_size" = "48"
 "cache_config" {
 "min_object_size" = "100"
@@ -189,12 +195,13 @@ resource "avi_applicationprofile" "testApplicationProfile" {
 "ssl_client_certificate_mode" = "SSL_CLIENT_CERTIFICATE_NONE"
 "http_to_https" = true
 "spdy_enabled" = false
+"respond_with_100_continue" = true
 "client_body_timeout" = "30000"
 "httponly_enabled" = true
 "hsts_max_age" = "365"
-"max_bad_rps_cip" = "0"
-"server_side_redirect_to_https" = true
 "client_max_header_size" = "12"
+"server_side_redirect_to_https" = true
+"max_bad_rps_cip" = "0"
 "client_max_request_size" = "48"
 "cache_config" {
 "min_object_size" = "100"

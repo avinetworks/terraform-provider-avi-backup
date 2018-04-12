@@ -2,11 +2,12 @@ package avi
 
 import (
 	"fmt"
+	"strings"
+	"testing"
+
 	"github.com/avinetworks/sdk/go/clients"
 	"github.com/hashicorp/terraform/helper/resource"
 	"github.com/hashicorp/terraform/terraform"
-	"strings"
-	"testing"
 )
 
 func TestAVIApplicationPersistenceProfileBasic(t *testing.T) {
@@ -45,7 +46,9 @@ func testAccCheckAVIApplicationPersistenceProfileExists(resourcename string) res
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No AVI ApplicationPersistenceProfile ID is set")
 		}
-		path := "api" + strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		uuid := strings.Split(url, "#")[0]
+		path := "api" + uuid
 		err := conn.Get(path, &obj)
 		if err != nil {
 			return err
@@ -62,7 +65,9 @@ func testAccCheckAVIApplicationPersistenceProfileDestroy(s *terraform.State) err
 		if rs.Type != "avi_applicationpersistenceprofile" {
 			continue
 		}
-		path := "api" + strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		uuid := strings.Split(url, "#")[0]
+		path := "api" + uuid
 		err := conn.Get(path, &obj)
 		if err != nil {
 			if strings.Contains(err.Error(), "404") {
@@ -86,9 +91,6 @@ resource "avi_applicationpersistenceprofile" "testApplicationPersistenceProfile"
 "is_federated" = false
 "server_hm_down_recovery" = "HM_DOWN_PICK_NEW_SERVER"
 "persistence_type" = "PERSISTENCE_TYPE_CLIENT_IP_ADDRESS"
-"ip_persistence_profile" {
-"ip_persistent_timeout" = "5"
-}
 "name" = "testSystem-Persistence-Client-IP"
 }
 `
@@ -102,9 +104,6 @@ resource "avi_applicationpersistenceprofile" "testApplicationPersistenceProfile"
 "is_federated" = false
 "server_hm_down_recovery" = "HM_DOWN_PICK_NEW_SERVER"
 "persistence_type" = "PERSISTENCE_TYPE_CLIENT_IP_ADDRESS"
-"ip_persistence_profile" {
-"ip_persistent_timeout" = "5"
-}
 "name" = "testSystem-Persistence-Client-IP-abc"
 }
 `

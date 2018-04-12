@@ -2,11 +2,12 @@ package avi
 
 import (
 	"fmt"
+	"strings"
+	"testing"
+
 	"github.com/avinetworks/sdk/go/clients"
 	"github.com/hashicorp/terraform/helper/resource"
 	"github.com/hashicorp/terraform/terraform"
-	"strings"
-	"testing"
 )
 
 func TestAVINetworkProfileBasic(t *testing.T) {
@@ -46,7 +47,9 @@ func testAccCheckAVINetworkProfileExists(resourcename string) resource.TestCheck
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No AVI NetworkProfile ID is set")
 		}
-		path := "api" + strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		uuid := strings.Split(url, "#")[0]
+		path := "api" + uuid
 		err := conn.Get(path, &obj)
 		if err != nil {
 			return err
@@ -63,7 +66,9 @@ func testAccCheckAVINetworkProfileDestroy(s *terraform.State) error {
 		if rs.Type != "avi_networkprofile" {
 			continue
 		}
-		path := "api" + strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		uuid := strings.Split(url, "#")[0]
+		path := "api" + uuid
 		err := conn.Get(path, &obj)
 		if err != nil {
 			if strings.Contains(err.Error(), "404") {
@@ -85,6 +90,7 @@ data "avi_tenant" "default_tenant"{
 resource "avi_networkprofile" "testNetworkProfile" {
 "profile" {
 "tcp_proxy_profile" {
+"min_rexmt_timeout" = 50
 "receive_window" = "64"
 "time_wait_delay" = "2000"
 "cc_algo" = "CC_ALGO_NEW_RENO"

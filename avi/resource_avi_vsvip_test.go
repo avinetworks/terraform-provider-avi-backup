@@ -2,11 +2,12 @@ package avi
 
 import (
 	"fmt"
+	"strings"
+	"testing"
+
 	"github.com/avinetworks/sdk/go/clients"
 	"github.com/hashicorp/terraform/helper/resource"
 	"github.com/hashicorp/terraform/terraform"
-	"strings"
-	"testing"
 )
 
 func TestAVIVSVipBasic(t *testing.T) {
@@ -46,7 +47,9 @@ func testAccCheckAVIVSVipExists(resourcename string) resource.TestCheckFunc {
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No VSVip ID is set")
 		}
-		path := "api" + strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		uuid := strings.Split(url, "#")[0]
+		path := "api" + uuid
 		err := conn.Get(path, &obj)
 		if err != nil {
 			return err
@@ -63,7 +66,9 @@ func testAccCheckAVIVSVipDestroy(s *terraform.State) error {
 		if rs.Type != "avi_vsvip" {
 			continue
 		}
-		path := "api" + strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		uuid := strings.Split(url, "#")[0]
+		path := "api" + uuid
 		err := conn.Get(path, &obj)
 		if err != nil {
 			if strings.Contains(err.Error(), "404") {
@@ -98,7 +103,7 @@ resource "avi_vsvip" "testvsvip" {
 		vip_id= "1"
 		avi_allocated_fip= false
 		auto_allocate_ip= false
-		enabled= true
+		enabled= false
 		auto_allocate_floating_ip= false
 		avi_allocated_vip= false
 		ip_address= {

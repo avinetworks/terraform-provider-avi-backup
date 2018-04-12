@@ -26,13 +26,13 @@ func Provider() terraform.ResourceProvider {
 			},
 			"avi_controller": &schema.Schema{
 				Type:        schema.TypeString,
-				Optional:    true,
+				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("AVI_CONTROLLER", nil),
 				Description: "Avi Controller hostname or IP address.",
 			},
 			"avi_password": &schema.Schema{
 				Type:        schema.TypeString,
-				Optional:    true,
+				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("AVI_PASSWORD", nil),
 				Description: "Password for Avi Controller.",
 			},
@@ -46,7 +46,7 @@ func Provider() terraform.ResourceProvider {
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("AVI_VERSION", nil),
-				Description: "Avi tenant for Avi Controller.",
+				Description: "Avi version for Avi Controller.",
 			},
 		},
 		DataSourcesMap: map[string]*schema.Resource{
@@ -188,11 +188,13 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 		Password:   d.Get("avi_password").(string),
 		Controller: d.Get("avi_controller").(string),
 		Tenant:     "admin",
-		Version:    "17.2.7",
+		Version:    "17.2.8",
 	}
+
 	if username, ok := d.GetOk("avi_username"); ok {
 		config.Username = username.(string)
 	}
+
 	if version, ok := d.GetOk("avi_version"); ok {
 		config.Version = version.(string)
 	}
@@ -208,7 +210,7 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 		session.SetVersion(config.Version),
 		session.SetInsecure)
 
-	log.Println("Avi Client created for user %v tenant %v version %v",
+	log.Printf("Avi Client created for user %v tenant %v version %v",
 		config.Username, config.Tenant, config.Version)
 
 	return aviClient, err
@@ -228,10 +230,6 @@ func (c *Credentials) validate() error {
 
 	if c.Controller == "" {
 		err = multierror.Append(err, fmt.Errorf("Avi Controller must be provided"))
-	}
-
-	if c.Username == "" {
-		err = multierror.Append(err, fmt.Errorf("Avi Controller username must be provided"))
 	}
 
 	if c.Password == "" {
