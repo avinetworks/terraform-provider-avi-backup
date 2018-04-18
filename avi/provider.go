@@ -46,7 +46,7 @@ func Provider() terraform.ResourceProvider {
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("AVI_VERSION", nil),
-				Description: "Avi tenant for Avi Controller.",
+				Description: "Avi version for Avi Controller.",
 			},
 		},
 		DataSourcesMap: map[string]*schema.Resource{
@@ -188,7 +188,7 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 		Password:   d.Get("avi_password").(string),
 		Controller: d.Get("avi_controller").(string),
 		Tenant:     "admin",
-		Version:    "17.2.7",
+		Version:    "17.2.8",
 	}
 	if username, ok := d.GetOk("avi_username"); ok {
 		config.Username = username.(string)
