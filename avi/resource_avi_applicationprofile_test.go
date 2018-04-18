@@ -2,11 +2,12 @@ package avi
 
 import (
 	"fmt"
+	"strings"
+	"testing"
+
 	"github.com/avinetworks/sdk/go/clients"
 	"github.com/hashicorp/terraform/helper/resource"
 	"github.com/hashicorp/terraform/terraform"
-	"strings"
-	"testing"
 )
 
 func TestAVIApplicationProfileBasic(t *testing.T) {
@@ -45,7 +46,9 @@ func testAccCheckAVIApplicationProfileExists(resourcename string) resource.TestC
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No AVI ApplicationProfile ID is set")
 		}
-		path := "api" + strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		uuid := strings.Split(url, "#")[0]
+		path := "api" + uuid
 		err := conn.Get(path, &obj)
 		if err != nil {
 			return err
@@ -62,7 +65,9 @@ func testAccCheckAVIApplicationProfileDestroy(s *terraform.State) error {
 		if rs.Type != "avi_applicationprofile" {
 			continue
 		}
-		path := "api" + strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		uuid := strings.Split(url, "#")[0]
+		path := "api" + uuid
 		err := conn.Get(path, &obj)
 		if err != nil {
 			if strings.Contains(err.Error(), "404") {
@@ -153,6 +158,55 @@ resource "avi_applicationprofile" "testApplicationProfile" {
 	"preserve_client_ip" = false
 	"name" = "testSystem-Secure-HTTP"
 }
+"xff_enabled" = true
+"disable_keepalive_posts_msie6" = true
+"keepalive_timeout" = "30000"
+"ssl_client_certificate_mode" = "SSL_CLIENT_CERTIFICATE_NONE"
+"http_to_https" = true
+"spdy_enabled" = false
+"respond_with_100_continue" = true
+"client_body_timeout" = "30000"
+"httponly_enabled" = true
+"hsts_max_age" = "365"
+"client_max_header_size" = "12"
+"server_side_redirect_to_https" = true
+"max_bad_rps_cip" = "0"
+"client_max_request_size" = "48"
+"cache_config" {
+"min_object_size" = "100"
+"query_cacheable" = false
+"xcache_header" = true
+"age_header" = true
+"enabled" = false
+"default_expire" = "600"
+"max_cache_size" = "0"
+"heuristic_expire" = false
+"date_header" = true
+"aggressive" = false
+"max_object_size" = "4194304"
+"mime_types_group_refs" = ["${data.avi_stringgroup.system_cacheablestringgroup.id}"]
+}
+"max_rps_unknown_uri" = "0"
+"ssl_everywhere_enabled" = true
+"spdy_fwd_proxy_mode" = false
+"allow_dots_in_header_name" = false
+"client_header_timeout" = "10000"
+"post_accept_timeout" = "30000"
+"secure_cookie_enabled" = true
+"max_response_headers_size" = "48"
+"xff_alternate_name" = "X-Forwarded-For"
+"max_rps_cip" = "0"
+"client_max_body_size" = "0"
+"enable_fire_and_forget" = false
+"max_rps_unknown_cip" = "0"
+"max_bad_rps_cip_uri" = "0"
+"max_bad_rps_uri" = "0"
+"use_app_keepalive_timeout" = false
+}
+"preserve_client_port" = false
+"preserve_client_ip" = false
+"name" = "testSystem-Secure-HTTP"
+}
 `
 
 const testAccAVIApplicationProfileupdatedConfig = `
@@ -230,5 +284,54 @@ resource "avi_applicationprofile" "testApplicationProfile" {
 	"preserve_client_port" = false
 	"preserve_client_ip" = false
 	"name" = "testSystem-Secure-HTTP-abc"
+}
+"xff_enabled" = true
+"disable_keepalive_posts_msie6" = true
+"keepalive_timeout" = "30000"
+"ssl_client_certificate_mode" = "SSL_CLIENT_CERTIFICATE_NONE"
+"http_to_https" = true
+"spdy_enabled" = false
+"respond_with_100_continue" = true
+"client_body_timeout" = "30000"
+"httponly_enabled" = true
+"hsts_max_age" = "365"
+"client_max_header_size" = "12"
+"server_side_redirect_to_https" = true
+"max_bad_rps_cip" = "0"
+"client_max_request_size" = "48"
+"cache_config" {
+"min_object_size" = "100"
+"query_cacheable" = false
+"xcache_header" = true
+"age_header" = true
+"enabled" = false
+"default_expire" = "600"
+"max_cache_size" = "0"
+"heuristic_expire" = false
+"date_header" = true
+"aggressive" = false
+"max_object_size" = "4194304"
+"mime_types_group_refs" = ["${data.avi_stringgroup.system_cacheablestringgroup.id}"]
+}
+"max_rps_unknown_uri" = "0"
+"ssl_everywhere_enabled" = true
+"spdy_fwd_proxy_mode" = false
+"allow_dots_in_header_name" = false
+"client_header_timeout" = "10000"
+"post_accept_timeout" = "30000"
+"secure_cookie_enabled" = true
+"max_response_headers_size" = "48"
+"xff_alternate_name" = "X-Forwarded-For"
+"max_rps_cip" = "0"
+"client_max_body_size" = "0"
+"enable_fire_and_forget" = false
+"max_rps_unknown_cip" = "0"
+"max_bad_rps_cip_uri" = "0"
+"max_bad_rps_uri" = "0"
+"use_app_keepalive_timeout" = false
+}
+"preserve_client_port" = false
+"preserve_client_ip" = false
+"name" = "testSystem-Secure-HTTP-abc"
 }
 `

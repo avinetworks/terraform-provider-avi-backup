@@ -2,11 +2,12 @@ package avi
 
 import (
 	"fmt"
+	"strings"
+	"testing"
+
 	"github.com/avinetworks/sdk/go/clients"
 	"github.com/hashicorp/terraform/helper/resource"
 	"github.com/hashicorp/terraform/terraform"
-	"strings"
-	"testing"
 )
 
 func TestAVIHardwareSecurityModuleGroupBasic(t *testing.T) {
@@ -45,7 +46,9 @@ func testAccCheckAVIHardwareSecurityModuleGroupExists(resourcename string) resou
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No Hardware Security Module Group ID is set")
 		}
-		path := "api" + strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		uuid := strings.Split(url, "#")[0]
+		path := "api" + uuid
 		err := conn.Get(path, &obj)
 		if err != nil {
 			return err
@@ -62,7 +65,9 @@ func testAccCheckAVIHardwareSecurityModuleGroupDestroy(s *terraform.State) error
 		if rs.Type != "avi_hardwaresecuritymodulegroup" {
 			continue
 		}
-		path := "api" + strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		uuid := strings.Split(url, "#")[0]
+		path := "api" + uuid
 		err := conn.Get(path, &obj)
 		if err != nil {
 			if strings.Contains(err.Error(), "404") {
@@ -91,12 +96,12 @@ resource "avi_hardwaresecuritymodulegroup" "testhardwaresecuritymodulegroup" {
      		remote_ip= {
 				addr= "10.10.15.1"
 				type= "V4"
-     		}
-			remote_port= "3450"
-			esn= "580A-F79E-BCD9"
+			 }
+			remote_port = 9004
+     		esn= "580A-F79E-BCD9"
 			priority= 100
-			module_id= 0
-			keyhash= "198644ebcba88ba1421ae0c34cdd541edf01deb8"
+     		module_id= 0
+     		keyhash= "198644ebcba88ba1421ae0c34cdd541edf01deb8"
    		}
  	}
 }

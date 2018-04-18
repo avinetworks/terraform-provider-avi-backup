@@ -96,6 +96,7 @@ func testAccPreCheck(t *testing.T) {
 		config.Controller, config.Username,
 		session.SetPassword(config.Password),
 		session.SetTenant(config.Tenant),
+		session.SetVersion(config.Version),
 		session.SetInsecure)
 
 	if err != nil {

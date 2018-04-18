@@ -2,11 +2,12 @@ package avi
 
 import (
 	"fmt"
+	"strings"
+	"testing"
+
 	"github.com/avinetworks/sdk/go/clients"
 	"github.com/hashicorp/terraform/helper/resource"
 	"github.com/hashicorp/terraform/terraform"
-	"strings"
-	"testing"
 )
 
 func TestAVINetworkSecuritypolicyBasic(t *testing.T) {
@@ -45,7 +46,9 @@ func testAccCheckAVINetworkSecuritypolicyExists(resourcename string) resource.Te
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No Network Security policy ID is set")
 		}
-		path := "api" + strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		uuid := strings.Split(url, "#")[0]
+		path := "api" + uuid
 		err := conn.Get(path, &obj)
 		if err != nil {
 			return err
@@ -62,7 +65,9 @@ func testAccCheckAVINetworkSecuritypolicyDestroy(s *terraform.State) error {
 		if rs.Type != "avi_networksecuritypolicy" {
 			continue
 		}
-		path := "api" + strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		uuid := strings.Split(url, "#")[0]
+		path := "api" + uuid
 		err := conn.Get(path, &obj)
 		if err != nil {
 			if strings.Contains(err.Error(), "404") {
