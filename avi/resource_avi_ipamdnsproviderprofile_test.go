@@ -86,7 +86,6 @@ const testAccAVIIPAMDNSProviderProfileConfig = `
 data "avi_tenant" "default_tenant"{
 	name= "admin"
 }
-
 data "avi_cloud" "default_cloud" {
 	name= "Default-Cloud"
 }
@@ -97,7 +96,7 @@ resource "avi_ipamdnsproviderprofile" "testipamdnsproviderprofile" {
 	name = "ipam-test"
 	allocate_ip_in_vrf= false
   	internal_profile= {
-    	ttl= 30
+        ttl= 31
   	}
   	type= "IPAMDNS_TYPE_INTERNAL"
 	tenant_ref= "${data.avi_tenant.default_tenant.id}"
@@ -108,7 +107,6 @@ const testAccUpdatedAVIIPAMDNSProviderProfileConfig = `
 data "avi_tenant" "default_tenant"{
 	name= "admin"
 }
-
 data "avi_cloud" "default_cloud" {
 	name= "Default-Cloud"
 }
@@ -118,6 +116,9 @@ data "avi_vrfcontext" "global_vrf" {
 resource "avi_ipamdnsproviderprofile" "testipamdnsproviderprofile" {
 	name = "ipam-abc"
 	allocate_ip_in_vrf= false
+    internal_profile= {
+        ttl= 31
+    }
   	type= "IPAMDNS_TYPE_INTERNAL"
 	tenant_ref= "${data.avi_tenant.default_tenant.id}"
 }

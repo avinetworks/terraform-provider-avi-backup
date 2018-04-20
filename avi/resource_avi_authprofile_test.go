@@ -23,13 +23,6 @@ func TestAVIAuthProfileBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"avi_authprofile.testauthprofile", "name", "ap-test")),
 			},
-			{
-				Config: testAccUpdatedAVIAuthProfileConfig,
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckAVIAuthProfileExists("avi_authprofile.testauthprofile"),
-					resource.TestCheckResourceAttr(
-						"avi_authprofile.testauthprofile", "name", "ap-abc")),
-			},
 		},
 	})
 
@@ -89,10 +82,6 @@ data "avi_tenant" "default_tenant"{
 
 resource "avi_authprofile" "testauthprofile" {
 	name = "ap-test"
-	http= {
-		cache_expiration_time= 5
-		group_member_is_full_dn= false
-	}
 	ldap= {
 		security_mode= "AUTH_LDAP_SECURE_NONE"
 		settings= {
@@ -110,9 +99,6 @@ resource "avi_authprofile" "testauthprofile" {
 		server= [
 			"10.0.0.1"
 		]
-		user_bind= {
-			token= "<user>"
-		}
 		full_name_attribute= "name"
 		email_attribute= "email"
 		port= 389
@@ -129,10 +115,6 @@ data "avi_tenant" "default_tenant"{
 
 resource "avi_authprofile" "testauthprofile" {
 	name = "ap-abc"
-	http= {
-		cache_expiration_time= 5
-		group_member_is_full_dn= false
-	}
 	ldap= {
 		security_mode= "AUTH_LDAP_SECURE_NONE"
 		settings= {
@@ -150,9 +132,6 @@ resource "avi_authprofile" "testauthprofile" {
 		server= [
 			"10.0.0.1"
 		]
-		user_bind= {
-			token= "<user>"
-		}
 		full_name_attribute= "name"
 		email_attribute= "email"
 		port= 389

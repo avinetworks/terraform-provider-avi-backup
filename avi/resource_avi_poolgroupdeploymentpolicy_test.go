@@ -86,11 +86,12 @@ const testAccAVIPoolGroupDeploymentPolicyConfig = `
 data "avi_tenant" "default_tenant"{
 	name= "admin"
 }
-
+data "avi_cloud" "default_cloud" {
+	name= "Default-Cloud"
+}
 resource "avi_poolgroupdeploymentpolicy" "testpoolgroupdeploymentpolicy" {
 	name = "pgpp-test"
 	tenant_ref= "${data.avi_tenant.default_tenant.id}"
-	cloud_ref= "${data.avi_cloud.default_cloud.id}"
 }
 `
 

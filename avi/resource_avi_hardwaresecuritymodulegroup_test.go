@@ -97,7 +97,7 @@ resource "avi_hardwaresecuritymodulegroup" "testhardwaresecuritymodulegroup" {
 				addr= "10.10.15.1"
 				type= "V4"
 			 }
-			remote_port = 9004
+			remote_port=9005
      		esn= "580A-F79E-BCD9"
 			priority= 100
      		module_id= 0
@@ -122,7 +122,7 @@ resource "avi_hardwaresecuritymodulegroup" "testhardwaresecuritymodulegroup" {
 				addr= "10.10.15.1"
 				type= "V4"
      		}
-			remote_port= "3450"
+			remote_port=3451
 			esn= "580A-F79E-BCD9"
 			priority= 100
 			module_id= 0

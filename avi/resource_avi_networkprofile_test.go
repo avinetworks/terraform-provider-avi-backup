@@ -89,8 +89,8 @@ data "avi_tenant" "default_tenant"{
 resource "avi_networkprofile" "testNetworkProfile" {
 	"profile" {
 		"tcp_proxy_profile" {
-			"receive_window" = "3200"
-			"time_wait_delay" = "2000"
+			"receive_window" = 3200
+			"time_wait_delay" = 2000
 			"cc_algo" = "CC_ALGO_NEW_RENO"
 			"nagles_algorithm" = false
 			"max_syn_retransmissions" = "6"
@@ -103,6 +103,7 @@ resource "avi_networkprofile" "testNetworkProfile" {
 			"automatic" = true
 			"ip_dscp" = "0"
 			"reorder_threshold" = "1"
+			"min_rexmt_timeout" = 435
 		}
 		"type" = "PROTOCOL_TYPE_TCP_PROXY"
 	}
@@ -118,8 +119,8 @@ data "avi_tenant" "default_tenant"{
 resource "avi_networkprofile" "testNetworkProfile" {
 	"profile" {
 		"tcp_proxy_profile" {
-			"receive_window" = "3200"
-			"time_wait_delay" = "2000"
+			"receive_window" = 3200
+			"time_wait_delay" = 2000
 			"cc_algo" = "CC_ALGO_NEW_RENO"
 			"nagles_algorithm" = false
 			"max_syn_retransmissions" = "6"
@@ -132,6 +133,7 @@ resource "avi_networkprofile" "testNetworkProfile" {
 			"automatic" = true
 			"ip_dscp" = "0"
 			"reorder_threshold" = "1"
+			"min_rexmt_timeout" = 435
 		}
 		"type" = "PROTOCOL_TYPE_TCP_PROXY"
 	}
