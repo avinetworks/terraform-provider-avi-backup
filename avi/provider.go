@@ -12,7 +12,7 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/terraform"
-	"log"
+	//	"log"
 )
 
 func Provider() terraform.ResourceProvider {
@@ -26,13 +26,13 @@ func Provider() terraform.ResourceProvider {
 			},
 			"avi_controller": &schema.Schema{
 				Type:        schema.TypeString,
-				Required:    true,
+				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("AVI_CONTROLLER", nil),
 				Description: "Avi Controller hostname or IP address.",
 			},
 			"avi_password": &schema.Schema{
 				Type:        schema.TypeString,
-				Required:    true,
+				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("AVI_PASSWORD", nil),
 				Description: "Password for Avi Controller.",
 			},
@@ -190,11 +190,9 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 		Tenant:     "admin",
 		Version:    "17.2.8",
 	}
-
 	if username, ok := d.GetOk("avi_username"); ok {
 		config.Username = username.(string)
 	}
-
 	if version, ok := d.GetOk("avi_version"); ok {
 		config.Version = version.(string)
 	}
@@ -210,9 +208,8 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 		session.SetVersion(config.Version),
 		session.SetInsecure)
 
-	log.Printf("Avi Client created for user %v tenant %v version %v",
-		config.Username, config.Tenant, config.Version)
-
+	//	log.Println("Avi Client created for user %v tenant %v version %v",
+	//		config.Username, config.Tenant, config.Version)
 	return aviClient, err
 }
 
