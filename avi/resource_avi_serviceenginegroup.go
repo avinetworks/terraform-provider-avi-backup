@@ -162,6 +162,11 @@ func ResourceServiceEngineGroupSchema() map[string]*schema.Schema {
 			Optional: true,
 			Default:  false,
 		},
+		"enable_multi_lb": &schema.Schema{
+			Type:     schema.TypeBool,
+			Optional: true,
+			Default:  false,
+		},
 		"enable_routing": &schema.Schema{
 			Type:     schema.TypeBool,
 			Optional: true,
