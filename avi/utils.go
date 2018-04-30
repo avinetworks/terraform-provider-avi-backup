@@ -10,12 +10,57 @@ import (
 	"reflect"
 	"strings"
 
+	//"fmt"
 	"github.com/avinetworks/sdk/go/clients"
 	"github.com/avinetworks/sdk/go/session"
 	"github.com/hashicorp/terraform/helper/hashcode"
 	"github.com/hashicorp/terraform/helper/schema"
 )
 
+func SetSchemaDefaultVal(d *schema.ResourceData, t map[string]*schema.Schema) {
+	//fmt.Printf("input= %v\n", reflect.TypeOf(t))
+	for k, v := range t {
+		//fmt.Printf("type of schema: %v\t%v\n", k, v.Type)
+		switch v.Type {
+		case schema.TypeList:
+			if k == "vip" {
+				log.Printf("vip obj: %v", v.Elem)
+				//temp := v.Elem.(schema.Schema.Elem)
+				//for o := range temp.(map[string]*schema.Schema) {
+				//	log.Printf("shrik %v\n", o)
+				//}
+				//defaultValue, err := v.DefaultValue()
+				//d.Set(k, defaultValue)
+				//a, _ := v.DefaultFunc()
+				//log.Printf("vip enabled default val %v\t%v\n%v", a, d.Get("enabled"), err)
+			}
+		case schema.TypeString:
+			defaultValue, err := v.DefaultValue()
+			if defaultValue != nil {
+				d.Set(k, defaultValue)
+				log.Printf("string default %v\t%v\t%v", defaultValue, d, err)
+			}
+		}
+		//if v.Type == schema.TypeString {
+		//	defaultValue, err := v.DefaultValue()
+		//	if defaultValue != nil {
+		//		d.Set(k, defaultValue)
+		//		//fmt.Printf("type of schema: %v\t%v\t%v\t%v\n", k, v.Type, defaultValue, err)
+		//		log.Printf("shrikant1 %v\n%v", d, err)
+		//	}
+		//}
+		//if v.Type == schema.TypeBool {
+		//	defaultValue, err := v.DefaultValue()
+		//	if defaultValue != nil {
+		//		d.Set(k, defaultValue)
+		//		//fmt.Printf("type of schema: %v\t%v\t%v\t%v\n", k, v.Type, defaultValue, err)
+		//		log.Printf("shrikant2 %v\n%v", d, err)
+		//	}
+		//}
+
+	}
+	return //nil, nil
+}
 func SchemaToAviData(d interface{}, s map[string]*schema.Schema) (interface{}, error) {
 	switch d.(type) {
 	default:
@@ -203,6 +248,13 @@ func ApiCreateOrUpdate(d *schema.ResourceData, meta interface{}, objType string,
 func ApiRead(d *schema.ResourceData, meta interface{}, objType string, s map[string]*schema.Schema) error {
 	client := meta.(*clients.AviClient)
 	var obj interface{}
+	var d_new schema.ResourceData
+	SetSchemaDefaultVal(&d_new, s)
+	ApiDataToSchema(obj, &d_new, s)
+	//if data, err := SchemaToAviData(obj, s); err == nil {
+	//	obj = data
+	//}
+	log.Printf("d= %v", d.Get("cloud_ref"))
 	uuid := ""
 	log.Printf("[DEBUG] ApiRead reading object with objType %v id %v\n",
 		objType, d.Id())
@@ -263,6 +315,7 @@ func ApiRead(d *schema.ResourceData, meta interface{}, objType string, s map[str
 	} else {
 		log.Printf("[ERROR] ApiRead in setting read object %v\n", err)
 	}
+
 	return nil
 }
 
