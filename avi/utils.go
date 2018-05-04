@@ -89,17 +89,15 @@ func SetDefaultsInAPIRes(api_res interface{}, d_local interface{}, t map[string]
 			default:
 				if _, ok := api_res.(map[string]interface{})[k]; !ok {
 					api_res.(map[string]interface{})[k] = v
-					if dval, ok := t[k]; ok {
-						//	// find default value in the schema
-						default_val, err := dval.DefaultValue()
-						if err == nil {
-							//log.Printf("default value : %v\t%v\n", k, default_val)
-							api_res.(map[string]interface{})[k] = default_val
-						}else {
-							log.Printf("[ERROR] SetDefaultsInAPIRes %v", err)
-						}
-					}
-					//log.Printf("test: %v\n", api_res.(map[string]interface{})[k])
+					//if dval, ok := t[k]; ok {
+					//	//	// find default value in the schema
+					//	default_val, err := dval.DefaultValue()
+					//	if default_val != nil && err == nil {
+					//		//log.Printf("default value : %v\t%v\n", k, default_val)
+					//		api_res.(map[string]interface{})[k] = v
+					//	}
+					//}
+					////log.Printf("test: %v\n", api_res.(map[string]interface{})[k])
 				}
 			case []interface{}:
 				//log.Printf("key= %v\t%v\n", k, v)
@@ -113,7 +111,7 @@ func SetDefaultsInAPIRes(api_res interface{}, d_local interface{}, t map[string]
 				for i := 0; i < len(varray); i++ {
 					//log.Printf("varray[%v]: %v\n", i, varray[i])
 					//t should be schema of the array of objects. t[k]
-					obj, err := SetDefaultsInAPIRes(varray2[i], varray[i], t_schema)
+					obj, err := SetDefaultsInAPIRes(varray2[i], varray[i], t)
 					if err == nil {
 						//log.Printf("[INFO] obj:  %v", obj)
 						switch obj.(type) {
