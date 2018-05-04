@@ -406,20 +406,25 @@ func resourceAviVirtualServiceUpdate(d *schema.ResourceData, meta interface{}) e
 	vspath := "api/virtualservice/" + uuid + "?include_name=true&skip_default=true"
 	err = client.AviSession.Get(vspath, &existingvs)
 	if err == nil {
-		if vsobj, err := ApiDataToSchema(existingvs, nil, nil); err == nil {
+		mod_api_res, err := SetDefaultsInAPIRes(existingvs, d, s)
+		if err != nil {
+			log.Printf("[ERROR] resourceAviVirtualServiceUpdate in Setting vip: %v\n", err)
+		}
+		if vsobj, err := ApiDataToSchema(mod_api_res, nil, nil); err == nil {
 			objs := vsobj.(*schema.Set).List()
-			for obj := 0; obj < len(objs); obj++ {
-				vsvipref := objs[obj].(map[string]interface{})["vsvip_ref"]
-				err = d.Set("vsvip_ref", vsvipref.(string))
-				if err != nil {
-					log.Printf("[ERROR] resourceAviVirtualServiceUpdate in Setting vsvip ref: %v\n", err)
-				}
-				vipob := objs[obj].(map[string]interface{})["vip"]
-				err = d.Set("vip", vipob)
-				if err != nil {
-					log.Printf("[ERROR] resourceAviVirtualServiceUpdate in Setting vip: %v\n", err)
-				}
-			}
+			//for obj := 0; obj < len(objs); obj++ {
+			//	vsvipref := objs[obj].(map[string]interface{})["vsvip_ref"]
+			//	err = d.Set("vsvip_ref", vsvipref.(string))
+			//	if err != nil {
+			//		log.Printf("[ERROR] resourceAviVirtualServiceUpdate in Setting vsvip ref: %v\n", err)
+			//	}
+			//	vipob := objs[obj].(map[string]interface{})["vip"]
+			//	err = d.Set("vip", vipob)
+			//	if err != nil {
+			//		log.Printf("[ERROR] resourceAviVirtualServiceUpdate in Setting vip: %v\n", err)
+			//	}
+			//}
+			log.Printf("objs: %v\n", objs)
 		} else {
 			log.Printf("[ERROR] resourceAviVirtualServiceUpdate in ApiDataToSchema: %v\n", err)
 		}

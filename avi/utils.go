@@ -17,50 +17,6 @@ import (
 	"github.com/hashicorp/terraform/helper/schema"
 )
 
-func SetSchemaDefaultVal(d *schema.ResourceData, t map[string]*schema.Schema) {
-	//fmt.Printf("input= %v\n", reflect.TypeOf(t))
-	for k, v := range t {
-		//fmt.Printf("type of schema: %v\t%v\n", k, v.Type)
-		switch v.Type {
-		case schema.TypeList:
-			if k == "vip" {
-				log.Printf("vip obj: %v", v.Elem)
-				//temp := v.Elem.(schema.Schema.Elem)
-				//for o := range temp.(map[string]*schema.Schema) {
-				//	log.Printf("shrik %v\n", o)
-				//}
-				//defaultValue, err := v.DefaultValue()
-				//d.Set(k, defaultValue)
-				//a, _ := v.DefaultFunc()
-				//log.Printf("vip enabled default val %v\t%v\n%v", a, d.Get("enabled"), err)
-			}
-		case schema.TypeString:
-			defaultValue, err := v.DefaultValue()
-			if defaultValue != nil {
-				d.Set(k, defaultValue)
-				log.Printf("string default %v\t%v\t%v", defaultValue, d, err)
-			}
-		}
-		//if v.Type == schema.TypeString {
-		//	defaultValue, err := v.DefaultValue()
-		//	if defaultValue != nil {
-		//		d.Set(k, defaultValue)
-		//		//fmt.Printf("type of schema: %v\t%v\t%v\t%v\n", k, v.Type, defaultValue, err)
-		//		log.Printf("shrikant1 %v\n%v", d, err)
-		//	}
-		//}
-		//if v.Type == schema.TypeBool {
-		//	defaultValue, err := v.DefaultValue()
-		//	if defaultValue != nil {
-		//		d.Set(k, defaultValue)
-		//		//fmt.Printf("type of schema: %v\t%v\t%v\t%v\n", k, v.Type, defaultValue, err)
-		//		log.Printf("shrikant2 %v\n%v", d, err)
-		//	}
-		//}
-
-	}
-	return //nil, nil
-}
 func SchemaToAviData(d interface{}, s map[string]*schema.Schema) (interface{}, error) {
 	switch d.(type) {
 	default:
@@ -118,6 +74,70 @@ func CommonHash(v interface{}) int {
 	return hashcode.String("avi")
 }
 
+func SetDefaultsInAPIRes(api_res interface{}, d_local interface{}, t map[string]*schema.Schema) (interface{}, error) {
+
+	log.Printf("d_local: %v\n", d_local)
+	log.Printf("api res: %v\n", api_res)
+	switch d_local.(type) {
+	default:
+	case map[string]interface{}:
+		//use schema default for boolean and add dictitionary use case and add contion for for array size=1
+		for k, v := range d_local.(map[string]interface{}) {
+			//log.Printf("v type: %v\n", reflect.TypeOf(v))
+			//log.Printf("enabled d_local: %v\t%v\n", k, api_res.(map[string]interface{})[k])
+			switch v.(type) {
+			default:
+				if _, ok := api_res.(map[string]interface{})[k]; !ok {
+					api_res.(map[string]interface{})[k] = v
+					if dval, ok := t[k]; ok {
+						//	// find default value in the schema
+						default_val, err := dval.DefaultValue()
+						if err == nil {
+							//log.Printf("default value : %v\t%v\n", k, default_val)
+							api_res.(map[string]interface{})[k] = default_val
+						}else {
+							log.Printf("[ERROR] SetDefaultsInAPIRes %v", err)
+						}
+					}
+					//log.Printf("test: %v\n", api_res.(map[string]interface{})[k])
+				}
+			case []interface{}:
+				//log.Printf("key= %v\t%v\n", k, v)
+				var objList []interface{}
+				varray := v.([]interface{})
+				varray2 := api_res.(map[string]interface{})[k].([]interface{})
+				//check for varray2 len.
+				//log.Printf("varray: %v\n", varray)
+				//log.Printf("varray2: %v\n", varray2)
+				//avoid loop over on index of an object.
+				for i := 0; i < len(varray); i++ {
+					//log.Printf("varray[%v]: %v\n", i, varray[i])
+					//t should be schema of the array of objects. t[k]
+					obj, err := SetDefaultsInAPIRes(varray2[i], varray[i], t_schema)
+					if err == nil {
+						//log.Printf("[INFO] obj:  %v", obj)
+						switch obj.(type) {
+						default:
+							objList = append(objList, obj)
+						case *schema.Set:
+							objList = append(objList, obj.(*schema.Set).List()[0])
+						}
+					} else {
+						log.Printf("[INFO] SetDefaultsInAPIRes %v", err)
+					}
+				}
+				api_res.(map[string]interface{})[k] = objList
+				//log.Printf("[INFO] api_res %v", api_res)
+				//SetDefaultsInAPIRes(api_res.(map[string]interface{})[k], v, t)
+			}
+
+		}
+		return api_res, nil
+	}
+	return api_res, nil
+
+}
+
 func ApiDataToSchema(adata interface{}, d *schema.ResourceData, t map[string]*schema.Schema) (interface{}, error) {
 	switch adata.(type) {
 	default:
@@ -132,7 +152,6 @@ func ApiDataToSchema(adata interface{}, d *schema.ResourceData, t map[string]*sc
 				} else if err != nil {
 					log.Printf("[ERROR] ApiDataToSchema %v in converting k: %v v: %v", err, k, v)
 				}
-
 			}
 			//var s schema.Set
 			objs := []interface{}{}
@@ -248,13 +267,6 @@ func ApiCreateOrUpdate(d *schema.ResourceData, meta interface{}, objType string,
 func ApiRead(d *schema.ResourceData, meta interface{}, objType string, s map[string]*schema.Schema) error {
 	client := meta.(*clients.AviClient)
 	var obj interface{}
-	var d_new schema.ResourceData
-	SetSchemaDefaultVal(&d_new, s)
-	ApiDataToSchema(obj, &d_new, s)
-	//if data, err := SchemaToAviData(obj, s); err == nil {
-	//	obj = data
-	//}
-	log.Printf("d= %v", d.Get("cloud_ref"))
 	uuid := ""
 	log.Printf("[DEBUG] ApiRead reading object with objType %v id %v\n",
 		objType, d.Id())
@@ -305,15 +317,30 @@ func ApiRead(d *schema.ResourceData, meta interface{}, objType string, s map[str
 		log.Printf("[ERROR] ApiRead not found %v\n", d.Get("uuid"))
 		return nil
 	}
-	if _, err := ApiDataToSchema(obj, d, s); err == nil {
-		url := obj.(map[string]interface{})["url"].(string)
-		uuid := obj.(map[string]interface{})["uuid"].(string)
-		//url = strings.SplitN(url, "#", 2)[0]
-		log.Printf("[DEBUG] ApiRead read object with id %v\n", url)
-		d.SetId(url)
-		d.Set("uuid", uuid)
-	} else {
-		log.Printf("[ERROR] ApiRead in setting read object %v\n", err)
+	if local_data, err := SchemaToAviData(d, s); err == nil {
+		mod_api_res, err := SetDefaultsInAPIRes(obj, local_data, s)
+		obj = mod_api_res
+		//log.Printf("hoooo: %v\n", obj.(map[string]interface{})["vip"])
+		//var vip_obj []interface{}
+		//if val, ok := obj.(map[string]interface{})["vip"]; ok {
+		//	for _, v := range val.([]interface{}) {
+		//		v.(map[string]interface{})["enabled"] = true
+		//		vip_obj = append(vip_obj, v)
+		//	}
+		//	obj.(map[string]interface{})["vip"] = vip_obj
+		//}
+
+		log.Printf("mod_api_res: %v\t%v\n", obj, err)
+		if _, err := ApiDataToSchema(obj, d, s); err == nil {
+			url := obj.(map[string]interface{})["url"].(string)
+			uuid := obj.(map[string]interface{})["uuid"].(string)
+			//url = strings.SplitN(url, "#", 2)[0]
+			log.Printf("[DEBUG] ApiRead read object with id %v\n", url)
+			d.SetId(url)
+			d.Set("uuid", uuid)
+		} else {
+			log.Printf("[ERROR] ApiRead in setting read object %v\n", err)
+		}
 	}
 
 	return nil
