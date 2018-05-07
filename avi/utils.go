@@ -10,7 +10,6 @@ import (
 	"reflect"
 	"strings"
 
-	//"fmt"
 	"github.com/avinetworks/sdk/go/clients"
 	"github.com/avinetworks/sdk/go/session"
 	"github.com/hashicorp/terraform/helper/hashcode"
@@ -74,68 +73,40 @@ func CommonHash(v interface{}) int {
 	return hashcode.String("avi")
 }
 
-func SetDefaultsInAPIRes(api_res interface{}, d_local interface{}, t map[string]*schema.Schema) (interface{}, error) {
-
-	log.Printf("d_local: %v\n", d_local)
-	log.Printf("api res: %v\n", api_res)
+func SetDefaultsInAPIRes(api_res interface{}, d_local interface{}) (interface{}, error) {
 	switch d_local.(type) {
 	default:
 	case map[string]interface{}:
-		//use schema default for boolean and add dictitionary use case and add contion for for array size=1
 		for k, v := range d_local.(map[string]interface{}) {
-			//log.Printf("v type: %v\n", reflect.TypeOf(v))
-			//log.Printf("enabled d_local: %v\t%v\n", k, api_res.(map[string]interface{})[k])
 			switch v.(type) {
 			default:
 				if _, ok := api_res.(map[string]interface{})[k]; !ok {
 					api_res.(map[string]interface{})[k] = v
-					//if dval, ok := t[k]; ok {
-					//	//	// find default value in the schema
-					//	default_val, err := dval.DefaultValue()
-					//	if default_val != nil && err == nil {
-					//		//log.Printf("default value : %v\t%v\n", k, default_val)
-					//		api_res.(map[string]interface{})[k] = v
-					//	}
-					//}
-					////log.Printf("test: %v\n", api_res.(map[string]interface{})[k])
 				}
+			case map[string]interface{}:
+				api_res1, err := SetDefaultsInAPIRes(api_res.(map[string]interface{})[k], v)
+				if err != nil {
+					log.Printf("[ERROR] SetDefaultsInAPIRes %v\n", api_res)
+				}
+				api_res.(map[string]interface{})[k] = api_res1
 			case []interface{}:
-				//log.Printf("key= %v\t%v\n", k, v)
 				var objList []interface{}
-				varray := v.([]interface{})
 				varray2 := api_res.(map[string]interface{})[k].([]interface{})
-				//check for varray2 len.
-				//log.Printf("varray: %v\n", varray)
-				//log.Printf("varray2: %v\n", varray2)
-				//avoid loop over on index of an object.
-				for i := 0; i < len(varray); i++ {
-					//log.Printf("varray[%v]: %v\n", i, varray[i])
-					//t should be schema of the array of objects. t[k]
-					obj, err := SetDefaultsInAPIRes(varray2[i], varray[i], t)
+				for x, y := range v.([]interface{}) {
+					obj, err := SetDefaultsInAPIRes(varray2[x], y)
 					if err == nil {
-						//log.Printf("[INFO] obj:  %v", obj)
-						switch obj.(type) {
-						default:
-							objList = append(objList, obj)
-						case *schema.Set:
-							objList = append(objList, obj.(*schema.Set).List()[0])
-						}
+						objList = append(objList, obj)
 					} else {
-						log.Printf("[INFO] SetDefaultsInAPIRes %v", err)
+						log.Printf("[ERROR] SetDefaultsInAPIRes %v", err)
 					}
 				}
 				api_res.(map[string]interface{})[k] = objList
-				//log.Printf("[INFO] api_res %v", api_res)
-				//SetDefaultsInAPIRes(api_res.(map[string]interface{})[k], v, t)
+				log.Printf("[INFO] SetDefaultsInAPIRes adding obj list to API response %v for field: %v", objList, k)
 			}
-
 		}
-		return api_res, nil
 	}
 	return api_res, nil
-
 }
-
 func ApiDataToSchema(adata interface{}, d *schema.ResourceData, t map[string]*schema.Schema) (interface{}, error) {
 	switch adata.(type) {
 	default:
@@ -150,6 +121,7 @@ func ApiDataToSchema(adata interface{}, d *schema.ResourceData, t map[string]*sc
 				} else if err != nil {
 					log.Printf("[ERROR] ApiDataToSchema %v in converting k: %v v: %v", err, k, v)
 				}
+
 			}
 			//var s schema.Set
 			objs := []interface{}{}
@@ -316,19 +288,11 @@ func ApiRead(d *schema.ResourceData, meta interface{}, objType string, s map[str
 		return nil
 	}
 	if local_data, err := SchemaToAviData(d, s); err == nil {
-		mod_api_res, err := SetDefaultsInAPIRes(obj, local_data, s)
+		mod_api_res, err := SetDefaultsInAPIRes(obj, local_data)
 		obj = mod_api_res
-		//log.Printf("hoooo: %v\n", obj.(map[string]interface{})["vip"])
-		//var vip_obj []interface{}
-		//if val, ok := obj.(map[string]interface{})["vip"]; ok {
-		//	for _, v := range val.([]interface{}) {
-		//		v.(map[string]interface{})["enabled"] = true
-		//		vip_obj = append(vip_obj, v)
-		//	}
-		//	obj.(map[string]interface{})["vip"] = vip_obj
-		//}
-
-		log.Printf("mod_api_res: %v\t%v\n", obj, err)
+		if err != nil {
+			log.Printf("[ERROR] ApiRead in Modifying API response %v\n", err)
+		}
 		if _, err := ApiDataToSchema(obj, d, s); err == nil {
 			url := obj.(map[string]interface{})["url"].(string)
 			uuid := obj.(map[string]interface{})["uuid"].(string)
@@ -340,7 +304,6 @@ func ApiRead(d *schema.ResourceData, meta interface{}, objType string, s map[str
 			log.Printf("[ERROR] ApiRead in setting read object %v\n", err)
 		}
 	}
-
 	return nil
 }
 
