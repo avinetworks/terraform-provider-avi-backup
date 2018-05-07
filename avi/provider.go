@@ -223,7 +223,6 @@ type Credentials struct {
 	Version    string
 }
 
-//skip default mode. addtion of new flag.
 func (c *Credentials) validate() error {
 	var err *multierror.Error
 
