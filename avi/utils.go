@@ -10,7 +10,6 @@ import (
 	"reflect"
 	"strings"
 
-	//"fmt"
 	"github.com/avinetworks/sdk/go/clients"
 	"github.com/avinetworks/sdk/go/session"
 	"github.com/hashicorp/terraform/helper/hashcode"
