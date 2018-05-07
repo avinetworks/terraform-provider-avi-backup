@@ -408,7 +408,7 @@ func resourceAviVirtualServiceUpdate(d *schema.ResourceData, meta interface{}) e
 	if err == nil {
 		mod_api_res, err := SetDefaultsInAPIRes(existingvs, d)
 		if err != nil {
-			log.Printf("[ERROR] resourceAviVirtualServiceUpdate in Setting vip: %v\n", err)
+			log.Printf("[ERROR] resourceAviVirtualServiceUpdate in updating api response: %v\n", err)
 		}
 		if _, err := ApiDataToSchema(mod_api_res, nil, nil); err != nil {
 			log.Printf("[ERROR] resourceAviVirtualServiceUpdate in ApiDataToSchema: %v\n", err)

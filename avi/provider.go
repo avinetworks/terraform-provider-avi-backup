@@ -208,7 +208,6 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 		session.SetVersion(config.Version),
 		session.SetInsecure)
 
-
 	log.Println("Avi Client created for user %v tenant %v version %v",
 		config.Username, config.Tenant, config.Version)
 	return aviClient, err
