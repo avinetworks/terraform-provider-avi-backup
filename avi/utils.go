@@ -10,6 +10,7 @@ import (
 	"reflect"
 	"strings"
 
+	//"fmt"
 	"github.com/avinetworks/sdk/go/clients"
 	"github.com/avinetworks/sdk/go/session"
 	"github.com/hashicorp/terraform/helper/hashcode"
@@ -79,16 +80,21 @@ func SetDefaultsInAPIRes(api_res interface{}, d_local interface{}) (interface{},
 	case map[string]interface{}:
 		for k, v := range d_local.(map[string]interface{}) {
 			switch v.(type) {
+			//Getting key, value for given d_local
 			default:
 				if _, ok := api_res.(map[string]interface{})[k]; !ok {
+					//Setting up value of api_res key from d_local
 					api_res.(map[string]interface{})[k] = v
 				}
+
+			//d_local nested dictionary.
 			case map[string]interface{}:
 				api_res1, err := SetDefaultsInAPIRes(api_res.(map[string]interface{})[k], v)
 				if err != nil {
 					log.Printf("[ERROR] SetDefaultsInAPIRes %v\n", api_res)
 				}
 				api_res.(map[string]interface{})[k] = api_res1
+			//d_local is array of dictionaries.
 			case []interface{}:
 				var objList []interface{}
 				varray2 := api_res.(map[string]interface{})[k].([]interface{})
@@ -101,12 +107,13 @@ func SetDefaultsInAPIRes(api_res interface{}, d_local interface{}) (interface{},
 					}
 				}
 				api_res.(map[string]interface{})[k] = objList
-				log.Printf("[INFO] SetDefaultsInAPIRes adding obj list to API response %v for field: %v", objList, k)
 			}
 		}
 	}
 	return api_res, nil
+
 }
+
 func ApiDataToSchema(adata interface{}, d *schema.ResourceData, t map[string]*schema.Schema) (interface{}, error) {
 	switch adata.(type) {
 	default:
@@ -121,7 +128,6 @@ func ApiDataToSchema(adata interface{}, d *schema.ResourceData, t map[string]*sc
 				} else if err != nil {
 					log.Printf("[ERROR] ApiDataToSchema %v in converting k: %v v: %v", err, k, v)
 				}
-
 			}
 			//var s schema.Set
 			objs := []interface{}{}
@@ -289,11 +295,10 @@ func ApiRead(d *schema.ResourceData, meta interface{}, objType string, s map[str
 	}
 	if local_data, err := SchemaToAviData(d, s); err == nil {
 		mod_api_res, err := SetDefaultsInAPIRes(obj, local_data)
-		obj = mod_api_res
 		if err != nil {
-			log.Printf("[ERROR] ApiRead in Modifying API response %v\n", err)
+			log.Printf("[ERROR] ApiRead in modifying api response object %v\n", err)
 		}
-		if _, err := ApiDataToSchema(obj, d, s); err == nil {
+		if _, err := ApiDataToSchema(mod_api_res, d, s); err == nil {
 			url := obj.(map[string]interface{})["url"].(string)
 			uuid := obj.(map[string]interface{})["uuid"].(string)
 			//url = strings.SplitN(url, "#", 2)[0]
@@ -304,6 +309,7 @@ func ApiRead(d *schema.ResourceData, meta interface{}, objType string, s map[str
 			log.Printf("[ERROR] ApiRead in setting read object %v\n", err)
 		}
 	}
+
 	return nil
 }
 
