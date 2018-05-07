@@ -12,7 +12,7 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/terraform"
-	//	"log"
+	//"log"
 )
 
 func Provider() terraform.ResourceProvider {
@@ -188,7 +188,7 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 		Password:   d.Get("avi_password").(string),
 		Controller: d.Get("avi_controller").(string),
 		Tenant:     "admin",
-		Version:    "17.2.8",
+		Version:    "17.2.10",
 	}
 	if username, ok := d.GetOk("avi_username"); ok {
 		config.Username = username.(string)
@@ -222,6 +222,7 @@ type Credentials struct {
 	Version    string
 }
 
+//skip default mode. addtion of new flag.
 func (c *Credentials) validate() error {
 	var err *multierror.Error
 
