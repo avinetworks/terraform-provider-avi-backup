@@ -405,17 +405,6 @@ func resourceAviVirtualServiceUpdate(d *schema.ResourceData, meta interface{}) e
 	uuid := d.Get("uuid").(string)
 	vspath := "api/virtualservice/" + uuid + "?include_name=true&skip_default=true"
 	err = client.AviSession.Get(vspath, &existingvs)
-	if err == nil {
-		mod_api_res, err := SetDefaultsInAPIRes(existingvs, d)
-		if err != nil {
-			log.Printf("[ERROR] resourceAviVirtualServiceUpdate in updating api response: %v\n", err)
-		}
-		if _, err := ApiDataToSchema(mod_api_res, nil, nil); err != nil {
-			log.Printf("[ERROR] resourceAviVirtualServiceUpdate in ApiDataToSchema: %v\n", err)
-		}
-	} else {
-		log.Printf("[ERROR] resourceAviVirtualServiceUpdate in GET: %v\n", err)
-	}
 	err = ApiCreateOrUpdate(d, meta, "virtualservice", s)
 	if err == nil {
 		err = ResourceAviVirtualServiceRead(d, meta)
