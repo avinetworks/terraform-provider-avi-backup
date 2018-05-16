@@ -432,13 +432,6 @@ func resourceAviVirtualServiceUpdate(d *schema.ResourceData, meta interface{}) e
 			}
 		}
 	}
-	mod_api_res, err := SetDefaultsInAPIRes(existingvs, d, s)
-	if err != nil {
-		log.Printf("[ERROR] SetDefaultsInAPIRes in updating api response: %v\n", err)
-	}
-	if _, err := ApiDataToSchema(mod_api_res, nil, nil); err != nil {
-		log.Printf("[ERROR] resourceAviVirtualServiceUpdate in ApiDataToSchema: %v\n", err)
-	}
 	err = ApiCreateOrUpdate(d, meta, "virtualservice", s)
 	if err == nil {
 		err = ResourceAviVirtualServiceRead(d, meta)
