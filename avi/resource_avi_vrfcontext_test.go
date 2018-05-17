@@ -45,9 +45,7 @@ func testAccCheckAVIVrfContextExists(resourcename string) resource.TestCheckFunc
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No AVI VrfContext ID is set")
 		}
-		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
-		uuid := strings.Split(url, "#")[0]
-		path := "api" + uuid
+		path := "api" + strings.SplitN(rs.Primary.ID, "/api", 2)[1]
 		err := conn.Get(path, &obj)
 		if err != nil {
 			return err
@@ -64,9 +62,7 @@ func testAccCheckAVIVrfContextDestroy(s *terraform.State) error {
 		if rs.Type != "avi_vrfcontext" {
 			continue
 		}
-		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
-		uuid := strings.Split(url, "#")[0]
-		path := "api" + uuid
+		path := "api" + strings.SplitN(rs.Primary.ID, "/api", 2)[1]
 		err := conn.Get(path, &obj)
 		if err != nil {
 			if strings.Contains(err.Error(), "404") {

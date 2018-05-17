@@ -54,6 +54,10 @@ func dataSourceAviWafPolicy() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
+			"waf_crs_ref": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
 			"waf_profile_ref": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,

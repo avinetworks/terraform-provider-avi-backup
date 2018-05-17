@@ -19,6 +19,11 @@ func ResourceServiceEngineGroupSchema() map[string]*schema.Schema {
 			Optional: true,
 			Default:  false,
 		},
+		"additional_config_memory": &schema.Schema{
+			Type:     schema.TypeInt,
+			Optional: true,
+			Default:  20,
+		},
 		"advertise_backend_networks": &schema.Schema{
 			Type:     schema.TypeBool,
 			Optional: true,
@@ -135,12 +140,12 @@ func ResourceServiceEngineGroupSchema() map[string]*schema.Schema {
 		"disable_gro": &schema.Schema{
 			Type:     schema.TypeBool,
 			Optional: true,
-			Default:  true,
+			Default:  false,
 		},
 		"disable_tso": &schema.Schema{
 			Type:     schema.TypeBool,
 			Optional: true,
-			Default:  true,
+			Default:  false,
 		},
 		"disk_per_se": &schema.Schema{
 			Type:     schema.TypeInt,
@@ -332,6 +337,16 @@ func ResourceServiceEngineGroupSchema() map[string]*schema.Schema {
 			Optional: true,
 			Default:  1,
 		},
+		"minimum_required_config_memory": &schema.Schema{
+			Type:     schema.TypeInt,
+			Optional: true,
+			Default:  10,
+		},
+		"n_log_streaming_threads": &schema.Schema{
+			Type:     schema.TypeInt,
+			Optional: true,
+			Default:  1,
+		},
 		"name": &schema.Schema{
 			Type:     schema.TypeString,
 			Required: true,
@@ -467,6 +482,11 @@ func ResourceServiceEngineGroupSchema() map[string]*schema.Schema {
 			Optional: true,
 			Default:  256,
 		},
+		"service_ip6_subnets": &schema.Schema{
+			Type:     schema.TypeList,
+			Optional: true,
+			Elem:     ResourceIpAddrPrefixSchema(),
+		},
 		"service_ip_subnets": &schema.Schema{
 			Type:     schema.TypeList,
 			Optional: true,
@@ -559,6 +579,11 @@ func ResourceServiceEngineGroupSchema() map[string]*schema.Schema {
 			Set: func(v interface{}) int {
 				return 0
 			},
+		},
+		"vss_placement_enabled": &schema.Schema{
+			Type:     schema.TypeBool,
+			Optional: true,
+			Default:  false,
 		},
 		"waf_mempool": &schema.Schema{
 			Type:     schema.TypeBool,

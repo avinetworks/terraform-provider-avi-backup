@@ -60,6 +60,10 @@ func ResourceWafPolicySchema() map[string]*schema.Schema {
 			Optional: true,
 			Computed: true,
 		},
+		"waf_crs_ref": &schema.Schema{
+			Type:     schema.TypeString,
+			Optional: true,
+		},
 		"waf_profile_ref": &schema.Schema{
 			Type:     schema.TypeString,
 			Optional: true,
