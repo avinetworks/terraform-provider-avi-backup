@@ -430,7 +430,11 @@ func resourceAviVirtualServiceUpdate(d *schema.ResourceData, meta interface{}) e
 					log.Printf("[ERROR] resourceAviVirtualServiceUpdate in Setting vip: %v\n", err)
 				}
 			}
+		} else {
+			log.Printf("[ERROR] resourceAviVirtualServiceUpdate in ApiDataToSchema: %v\n", err)
 		}
+	} else {
+		log.Printf("[ERROR] resourceAviVirtualServiceUpdate in GET: %v\n", err)
 	}
 	err = ApiCreateOrUpdate(d, meta, "virtualservice", s)
 	if err == nil {
