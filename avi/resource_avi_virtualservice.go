@@ -60,7 +60,6 @@ func ResourceVirtualServiceSchema() map[string]*schema.Schema {
 		"cloud_ref": &schema.Schema{
 			Type:     schema.TypeString,
 			Optional: true,
-			Default:  "/api/cloud?name=Default-Cloud",
 		},
 		"cloud_type": &schema.Schema{
 			Type:     schema.TypeString,

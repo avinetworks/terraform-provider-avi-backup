@@ -82,7 +82,6 @@ func SetDefaultsInAPIRes(api_res interface{}, d_local interface{}, s map[string]
 			//Getting key, value for given d_local
 			default:
 				if _, ok := api_res.(map[string]interface{})[k]; !ok {
-					log.Printf("\n\ntest: key %v, val %v\n\n", k, v)
 					//Cheking if field is present in schema
 					if dval, ok := s[k]; ok {
 						//Getting default values from schema
@@ -90,7 +89,7 @@ func SetDefaultsInAPIRes(api_res interface{}, d_local interface{}, s map[string]
 						if err != nil {
 							log.Printf("[ERROR] SetDefaultsInAPIRes %v", err)
 						} else {
-							if default_val != nil && k != "cloud_ref" {
+							if default_val != nil {
 								api_res.(map[string]interface{})[k] = default_val
 								log.Printf("[INFO] SetDefaultsInAPIRes setting default for field: %v\t val: %v", k, default_val)
 							}

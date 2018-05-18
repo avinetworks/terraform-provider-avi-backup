@@ -1931,7 +1931,6 @@ func ResourceVIMgrVcenterRuntimeSchema() *schema.Resource {
 			"cloud_ref": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
-				Default:  "/api/cloud?name=Default-Cloud",
 			},
 			"datacenter_refs": &schema.Schema{
 				Type:     schema.TypeList,
@@ -7300,7 +7299,6 @@ func ResourceVIMgrClusterRuntimeSchema() *schema.Resource {
 			"cloud_ref": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
-				Default:  "/api/cloud?name=Default-Cloud",
 			},
 			"datacenter_managed_object_id": &schema.Schema{
 				Type:     schema.TypeString,
@@ -8015,7 +8013,6 @@ func ResourceVIMgrDCRuntimeSchema() *schema.Resource {
 			"cloud_ref": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
-				Default:  "/api/cloud?name=Default-Cloud",
 			},
 			"cluster_refs": &schema.Schema{
 				Type:     schema.TypeList,
@@ -10629,7 +10626,6 @@ func ResourceVIMgrNWRuntimeSchema() *schema.Resource {
 			"cloud_ref": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
-				Default:  "/api/cloud?name=Default-Cloud",
 			},
 			"datacenter_uuid": &schema.Schema{
 				Type:     schema.TypeString,
@@ -12409,7 +12405,6 @@ func ResourceVIMgrSEVMRuntimeSchema() *schema.Resource {
 			"cloud_ref": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
-				Default:  "/api/cloud?name=Default-Cloud",
 			},
 			"connection_state": &schema.Schema{
 				Type:     schema.TypeString,
@@ -20969,7 +20964,6 @@ func ResourceDebugVirtualServiceSchema() *schema.Resource {
 			"cloud_ref": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
-				Default:  "/api/cloud?name=Default-Cloud",
 			},
 			"debug_hm": &schema.Schema{
 				Type:     schema.TypeString,
@@ -21742,7 +21736,6 @@ func ResourceVIMgrHostRuntimeSchema() *schema.Resource {
 			"cloud_ref": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
-				Default:  "/api/cloud?name=Default-Cloud",
 			},
 			"cluster_name": &schema.Schema{
 				Type:     schema.TypeString,
@@ -23121,7 +23114,6 @@ func ResourceVIMgrVMRuntimeSchema() *schema.Resource {
 			"cloud_ref": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
-				Default:  "/api/cloud?name=Default-Cloud",
 			},
 			"connection_state": &schema.Schema{
 				Type:     schema.TypeString,

@@ -87,7 +87,6 @@ func dataSourceAviServiceEngineGroup() *schema.Resource {
 			"cloud_ref": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
-				Default:  "/api/cloud?name=Default-Cloud",
 			},
 			"connection_memory_percentage": &schema.Schema{
 				Type:     schema.TypeInt,
