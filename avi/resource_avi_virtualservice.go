@@ -60,7 +60,6 @@ func ResourceVirtualServiceSchema() map[string]*schema.Schema {
 		"cloud_ref": &schema.Schema{
 			Type:     schema.TypeString,
 			Optional: true,
-			Default:  "/api/cloud?name=Default-Cloud",
 		},
 		"cloud_type": &schema.Schema{
 			Type:     schema.TypeString,
@@ -430,7 +429,11 @@ func resourceAviVirtualServiceUpdate(d *schema.ResourceData, meta interface{}) e
 					log.Printf("[ERROR] resourceAviVirtualServiceUpdate in Setting vip: %v\n", err)
 				}
 			}
+		} else {
+			log.Printf("[ERROR] resourceAviVirtualServiceUpdate in ApiDataToSchema: %v\n", err)
 		}
+	} else {
+		log.Printf("[ERROR] resourceAviVirtualServiceUpdate in GET: %v\n", err)
 	}
 	err = ApiCreateOrUpdate(d, meta, "virtualservice", s)
 	if err == nil {
