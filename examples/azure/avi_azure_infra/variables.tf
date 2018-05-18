@@ -1,4 +1,3 @@
-
 variable "subscription_id" {
   description = "Enter Subscription ID for provisioning resources in Azure"
   default = ""
@@ -26,11 +25,13 @@ variable "location" {
   default = "EAST US"
 }
 
+/*
 // This can be removed if have authorization to create new rg
 variable "resource_group_name" {
   description = "Resource group name that will contain various resources"
   default = ""
 }
+*/
 
 variable "azure_username" {}
 
@@ -40,5 +41,8 @@ variable "avi_username" {
   default = "admin"
 }
 
-variable "avi_password" {
-}
+variable "avi_password" {}
+
+variable "avi_version" {}
+
+variable "project_name" {}
