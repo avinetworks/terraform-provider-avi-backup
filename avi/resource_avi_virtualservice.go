@@ -414,16 +414,6 @@ func resourceAviVirtualServiceUpdate(d *schema.ResourceData, meta interface{}) e
 					log.Printf("[ERROR] resourceAviVirtualServiceUpdate in Setting vsvip ref: %v\n", err)
 				}
 				vipob := objs[obj].(map[string]interface{})["vip"]
-				for k, v := range vipob.([]interface{}) {
-					//adding enabled field as this field is absent in api response due to skip default
-					//reason to do this beacause d's vip object is overwritten by api response's vip object
-					//and we are iterating over d and schema to set default values it will not find this enabled
-					//field as its absent in d.
-					if _, ok := v.(map[string]interface{})["enabled"]; !ok {
-						v.(map[string]interface{})["enabled"] = true
-						vipob.([]interface{})[k] = v
-					}
-				}
 				err = d.Set("vip", vipob)
 				if err != nil {
 					log.Printf("[ERROR] resourceAviVirtualServiceUpdate in Setting vip: %v\n", err)

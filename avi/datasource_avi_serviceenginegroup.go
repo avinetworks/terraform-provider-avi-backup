@@ -281,6 +281,16 @@ func dataSourceAviServiceEngineGroup() *schema.Resource {
 				Optional: true,
 				Default:  80,
 			},
+			"max_public_ips_per_lb": &schema.Schema{
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  30,
+			},
+			"max_rules_per_lb": &schema.Schema{
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  150,
+			},
 			"max_scaleout_per_vs": &schema.Schema{
 				Type:     schema.TypeInt,
 				Optional: true,
@@ -471,6 +481,11 @@ func dataSourceAviServiceEngineGroup() *schema.Resource {
 				Optional: true,
 				Default:  256,
 			},
+			"self_se_election": &schema.Schema{
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default:  false,
+			},
 			"service_ip6_subnets": &schema.Schema{
 				Type:     schema.TypeList,
 				Optional: true,
@@ -570,6 +585,16 @@ func dataSourceAviServiceEngineGroup() *schema.Resource {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Default:  false,
+			},
+			"waf_learning_interval": &schema.Schema{
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  10,
+			},
+			"waf_learning_memory": &schema.Schema{
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  0,
 			},
 			"waf_mempool": &schema.Schema{
 				Type:     schema.TypeBool,

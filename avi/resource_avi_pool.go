@@ -14,18 +14,6 @@ import (
 
 func ResourcePoolSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-		"a_pool": &schema.Schema{
-			Type:     schema.TypeString,
-			Optional: true,
-		},
-		"ab_pool": &schema.Schema{
-			Type:     schema.TypeSet,
-			Optional: true,
-			Elem:     ResourceAbPoolSchema(),
-			Set: func(v interface{}) int {
-				return 0
-			},
-		},
 		"apic_epg_name": &schema.Schema{
 			Type:     schema.TypeString,
 			Optional: true,
@@ -253,7 +241,7 @@ func ResourcePoolSchema() map[string]*schema.Schema {
 		"sni_enabled": &schema.Schema{
 			Type:     schema.TypeBool,
 			Optional: true,
-			Default:  true,
+			Default:  false,
 		},
 		"ssl_key_and_certificate_ref": &schema.Schema{
 			Type:     schema.TypeString,

@@ -20,33 +20,27 @@ func Provider() terraform.ResourceProvider {
 		Schema: map[string]*schema.Schema{
 			"avi_username": &schema.Schema{
 				Type:        schema.TypeString,
-				Optional:    true,
+				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("AVI_USERNAME", nil),
 				Description: "Username for Avi Controller.",
 			},
 			"avi_controller": &schema.Schema{
 				Type:        schema.TypeString,
-				Optional:    true,
+				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("AVI_CONTROLLER", nil),
 				Description: "Avi Controller hostname or IP address.",
 			},
 			"avi_password": &schema.Schema{
 				Type:        schema.TypeString,
-				Optional:    true,
+				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("AVI_PASSWORD", nil),
 				Description: "Password for Avi Controller.",
 			},
 			"avi_tenant": &schema.Schema{
 				Type:        schema.TypeString,
-				Optional:    true,
+				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("AVI_TENANT", nil),
 				Description: "Avi tenant for Avi Controller.",
-			},
-			"avi_version": &schema.Schema{
-				Type:        schema.TypeString,
-				Optional:    true,
-				DefaultFunc: schema.EnvDefaultFunc("AVI_VERSION", nil),
-				Description: "Avi version for Avi Controller.",
 			},
 		},
 		DataSourcesMap: map[string]*schema.Resource{
@@ -68,6 +62,7 @@ func Provider() terraform.ResourceProvider {
 			"avi_serviceenginegroup":            dataSourceAviServiceEngineGroup(),
 			"avi_tenant":                        dataSourceAviTenant(),
 			"avi_dnspolicy":                     dataSourceAviDnsPolicy(),
+			"avi_sevipproto":                    dataSourceAviSeVipProto(),
 			"avi_hardwaresecuritymodulegroup":   dataSourceAviHardwareSecurityModuleGroup(),
 			"avi_applicationpersistenceprofile": dataSourceAviApplicationPersistenceProfile(),
 			"avi_vrfcontext":                    dataSourceAviVrfContext(),
@@ -132,6 +127,7 @@ func Provider() terraform.ResourceProvider {
 			"avi_serviceenginegroup":            resourceAviServiceEngineGroup(),
 			"avi_tenant":                        resourceAviTenant(),
 			"avi_dnspolicy":                     resourceAviDnsPolicy(),
+			"avi_sevipproto":                    resourceAviSeVipProto(),
 			"avi_hardwaresecuritymodulegroup":   resourceAviHardwareSecurityModuleGroup(),
 			"avi_applicationpersistenceprofile": resourceAviApplicationPersistenceProfile(),
 			"avi_vrfcontext":                    resourceAviVrfContext(),
@@ -184,17 +180,10 @@ func Provider() terraform.ResourceProvider {
 
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	config := Credentials{
-		Username:   "admin",
+		Username:   d.Get("avi_username").(string),
 		Password:   d.Get("avi_password").(string),
 		Controller: d.Get("avi_controller").(string),
-		Tenant:     "admin",
-		Version:    "17.2.8",
-	}
-	if username, ok := d.GetOk("avi_username"); ok {
-		config.Username = username.(string)
-	}
-	if version, ok := d.GetOk("avi_version"); ok {
-		config.Version = version.(string)
+		Tenant:     d.Get("avi_tenant").(string),
 	}
 
 	if err := config.validate(); err != nil {
@@ -205,11 +194,11 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 		config.Controller, config.Username,
 		session.SetPassword(config.Password),
 		session.SetTenant(config.Tenant),
-		session.SetVersion(config.Version),
+		session.SetVersion("18.1.2"),
 		session.SetInsecure)
 
-	log.Println("Avi Client created for user %v tenant %v version %v",
-		config.Username, config.Tenant, config.Version)
+	log.Println("Avi Client created ")
+
 	return aviClient, err
 }
 
@@ -227,6 +216,10 @@ func (c *Credentials) validate() error {
 
 	if c.Controller == "" {
 		err = multierror.Append(err, fmt.Errorf("Avi Controller must be provided"))
+	}
+
+	if c.Username == "" {
+		err = multierror.Append(err, fmt.Errorf("Avi Controller username must be provided"))
 	}
 
 	if c.Password == "" {
