@@ -400,12 +400,18 @@ func resourceAviVirtualServiceUpdate(d *schema.ResourceData, meta interface{}) e
 	s := ResourceVirtualServiceSchema()
 	var err error
 	var existingvs interface{}
+	var mod_api_res interface{}
 	client := meta.(*clients.AviClient)
 	uuid := d.Get("uuid").(string)
-	vspath := "api/virtualservice/" + uuid
+	vspath := "api/virtualservice/" + uuid + "?include_name=true&skip_default=true"
 	err = client.AviSession.Get(vspath, &existingvs)
 	if err == nil {
-		if vsobj, err := ApiDataToSchema(existingvs, nil, nil); err == nil {
+		//adding default values to api_response before it overwrites the d (local state).
+		//For default fields are set by terraform int the d (local state).
+		if local_data, err := SchemaToAviData(d, s); err == nil {
+			mod_api_res, err = SetDefaultsInAPIRes(existingvs, local_data, s)
+		}
+		if vsobj, err := ApiDataToSchema(mod_api_res, nil, nil); err == nil {
 			objs := vsobj.(*schema.Set).List()
 			for obj := 0; obj < len(objs); obj++ {
 				vsvipref := objs[obj].(map[string]interface{})["vsvip_ref"]
