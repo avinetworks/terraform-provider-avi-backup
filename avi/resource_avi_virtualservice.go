@@ -424,6 +424,7 @@ func resourceAviVirtualServiceUpdate(d *schema.ResourceData, meta interface{}) e
 						vipob.([]interface{})[k] = v
 					}
 				}
+				log.Printf("shrikant vipobj: %v", vipob)
 				err = d.Set("vip", vipob)
 				if err != nil {
 					log.Printf("[ERROR] resourceAviVirtualServiceUpdate in Setting vip: %v\n", err)

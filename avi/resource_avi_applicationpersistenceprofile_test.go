@@ -45,7 +45,9 @@ func testAccCheckAVIApplicationPersistenceProfileExists(resourcename string) res
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No AVI ApplicationPersistenceProfile ID is set")
 		}
-		path := "api" + strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		uuid := strings.Split(url, "#")[0]
+		path := "api" + uuid
 		err := conn.Get(path, &obj)
 		if err != nil {
 			return err
@@ -62,7 +64,9 @@ func testAccCheckAVIApplicationPersistenceProfileDestroy(s *terraform.State) err
 		if rs.Type != "avi_applicationpersistenceprofile" {
 			continue
 		}
-		path := "api" + strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+		uuid := strings.Split(url, "#")[0]
+		path := "api" + uuid
 		err := conn.Get(path, &obj)
 		if err != nil {
 			if strings.Contains(err.Error(), "404") {
