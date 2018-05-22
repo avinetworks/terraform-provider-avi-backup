@@ -45,9 +45,7 @@ func testAccCheckAVICloudExists(resourcename string) resource.TestCheckFunc {
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No AVI Cloud ID is set")
 		}
-		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
-		uuid := strings.Split(url, "#")[0]
-		path := "api" + uuid
+		path := "api" + strings.SplitN(rs.Primary.ID, "/api", 2)[1]
 		err := conn.Get(path, &obj)
 		if err != nil {
 			return err
@@ -64,9 +62,7 @@ func testAccCheckAVICloudDestroy(s *terraform.State) error {
 		if rs.Type != "avi_cloud" {
 			continue
 		}
-		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
-		uuid := strings.Split(url, "#")[0]
-		path := "api" + uuid
+		path := "api" + strings.SplitN(rs.Primary.ID, "/api", 2)[1]
 		err := conn.Get(path, &obj)
 		if err != nil {
 			if strings.Contains(err.Error(), "404") {
@@ -89,7 +85,7 @@ resource "avi_cloud" "testCloud" {
 "vtype" = "CLOUD_NONE"
 "license_tier" = "ENTERPRISE_18"
 "tenant_ref" = "${data.avi_tenant.default_tenant.id}"
-"dhcp_enabled" = false
+"dhcp_enabled" = true
 "state_based_dns_registration" = true
 "prefer_static_routes" = false
 "license_type" = "LIC_CORES"
@@ -108,7 +104,7 @@ resource "avi_cloud" "testCloud" {
 "vtype" = "CLOUD_NONE"
 "license_tier" = "ENTERPRISE_18"
 "tenant_ref" = "${data.avi_tenant.default_tenant.id}"
-"dhcp_enabled" = false
+"dhcp_enabled" = true
 "state_based_dns_registration" = true
 "prefer_static_routes" = false
 "license_type" = "LIC_CORES"

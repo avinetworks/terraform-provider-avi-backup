@@ -82,26 +82,19 @@ func SetDefaultsInAPIRes(api_res interface{}, d_local interface{}, s map[string]
 			//Getting key, value for given d_local
 			default:
 				if _, ok := api_res.(map[string]interface{})[k]; !ok {
-					switch s[k].Type {
-					default:
-						//Cheking if field is present in schema
-						if dval, ok := s[k]; ok {
-							//Getting default values from schema
-							default_val, err := dval.DefaultValue()
-							if err != nil {
-								log.Printf("[ERROR] SetDefaultsInAPIRes %v", err)
-							} else {
-								if default_val != nil {
-									api_res.(map[string]interface{})[k] = default_val
-									log.Printf("[INFO] SetDefaultsInAPIRes setting default for field: %v\t val: %v", k, default_val)
-								}
+					//Cheking if field is present in schema
+					if dval, ok := s[k]; ok {
+						//Getting default values from schema
+						default_val, err := dval.DefaultValue()
+						if err != nil {
+							log.Printf("[ERROR] SetDefaultsInAPIRes %v", err)
+						} else {
+							if default_val != nil {
+								api_res.(map[string]interface{})[k] = default_val
+								log.Printf("[INFO] SetDefaultsInAPIRes setting default for field: %v\t val: %v", k, default_val)
 							}
-
 						}
-					//string fields are being skiped from setting default values. e.g. cloud_ref has default value which will override the value which is
-					//fetched from datasource object.
-					case schema.TypeString:
-						continue
+
 					}
 				}
 			//d_local nested dictionary.
