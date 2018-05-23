@@ -407,7 +407,8 @@ func resourceAviVirtualServiceUpdate(d *schema.ResourceData, meta interface{}) e
 	err = client.AviSession.Get(vspath, &existingvs)
 	if err == nil {
 		//adding default values to api_response before it overwrites the d (local state).
-		//For default fields are set by terraform int the d (local state).
+		//Before GO lang sets zero value to fields which are absent in api response
+		//setting those fields to schema default and then overwritting d (local state)
 		if local_data, err := SchemaToAviData(d, s); err == nil {
 			mod_api_res, err = SetDefaultsInAPIRes(existingvs, local_data, s)
 		}
