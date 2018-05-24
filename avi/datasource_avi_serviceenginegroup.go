@@ -281,6 +281,16 @@ func dataSourceAviServiceEngineGroup() *schema.Resource {
 				Optional: true,
 				Default:  80,
 			},
+			"max_public_ips_per_lb": &schema.Schema{
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  30,
+			},
+			"max_rules_per_lb": &schema.Schema{
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  150,
+			},
 			"max_scaleout_per_vs": &schema.Schema{
 				Type:     schema.TypeInt,
 				Optional: true,
