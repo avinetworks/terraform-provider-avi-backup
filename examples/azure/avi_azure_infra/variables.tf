@@ -21,8 +21,8 @@ variable "tenant_id" {
 }
 
 variable "location" {
-  description = "The default Azure region for the resource provisioning"
-  default = "EAST US"
+  description = "Azure region for the resource provisioning, must be smallcaps without space inbetween for se creation"
+  default = "eastus"
 }
 
 /*
