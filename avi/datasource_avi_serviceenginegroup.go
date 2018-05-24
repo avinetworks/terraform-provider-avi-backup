@@ -553,6 +553,14 @@ func dataSourceAviServiceEngineGroup() *schema.Resource {
 				Optional: true,
 				Default:  1,
 			},
+			"vip_asg": &schema.Schema{
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem:     ResourceVipAutoscaleGroupSchema(),
+				Set: func(v interface{}) int {
+					return 0
+				},
+			},
 			"vs_host_redundancy": &schema.Schema{
 				Type:     schema.TypeBool,
 				Optional: true,

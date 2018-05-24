@@ -241,7 +241,7 @@ func ResourcePoolSchema() map[string]*schema.Schema {
 		"sni_enabled": &schema.Schema{
 			Type:     schema.TypeBool,
 			Optional: true,
-			Default:  false,
+			Default:  true,
 		},
 		"ssl_key_and_certificate_ref": &schema.Schema{
 			Type:     schema.TypeString,
