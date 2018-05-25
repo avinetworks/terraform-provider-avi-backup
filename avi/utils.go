@@ -348,7 +348,6 @@ func ApiRead(d *schema.ResourceData, meta interface{}, objType string, s map[str
 			} else {
 				d.SetId(uuid)
 			}
-
 		} else {
 			log.Printf("[ERROR] ApiRead in setting read object %v\n", err)
 		}
