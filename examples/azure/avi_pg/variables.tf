@@ -21,11 +21,6 @@ variable "tenant_id" {
   default = ""
 }
 
-variable "location" {
-  description = "The default Azure region for the resource provisioning"
-  default = "EAST US"
-}
-
 /*
 // This can be removed if have authorization to create new rg
 variable "resource_group_name" {
@@ -33,8 +28,6 @@ variable "resource_group_name" {
   default = ""
 }
 */
-
-variable "azure_vm_password" {}
 
 variable "avi_username" {
   default = "admin"
@@ -45,5 +38,3 @@ variable "avi_password" {}
 variable "avi_version" {}
 
 variable "project_name" {}
-
-variable "project_environment" {}
