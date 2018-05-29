@@ -20,7 +20,6 @@ resource "vsphere_virtual_machine" "example_virtual_machines" {
   disk {
     label = "disk0"
     size  = "${data.vsphere_virtual_machine.example_template.disks.0.size}"
-    eagerly_scrub    = "${data.vsphere_virtual_machine.example_template.disks.0.eagerly_scrub}"
     thin_provisioned = "${data.vsphere_virtual_machine.example_template.disks.0.thin_provisioned}"
   }
 
@@ -31,7 +30,6 @@ resource "vsphere_virtual_machine" "example_virtual_machines" {
       properties {
         "mgmt-ip" = "10.10.28.132"
         "mgmt-mask" = "23"
-        "default-gw" = "10.10.28.1"
       }
   }
 }
