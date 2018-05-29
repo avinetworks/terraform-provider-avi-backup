@@ -1,10 +1,10 @@
-datacenter = "10GTest"
+datacenter = "dc"
 
-resource_pool = "Arista/Resources"
+resource_pool = "cluster1/Resources"
 
-datastore_name = "AS15"
+datastore_name = "datastore"
 
-network_name = "Mgmt_Arista_3"
+network_name = "network"
 
 template_name = "some-coreos-template"
 
