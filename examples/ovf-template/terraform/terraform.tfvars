@@ -8,7 +8,7 @@ network_name = "Mgmt_Arista_3"
 
 template_name = "test_template"
 
-virtual_machine_name_prefix = "test"
+virtual_machine_name_prefix = "test-controller"
 
 virtual_machine_domain = ""
 
@@ -29,3 +29,5 @@ server_binary_name = "ovf-example-service"
 management_ssh_keys = [
   "",
 ]
+
+controller_ip = "10.10.28.132"

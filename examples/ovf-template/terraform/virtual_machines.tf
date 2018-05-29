@@ -11,6 +11,7 @@ resource "vsphere_virtual_machine" "example_virtual_machines" {
   guest_id = "${data.vsphere_virtual_machine.example_template.guest_id}"
   wait_for_guest_net_timeout = "0"
   force_power_off = "false"
+  scsi_type = "${data.vsphere_virtual_machine.example_template.scsi_type}"
   network_interface {
     network_id   = "${data.vsphere_network.example_network.id}"
     adapter_type = "${data.vsphere_virtual_machine.example_template.network_interface_types[0]}"
@@ -19,10 +20,18 @@ resource "vsphere_virtual_machine" "example_virtual_machines" {
   disk {
     label = "disk0"
     size  = "${data.vsphere_virtual_machine.example_template.disks.0.size}"
-    thin_provisioned = "false"
+    eagerly_scrub    = "${data.vsphere_virtual_machine.example_template.disks.0.eagerly_scrub}"
+    thin_provisioned = "${data.vsphere_virtual_machine.example_template.disks.0.thin_provisioned}"
   }
 
   clone {
     template_uuid = "${data.vsphere_virtual_machine.example_template.id}"
+  }
+  vapp {
+      properties {
+        "mgmt-ip" = "10.10.28.132"
+        "mgmt-mask" = "23"
+        "default-gw" = "10.10.28.1"
+      }
   }
 }
