@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-#HTTP_HELLO_GO_PATH="github.com/vancluever/http-hello-go"
-HTTP_HELLO_GO_PATH="github.com/avinetworks/terraform-provider-avi"
+HTTP_HELLO_GO_PATH="github.com/vancluever/http-hello-go"
+
 set -e
 
 SRV_BIN="$(grep "server_binary_name" "${TF_DIR}/terraform.tfvars" | awk '{print $3}' | tr -d \'\"\' )"
