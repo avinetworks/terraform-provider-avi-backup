@@ -99,6 +99,8 @@ func resourceAviVsVipUpdate(d *schema.ResourceData, meta interface{}) error {
 	var err error
 	var existingvip interface{}
 	var apiResponse interface{}
+	var vipobjs []interface{}
+	autoAllocFlag := false
 	client := meta.(*clients.AviClient)
 	uuid := d.Get("uuid").(string)
 	vippath := "api/vsvip/" + uuid + "?include_name=true"
@@ -109,19 +111,25 @@ func resourceAviVsVipUpdate(d *schema.ResourceData, meta interface{}) error {
 		//setting those fields to schema default and then overwritting d (local state)
 		if localData, err := SchemaToAviData(d, s); err == nil {
 			apiResponse, err = SetDefaultsInAPIRes(existingvip, localData, s)
+		} else {
+			log.Printf("[ERROR] resourceAviVSVIPUpdate in SchemaToAviData: %v\n", err)
 		}
 		if vipobj, err := ApiDataToSchema(apiResponse, nil, nil); err == nil {
 			objs := vipobj.(*schema.Set).List()
 			for obj := 0; obj < len(objs); obj++ {
-				vipobjs := objs[obj].(map[string]interface{})["vip"].([]interface{})
+				vipobjs = objs[obj].(map[string]interface{})["vip"].([]interface{})
 				for ob := 0; ob < len(vipobjs); ob++ {
 					vipob := vipobjs[ob].(map[string]interface{})
 					if value, ok := vipob["auto_allocate_ip"].(bool); ok && value {
-						err = d.Set("vip", vipobjs)
-						if err != nil {
-							log.Printf("[ERROR] resourceAviVSVIPUpdate in Setting vip: %v\n", err)
-						}
+						autoAllocFlag = true
+						break
 					}
+				}
+			}
+			if autoAllocFlag {
+				err = d.Set("vip", vipobjs)
+				if err != nil {
+					log.Printf("[ERROR] resourceAviVSVIPUpdate in Setting vip: %v\n", err)
 				}
 			}
 		} else {
