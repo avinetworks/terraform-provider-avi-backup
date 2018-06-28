@@ -14,6 +14,7 @@ import (
 	"github.com/avinetworks/sdk/go/session"
 	"github.com/hashicorp/terraform/helper/hashcode"
 	"github.com/hashicorp/terraform/helper/schema"
+	"path/filepath"
 )
 
 func SchemaToAviData(d interface{}, s map[string]*schema.Schema) (interface{}, error) {
@@ -415,19 +416,28 @@ func ApiDeleteSystemDefaultCheck(d *schema.ResourceData) bool {
 //Function to make REST API call for upload and download.
 func MultipartUploadOrDownload(d *schema.ResourceData, meta interface{}, s map[string]*schema.Schema) error {
 	client := meta.(*clients.AviClient)
-	http_method := d.Get("http_method").(string)
 	uri := d.Get("uri").(string)
 	file_path := d.Get("file_path").(string)
 	var err error
-	if http_method == "POST" {
-		//For multipart file upload
+	switch http_method := d.Get("http_method").(string); http_method {
+	case "POST":
 		err := client.AviSession.PostMultipartRequest(http_method, uri, file_path)
 		if err != nil {
 			log.Printf("[ERROR] MultipartUploadOrDownload Error uploading file %v %v", file_path, err)
 			return err
 		}
-	}
-	if http_method == "GET" {
+		_, file := filepath.Split(file_path)
+		d.SetId(file)
+
+	case "GET":
+		//For multipart file download
+		err := client.AviSession.GetMultipartRaw(http_method, uri, file_path)
+		if err != nil {
+			log.Printf("[ERROR] MultipartUploadOrDownload Error downloaing file using uri %v %v", uri, err)
+			return err
+		}
+
+	default:
 		//For multipart file download
 		err := client.AviSession.GetMultipartRaw(http_method, uri, file_path)
 		if err != nil {
