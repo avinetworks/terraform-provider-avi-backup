@@ -10,7 +10,9 @@ resource "avi_serviceenginegroup" "test_se" {
 	name= "Default-Group",
 	license_type= "LIC_SE_BANDWIDTH",
 	se_bandwidth_type= "SE_BANDWIDTH_200M",
-	algo= "PLACEMENT_ALGO_PACKED"
+	algo= "PLACEMENT_ALGO_PACKED",
+	min_scaleout_per_vs = 2,
+	ha_mode= "HA_MODE_SHARED_PAIR"
 }
 
 resource "avi_tenant" "test_tenant" {
