@@ -31,7 +31,6 @@ resource "avi_sslprofile" "system_standard_sslprofile" {
 	},
   cipher_enums = ["TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384",
   "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256", "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384", "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA", "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256", "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA"]
-
 }
 
 data "avi_tenant" "default_tenant"{
