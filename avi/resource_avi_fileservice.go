@@ -58,7 +58,6 @@ func ResourceAviFileServiceRead(d *schema.ResourceData, meta interface{}) error 
 		log.Printf("[DEBUG]: ResourceAviFileServiceRead response: %v\n\n", res)
 		if err != nil {
 			log.Printf("[ERROR] ResourceAviFileServiceRead %v in GET of path %v\n", err, path)
-			d.Set("upload", false)
 			return err
 		}
 		return nil
@@ -67,7 +66,6 @@ func ResourceAviFileServiceRead(d *schema.ResourceData, meta interface{}) error 
 		log.Printf("[DEBUG] ResourceAviFileServiceRead reading local file %v\n", local_file)
 		if _, err := os.Stat(local_file); os.IsNotExist(err) {
 			log.Printf("File does not exist")
-			d.Set("upload", true)
 			return err
 		} else {
 			log.Printf("File exists")

@@ -9,7 +9,7 @@ import (
 	"log"
 	"reflect"
 	"strings"
-
+	"os"
 	"github.com/avinetworks/sdk/go/clients"
 	"github.com/avinetworks/sdk/go/session"
 	"github.com/hashicorp/terraform/helper/hashcode"
@@ -412,6 +412,35 @@ func ApiDeleteSystemDefaultCheck(d *schema.ResourceData) bool {
 	return false
 }
 
+//Open given file as a file pointer
+func mustOpen(f string) *os.File {
+	r, err := os.Open(f)
+	if err != nil {
+		log.Printf("[ERROR] mustOpen Error while opening file %v", f)
+		panic(err)
+	}
+	return r
+}
+
+func createFilePointer(path string) (*os.File, error) {
+	// detect if file exists
+	var _, err = os.Stat(path)
+	// create file if not exists
+	if os.IsNotExist(err) {
+		var file, err = os.Create(path)
+		if err != nil {
+			return nil, err
+		}
+		log.Printf("[INFO] createFilePointer File created %v", path)
+		return file, err
+	} else {
+		// open file using READ & WRITE permission
+		var file, err = os.OpenFile(path, os.O_RDWR, 0644)
+		log.Printf("[INFO] createFilePointer File exist Reopening %v", path)
+		return file, err
+	}
+}
+
 //Function to make REST API call for upload and download.
 func MultipartUploadOrDownload(d *schema.ResourceData, meta interface{}, s map[string]*schema.Schema) error {
 	client := meta.(*clients.AviClient)
@@ -420,21 +449,36 @@ func MultipartUploadOrDownload(d *schema.ResourceData, meta interface{}, s map[s
 	var err error
 	switch upload := d.Get("upload").(bool); upload {
 	case true:
-		err := client.AviSession.PostMultipartRequest("POST", uri, local_file)
+		if _, err := os.Stat(local_file); os.IsNotExist(err) {
+			log.Printf("[ERROR] MultipartUploadOrDownload File path does not exist %v", local_file)
+			return err
+		}
+		local_file_ptr := mustOpen(local_file)
+		err := client.AviSession.PostMultipartRequest("POST", uri, local_file_ptr)
 		if err != nil {
 			log.Printf("[ERROR] MultipartUploadOrDownload Error uploading file %v %v", local_file, err)
 			return err
 		}
 	case false:
 		//For multipart file download
-		err := client.AviSession.GetMultipartRaw("GET", uri, local_file)
+		//File creation
+		download_file_ptr, err := createFilePointer(local_file)
+		if err != nil {
+			log.Printf("[ERROR] MultipartUploadOrDownload Error for creation of file %v", local_file)
+		}
+		err = client.AviSession.GetMultipartRaw("GET", uri, download_file_ptr)
 		if err != nil {
 			log.Printf("[ERROR] MultipartUploadOrDownload Error downloaing file using uri %v %v", uri, err)
 			return err
 		}
 	default:
 		//For multipart file download
-		err := client.AviSession.GetMultipartRaw("GET", uri, local_file)
+		//File creation
+		download_file_ptr, err := createFilePointer(local_file)
+		if err != nil {
+			log.Printf("[ERROR] MultipartUploadOrDownload Error for creation of file %v", local_file)
+		}
+		err = client.AviSession.GetMultipartRaw("GET", uri, download_file_ptr)
 		if err != nil {
 			log.Printf("[ERROR] MultipartUploadOrDownload Error downloaing file using uri %v %v", uri, err)
 			return err
