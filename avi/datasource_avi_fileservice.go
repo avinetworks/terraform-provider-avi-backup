@@ -6,23 +6,19 @@ func dataSourceAviFileService() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviFileServiceCreate,
 		Schema: map[string]*schema.Schema{
-			"http_method": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
-			},
 			"uri": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"file_path": &schema.Schema{
+			"local_file": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			//Force mode to overwrite the remote file if it exists on server.
-			"force": &schema.Schema{
+			//upload flag to state current local file will be uploaded to remote server.
+			"upload": &schema.Schema{
 				Type:     schema.TypeBool,
 				Optional: true,
-				Default: false,
+				Default:  false,
 			},
 		},
 	}
