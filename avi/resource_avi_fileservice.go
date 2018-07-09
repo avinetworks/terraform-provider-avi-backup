@@ -5,7 +5,6 @@ import (
 	"github.com/hashicorp/terraform/helper/schema"
 	"log"
 	"os"
-	"path/filepath"
 	"strings"
 )
 
@@ -48,19 +47,29 @@ func ResourceFileServiceImporter(d *schema.ResourceData, m interface{}) ([]*sche
 
 func ResourceAviFileServiceRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*clients.AviClient)
+	var res interface{}
 	switch upload := d.Get("upload").(bool); upload {
 	case true:
-		uri := strings.Split(d.Get("uri").(string), "?")[0]
-		path := "/api/fileservice?uri=controller://" + uri
-		log.Printf("[DEBUG] ResourceAviFileServiceRead reading fileservice API status path %v\n", path)
-		var res interface{}
-		err := client.AviSession.Get(path, &res)
-		log.Printf("[DEBUG]: ResourceAviFileServiceRead response: %v\n\n", res)
-		if err != nil {
-			log.Printf("[ERROR] ResourceAviFileServiceRead %v in GET of path %v\n", err, path)
-			return err
+		switch uri := d.Get("uri").(string); uri {
+		case "license":
+			path := "/api/license"
+			err := client.AviSession.Get(path, &res)
+			log.Printf("[DEBUG] ResourceAviFileServiceRead response: %v\n\n", res)
+			if err != nil {
+				log.Printf("[ERROR] ResourceAviFileServiceRead %v in GET of path %v\n", err, path)
+				return err
+			}
+		default:
+			uri := strings.Split(d.Get("uri").(string), "?")[0]
+			path := "/api/fileservice?uri=controller://" + uri
+			log.Printf("[DEBUG] ResourceAviFileServiceRead reading fileservice API status path %v\n", path)
+			err := client.AviSession.Get(path, &res)
+			log.Printf("[DEBUG] ResourceAviFileServiceRead response: %v\n\n", res)
+			if err != nil {
+				log.Printf("[ERROR] ResourceAviFileServiceRead %v in GET of path %v\n", err, path)
+				return err
+			}
 		}
-		return nil
 	case false:
 		local_file := d.Get("local_file").(string)
 		log.Printf("[DEBUG] ResourceAviFileServiceRead reading local file %v\n", local_file)
@@ -74,18 +83,16 @@ func ResourceAviFileServiceRead(d *schema.ResourceData, meta interface{}) error 
 	default:
 		return nil
 	}
+	return nil
 }
 
 func ResourceAviFileServiceCreate(d *schema.ResourceData, meta interface{}) error {
 	s := ResourceFileServiceSchema()
-	local_file := d.Get("local_file").(string)
 	err := MultipartUploadOrDownload(d, meta, s)
 	if err != nil {
 		log.Printf("[ERROR] ResourceAviFileServiceCreate Error during upload/download %v\n", err)
 		return err
 	}
-	_, file := filepath.Split(local_file)
-	d.SetId(file)
 	return nil
 }
 
@@ -106,15 +113,23 @@ func ResourceAviFileServiceDelete(d *schema.ResourceData, meta interface{}) erro
 	local_file := d.Get("local_file").(string)
 	switch upload := d.Get("upload").(bool); upload {
 	case true:
-		uri := strings.Split(d.Get("uri").(string), "?")[0]
-		path := "/api/fileservice?uri=controller://" + uri + "/" + d.Id()
-		log.Printf("[DEBUG] ResourceAviFileServiceDelete deleting file using fileservice API status path %v\n", path)
-		err := client.AviSession.Delete(path)
-		if err != nil {
-			log.Printf("[ERROR] ResourceAviFileServiceDelete %v in Delete of path %v\n", err, path)
-			return err
+		switch uri := d.Get("uri").(string); uri {
+		case "license":
+			path := "/api/" + uri + "/" + d.Id()
+			err := client.AviSession.Delete(path)
+			if err != nil {
+				log.Printf("[ERROR] ResourceAviFileServiceDelete %v Deleting file of path %v\n", err, path)
+			}
+		default:
+			uri := strings.Split(d.Get("uri").(string), "?")[0]
+			path := "/api/fileservice?uri=controller://" + uri + "/" + d.Id()
+			log.Printf("[DEBUG] ResourceAviFileServiceDelete deleting file using fileservice API status path %v\n", path)
+			err := client.AviSession.Delete(path)
+			if err != nil {
+				log.Printf("[ERROR] ResourceAviFileServiceDelete %v Deleting file of path %v\n", err, path)
+				return err
+			}
 		}
-		d.SetId("")
 	case false:
 		// delete file
 		var err = os.Remove(local_file)
@@ -123,9 +138,9 @@ func ResourceAviFileServiceDelete(d *schema.ResourceData, meta interface{}) erro
 			return err
 		}
 		log.Printf("[INFO] ResourceAviFileServiceDelete file %v deleted\n", local_file)
-		d.SetId("")
 	default:
 		return nil
 	}
+	d.SetId("")
 	return nil
 }
