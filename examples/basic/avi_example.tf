@@ -50,6 +50,25 @@ data "avi_vrfcontext" "global_vrf" {
 
 
 
+data "local_file" "ssl_cert" {
+  filename = "${path.module}/ssl.cert"
+}
+
+data "local_file" "ssl_key" {
+  filename = "${path.module}/ssl.key"
+}
+
+resource "avi_sslkeyandcertificate" "ssk_cert" {
+  name= "ssl-cert-42"
+  tenant_ref = "${data.avi_tenant.default_tenant.id}"
+  type= "SSL_CERTIFICATE_TYPE_VIRTUALSERVICE"
+  key= "${data.local_file.ssl_key.content}"
+  certificate {
+    self_signed= true
+    certificate = "${data.local_file.ssl_cert.content}"
+  }
+}
+
 
 resource "avi_networkprofile" "test_networkprofile" {
   name= "networkprofile-42"
@@ -71,7 +90,7 @@ resource "avi_vsvip" "test_vsvip" {
     vip_id= "0"
     ip_address {
       type= "V4",
-      addr= "10.90.64.88",
+      addr= "10.90.64.224",
     }
   }
   tenant_ref= "${data.avi_tenant.default_tenant.id}"
@@ -86,7 +105,7 @@ resource "avi_virtualservice" "test_vs" {
     vip_id= "0"
     ip_address {
       type= "V4",
-      addr= "10.90.64.88",
+      addr= "10.90.64.224",
     }
   }
   services {
@@ -117,6 +136,13 @@ resource "avi_pool" "testpool" {
     ip= {
       type= "V4",
       addr= "10.90.64.66",
+    }
+    port= 8080
+  }
+  servers {
+    ip= {
+      type= "V4",
+      addr= "10.90.64.69",
     }
     port= 8080
   }
