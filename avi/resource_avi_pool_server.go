@@ -10,6 +10,7 @@ import (
 	"github.com/avinetworks/sdk/go/models"
 	"github.com/hashicorp/terraform/helper/schema"
 	"log"
+	"strconv"
 )
 
 func ResourceAviPoolServerSchema() map[string]*schema.Schema {
@@ -97,8 +98,11 @@ func resourceAviServer() *schema.Resource {
 func resourceAviServerCreateOrUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*clients.AviClient)
 	err, pUUID, poolObj, pserver := resourceAviServerReadApi(d, meta)
-
-	// TODO: add check for err and poolObj.
+	//added check for err and poolObj.
+	if err != nil || poolObj == nil {
+		log.Printf("[ERROR] resourceAviServerCreateOrUpdate Error during fetching pool object using pool_ref %v", err)
+		return err
+	}
 	if pserver == nil {
 		// not found
 		newServer := models.Server{}
@@ -108,13 +112,68 @@ func resourceAviServerCreateOrUpdate(d *schema.ResourceData, meta interface{}) e
 		pserver = &newServer
 	}
 	log.Printf("[INFO] resourceAviServerCreateOrUpdate pool %v server %v", pUUID, pserver)
-	// TODO set other attributes from server.
+	//set other attributes from server.
 	if hostname, ok := d.GetOk("hostname"); ok {
 		pserver.Hostname = hostname.(string)
+	}
+	if AutoscalingGroupName, ok := d.GetOk("autoscaling_group_name"); ok {
+		pserver.AutoscalingGroupName = AutoscalingGroupName.(string)
+	}
+	if AvailabilityZone, ok := d.GetOk("availability_zone"); ok {
+		pserver.AvailabilityZone = AvailabilityZone.(string)
+	}
+	if Description, ok := d.GetOk("description"); ok {
+		pserver.Description = Description.(string)
+	}
+	if DiscoveredNetworks, ok := d.GetOk("discovered_networks"); ok {
+		pserver.DiscoveredNetworks = DiscoveredNetworks.([]*models.DiscoveredNetwork)
+	}
+	if Enabled, ok := d.GetOk("enabled"); ok {
+		pserver.Enabled = Enabled.(bool)
+	}
+	if ExternalOrchestrationID, ok := d.GetOk("external_orchestration_id"); ok {
+		pserver.ExternalOrchestrationID = ExternalOrchestrationID.(string)
+	}
+	if ExternalUUID, ok := d.GetOk("external_uuid"); ok {
+		pserver.ExternalUUID = ExternalUUID.(string)
+	}
+	if Location, ok := d.GetOk("location"); ok {
+		pserver.Location = Location.(*models.GeoLocation)
+	}
+	if MacAddress, ok := d.GetOk("mac_address"); ok {
+		pserver.MacAddress = MacAddress.(string)
+	}
+	if NwRef, ok := d.GetOk("nw_ref"); ok {
+		pserver.NwRef = NwRef.(string)
+	}
+	if PrstHdrVal, ok := d.GetOk("prst_hdr_val"); ok {
+		pserver.PrstHdrVal = PrstHdrVal.(string)
+	}
+	if Ratio, ok := d.GetOk("ratio"); ok {
+		pserver.Ratio = Ratio.(int32)
+	}
+	if ResolveServerByDNS, ok := d.GetOk("resolve_server_by_dns"); ok {
+		pserver.ResolveServerByDNS = ResolveServerByDNS.(bool)
+	}
+	if RewriteHostHeader, ok := d.GetOk("rewrite_host_header"); ok {
+		pserver.RewriteHostHeader = RewriteHostHeader.(bool)
+	}
+	if ServerNode, ok := d.GetOk("server_node"); ok {
+		pserver.ServerNode = ServerNode.(string)
+	}
+	if Static, ok := d.GetOk("static"); ok {
+		pserver.Static = Static.(bool)
+	}
+	if VerifyNetwork, ok := d.GetOk("verify_network"); ok {
+		pserver.VerifyNetwork = VerifyNetwork.(bool)
+	}
+	if VMRef, ok := d.GetOk("vm_ref"); ok {
+		pserver.VMRef = VMRef.(string)
 	}
 	if t, ok := d.GetOk("type"); ok {
 		pserver.IP = &models.IPAddr{Type: t.(string), Addr: d.Get("ip").(string)}
 	}
+
 	uri := "api/pool/" + pUUID + "?include_name=true"
 	var response interface{}
 	patchPool := models.Pool{}
@@ -136,16 +195,62 @@ func ResourceAviServerRead(d *schema.ResourceData, meta interface{}) error {
 	port := d.Get("port")
 	log.Printf("[INFO] pool %v ip %v port %v", pUUID, ip, port)
 	if err == nil && pserver != nil {
-		// TODO fix the set id to include port number. if port is not in tf then use 0
-		sUUID := pUUID + ip
+		//Set id to include port number. if port is not in tf then use 0
+		var sUUID string
+		if port, ok := d.GetOk("port"); ok {
+			port_str := strconv.Itoa(port.(int))
+			sUUID = pUUID + ip + port_str
+		} else {
+			port = 0
+			sUUID = pUUID + ip + "0"
+		}
 		d.SetId(sUUID)
 		// Fill in the server information
 		if pserver.Hostname != "" {
 			d.Set("hostname", pserver.Hostname)
 		}
+
 		d.Set("enabled", pserver.Enabled)
+
+		if pserver.AutoscalingGroupName != "" {
+			d.Set("autoscaling_group_name", pserver.AutoscalingGroupName)
+		}
+		if pserver.AvailabilityZone != "" {
+			d.Set("availability_zone", pserver.AvailabilityZone)
+		}
+		if pserver.Description != "" {
+			d.Set("description", pserver.Description)
+		}
+		if pserver.DiscoveredNetworks != nil {
+			d.Set("discovered_networks", pserver.DiscoveredNetworks)
+		}
+
 		if pserver.ExternalUUID != "" {
 			d.Set("external_uuid", pserver.ExternalUUID)
+		}
+		if pserver.ExternalOrchestrationID != "" {
+			d.Set("external_orchestration_id", pserver.ExternalOrchestrationID)
+		}
+
+		if pserver.Location != nil {
+			d.Set("mac_address", pserver.Location)
+		}
+		if pserver.NwRef != "" {
+			d.Set("nw_ref", pserver.NwRef)
+		}
+		if pserver.PrstHdrVal != "" {
+			d.Set("prst_hdr_val", pserver.PrstHdrVal)
+		}
+		d.Set("ratio", pserver.Ratio)
+		d.Set("resolve_server_by_dns", pserver.ResolveServerByDNS)
+		d.Set("rewrite_host_header", pserver.RewriteHostHeader)
+		if pserver.ServerNode != "" {
+			d.Set("server_node", pserver.ServerNode)
+		}
+		d.Set("static", pserver.Static)
+		d.Set("verify_network", pserver.VerifyNetwork)
+		if pserver.VMRef != "" {
+			d.Set("vm_ref", pserver.VMRef)
 		}
 		// Add more fields to read.
 	}
@@ -184,7 +289,7 @@ func resourceAviServerDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*clients.AviClient)
 	err, pUUID, poolObj, pserver := resourceAviServerReadApi(d, meta)
 	if pserver != nil {
-		uri := "pool/" + pUUID + "?include_name=true&skip_default=true"
+		uri := "api/pool/" + pUUID + "?name=" + poolObj.Name + "&include_name=true&skip_default=true"
 		var response interface{}
 		patchPool := models.Pool{}
 		patchPool.Name = poolObj.Name

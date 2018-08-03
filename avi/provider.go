@@ -113,6 +113,7 @@ func Provider() terraform.ResourceProvider {
 			"avi_httppolicyset":                 dataSourceAviHTTPPolicySet(),
 			"avi_serviceengine":                 dataSourceAviServiceEngine(),
 			"avi_fileservice":                   dataSourceAviFileService(),
+			"avi_server":                        dataSourceAviServer(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"avi_useraccountprofile":            resourceAviUserAccountProfile(),
