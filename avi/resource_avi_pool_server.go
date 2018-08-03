@@ -14,6 +14,10 @@ import (
 
 func ResourceAviPoolServerSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
+		"pool_ref": &schema.Schema{
+			Type:     schema.TypeString,
+			Required: true,
+		},
 		"ip": &schema.Schema{
 			Type:     schema.TypeString,
 			Required: true,
@@ -26,10 +30,6 @@ func ResourceAviPoolServerSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Optional: true,
 			Default:  "V4",
-		},
-		"pool_ref": &schema.Schema{
-			Type:     schema.TypeString,
-			Required: true,
 		},
 		"autoscaling_group_name": &schema.Schema{
 			Type:     schema.TypeString,
@@ -98,34 +98,31 @@ func resourceAviServerCreateOrUpdate(d *schema.ResourceData, meta interface{}) e
 	client := meta.(*clients.AviClient)
 	err, pUUID, poolObj, pserver := resourceAviServerReadApi(d, meta)
 
-	patchOp := "update"
-
+	// TODO: add check for err and poolObj.
 	if pserver == nil {
 		// not found
 		newServer := models.Server{}
-		if t, ok := d.GetOk("type"); ok {
-			newServer.IP = &models.IPAddr{Type: t.(string), Addr: d.Get("ip").(string)}
-		}
 		if port, ok := d.GetOk("port"); ok {
 			newServer.Port = int32(port.(int))
 		}
 		pserver = &newServer
-		patchOp = "add"
 	}
-	log.Printf("[INFO] resourceAviServerCreateOrUpdate pool %v server %v patchOp %v", pUUID, pserver, patchOp)
-
+	log.Printf("[INFO] resourceAviServerCreateOrUpdate pool %v server %v", pUUID, pserver)
+	// TODO set other attributes from server.
 	if hostname, ok := d.GetOk("hostname"); ok {
 		pserver.Hostname = hostname.(string)
 	}
-	uri := "api/pool/" + pUUID + "?include_name=true&skip_default=true"
+	if t, ok := d.GetOk("type"); ok {
+		pserver.IP = &models.IPAddr{Type: t.(string), Addr: d.Get("ip").(string)}
+	}
+	uri := "api/pool/" + pUUID + "?include_name=true"
 	var response interface{}
 	patchPool := models.Pool{}
 	patchPool.Name = poolObj.Name
 	patchPool.TenantRef = poolObj.TenantRef
 	patchPool.CloudRef = poolObj.CloudRef
 	patchPool.Servers = append(patchPool.Servers, pserver)
-
-	err = client.AviSession.Patch(uri, patchPool, patchOp, response)
+	err = client.AviSession.Patch(uri, patchPool, "add", response)
 	log.Printf("[INFO] resourceAviServerCreateOrUpdate pool %v err %v response %v", pUUID, err, response)
 	if err == nil {
 		err = ResourceAviServerRead(d, meta)
@@ -139,6 +136,7 @@ func ResourceAviServerRead(d *schema.ResourceData, meta interface{}) error {
 	port := d.Get("port")
 	log.Printf("[INFO] pool %v ip %v port %v", pUUID, ip, port)
 	if err == nil && pserver != nil {
+		// TODO fix the set id to include port number. if port is not in tf then use 0
 		sUUID := pUUID + ip
 		d.SetId(sUUID)
 		// Fill in the server information
@@ -149,6 +147,7 @@ func ResourceAviServerRead(d *schema.ResourceData, meta interface{}) error {
 		if pserver.ExternalUUID != "" {
 			d.Set("external_uuid", pserver.ExternalUUID)
 		}
+		// Add more fields to read.
 	}
 	return err
 }
@@ -194,7 +193,6 @@ func resourceAviServerDelete(d *schema.ResourceData, meta interface{}) error {
 		patchPool.Servers = append(patchPool.Servers, pserver)
 		err = client.AviSession.Patch(uri, patchPool, "delete", response)
 		log.Printf("[INFO] pool %v uuid %v not found", patchPool.Name, pUUID)
-
 	}
 	d.SetId("")
 	return err
