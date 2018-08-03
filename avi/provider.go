@@ -179,6 +179,7 @@ func Provider() terraform.ResourceProvider {
 			"avi_serviceengine":                 resourceAviServiceEngine(),
 			"avi_useraccount":                   resourceAviUserAccount(),
 			"avi_fileservice":                   resourceAviFileService(),
+			"avi_server":                        resourceAviServer(),
 		},
 		ConfigureFunc: providerConfigure,
 	}

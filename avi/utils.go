@@ -530,3 +530,11 @@ func MultipartUploadOrDownload(d *schema.ResourceData, meta interface{}, s map[s
 	}
 	return err
 }
+
+func UUIDFromID(Id string) (string, string) {
+	urlParts := strings.Split(Id, "/")
+	idParts := urlParts[len(urlParts)-1]
+	// need to strip #xxx if present
+	nu := strings.Split(idParts, "#")
+	return nu[0], nu[1]
+}

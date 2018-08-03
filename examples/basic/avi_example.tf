@@ -71,7 +71,7 @@ resource "avi_vsvip" "test_vsvip" {
     vip_id= "0"
     ip_address {
       type= "V4",
-      addr= "10.90.64.88",
+      addr= "10.90.64.100",
     }
   }
   tenant_ref= "${data.avi_tenant.default_tenant.id}"
@@ -86,7 +86,7 @@ resource "avi_virtualservice" "test_vs" {
     vip_id= "0"
     ip_address {
       type= "V4",
-      addr= "10.90.64.88",
+      addr= "10.90.64.100",
     }
   }
   services {
@@ -123,4 +123,11 @@ resource "avi_pool" "testpool" {
   fail_action= {
     type= "FAIL_ACTION_CLOSE_CONN"
   }
+}
+
+resource "avi_server" "test_server" {
+  ip = "10.90.64.111"
+  port = "80"
+  pool_ref = "${avi_pool.testpool.id}"
+  hostname = "10.90.64.111"
 }
