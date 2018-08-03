@@ -182,7 +182,8 @@ func resourceAviServerCreateOrUpdate(d *schema.ResourceData, meta interface{}) e
 	patchPool.CloudRef = poolObj.CloudRef
 	patchPool.Servers = append(patchPool.Servers, pserver)
 	err = client.AviSession.Patch(uri, patchPool, "add", response)
-	log.Printf("[INFO] resourceAviServerCreateOrUpdate pool %v err %v response %v", pUUID, err, response)
+	log.Printf("[INFO] resourceAviServerCreateOrUpdate pool %v poolobj %v err %v response %v",
+		pUUID, patchPool, err, response)
 	if err == nil {
 		err = ResourceAviServerRead(d, meta)
 	}
@@ -267,6 +268,7 @@ func resourceAviServerReadApi(d *schema.ResourceData, meta interface{}) (error, 
 		log.Printf("[ERROR] pool %v uuid %v not found", pName, pUUID)
 		return err, pUUID, nil, nil
 	}
+	log.Printf("[INFO] found pool %v", poolObj.Name)
 	ip := d.Get("ip").(string)
 	port := d.Get("port")
 
@@ -281,7 +283,6 @@ func resourceAviServerReadApi(d *schema.ResourceData, meta interface{}) (error, 
 			}
 		}
 	}
-
 	return nil, pUUID, poolObj, matchedServer
 }
 
@@ -289,15 +290,15 @@ func resourceAviServerDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*clients.AviClient)
 	err, pUUID, poolObj, pserver := resourceAviServerReadApi(d, meta)
 	if pserver != nil {
-		uri := "api/pool/" + pUUID + "?name=" + poolObj.Name + "&include_name=true&skip_default=true"
+		uri := "api/pool/" + pUUID
 		var response interface{}
 		patchPool := models.Pool{}
-		patchPool.Name = poolObj.Name
+		//patchPool.Name = poolObj.Name
 		patchPool.TenantRef = poolObj.TenantRef
 		patchPool.CloudRef = poolObj.CloudRef
 		patchPool.Servers = append(patchPool.Servers, pserver)
 		err = client.AviSession.Patch(uri, patchPool, "delete", response)
-		log.Printf("[INFO] pool %v uuid %v not found", patchPool.Name, pUUID)
+		log.Printf("[INFO] pool %v server %v deleted err %v", patchPool, d.Id(), err)
 	}
 	d.SetId("")
 	return err
