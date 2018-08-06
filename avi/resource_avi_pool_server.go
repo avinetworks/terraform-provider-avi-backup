@@ -286,17 +286,17 @@ func resourceAviServerReadApi(d *schema.ResourceData, meta interface{}) (error, 
 func resourceAviServerDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*clients.AviClient)
 	err, pUUID, poolObj, pserver := resourceAviServerReadApi(d, meta)
+	log.Printf("[DEBUG] pool %v %v server %v", pUUID, poolObj.Name, d.Id())
 	if pserver != nil {
 		uri := "api/pool/" + pUUID
 		var response interface{}
-		patchPool := models.Pool{}
-		patchPool.Name = poolObj.Name
-		patchPool.TenantRef = poolObj.TenantRef
-		patchPool.CloudRef = poolObj.CloudRef
-		patchPool.Servers = append(patchPool.Servers, pserver)
+		var patchPool = make(map[string]interface{})
+		var servers = make([]models.Server, 1)
+		servers[0] = *pserver
+		patchPool["servers"] = servers
 		err = client.AviSession.Patch(uri, patchPool, "delete", response)
 		log.Printf("[INFO] pool %v server %v deleted err %v", patchPool, d.Id(), err)
 	}
 	d.SetId("")
-	return nil
+	return err
 }
