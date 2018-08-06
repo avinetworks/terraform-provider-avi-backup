@@ -290,7 +290,7 @@ func resourceAviServerDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*clients.AviClient)
 	err, pUUID, poolObj, pserver := resourceAviServerReadApi(d, meta)
 	if pserver != nil {
-		uri := "api/pool/" + pUUID
+		uri := "api/pool/" + pUUID + "?include_name=true#" + poolObj.Name
 		var response interface{}
 		patchPool := models.Pool{}
 		//patchPool.Name = poolObj.Name
