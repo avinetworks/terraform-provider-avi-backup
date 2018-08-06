@@ -192,19 +192,16 @@ func resourceAviServerCreateOrUpdate(d *schema.ResourceData, meta interface{}) e
 
 func ResourceAviServerRead(d *schema.ResourceData, meta interface{}) error {
 	err, pUUID, _, pserver := resourceAviServerReadApi(d, meta)
-	ip := d.Get("ip").(string)
-	port := d.Get("port")
-	log.Printf("[INFO] pool %v ip %v port %v", pUUID, ip, port)
 	if err == nil && pserver != nil {
 		//Set id to include port number. if port is not in tf then use 0
 		var sUUID string
+		portStr := "0"
+		ip := d.Get("ip").(string)
 		if port, ok := d.GetOk("port"); ok {
-			port_str := strconv.Itoa(port.(int))
-			sUUID = pUUID + ip + port_str
-		} else {
-			port = 0
-			sUUID = pUUID + ip + "0"
+			portStr = strconv.Itoa(port.(int))
 		}
+		sUUID = pUUID + ":" + ip + ":" + portStr
+		log.Printf("[INFO] pool %v ip %v port %v", pUUID, ip, portStr)
 		d.SetId(sUUID)
 		// Fill in the server information
 		if pserver.Hostname != "" {
