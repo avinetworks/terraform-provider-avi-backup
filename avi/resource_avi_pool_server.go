@@ -287,10 +287,10 @@ func resourceAviServerDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*clients.AviClient)
 	err, pUUID, poolObj, pserver := resourceAviServerReadApi(d, meta)
 	if pserver != nil {
-		uri := "api/pool/" + pUUID + "?include_name=true#" + poolObj.Name
+		uri := "api/pool/" + pUUID
 		var response interface{}
 		patchPool := models.Pool{}
-		//patchPool.Name = poolObj.Name
+		patchPool.Name = poolObj.Name
 		patchPool.TenantRef = poolObj.TenantRef
 		patchPool.CloudRef = poolObj.CloudRef
 		patchPool.Servers = append(patchPool.Servers, pserver)
@@ -298,5 +298,5 @@ func resourceAviServerDelete(d *schema.ResourceData, meta interface{}) error {
 		log.Printf("[INFO] pool %v server %v deleted err %v", patchPool, d.Id(), err)
 	}
 	d.SetId("")
-	return err
+	return nil
 }
