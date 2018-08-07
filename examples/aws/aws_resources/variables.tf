@@ -31,7 +31,6 @@ variable "aws_availability_zone" {
 
 variable "aws_subnet_ip" {
   default = ""
-
 }
 
 variable "aws_subnet_mask" {
@@ -57,6 +56,7 @@ variable "aws_creds_file" {
 }
 
 variable "aws_subnets" {
+  type = "list"
 }
 
 
