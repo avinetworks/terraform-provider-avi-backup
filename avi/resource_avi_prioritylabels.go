@@ -29,7 +29,7 @@ func ResourcePriorityLabelsSchema() map[string]*schema.Schema {
 		},
 		"name": &schema.Schema{
 			Type:     schema.TypeString,
-			Required: true,
+			Optional: true,
 		},
 		"tenant_ref": &schema.Schema{
 			Type:     schema.TypeString,

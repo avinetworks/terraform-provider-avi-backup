@@ -276,6 +276,11 @@ func ResourceControllerPropertiesSchema() map[string]*schema.Schema {
 			Optional: true,
 			Default:  300,
 		},
+		"warmstart_vs_resync_wait_time": &schema.Schema{
+			Type:     schema.TypeInt,
+			Optional: true,
+			Default:  300,
+		},
 	}
 }
 

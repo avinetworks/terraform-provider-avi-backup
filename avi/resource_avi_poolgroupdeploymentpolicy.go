@@ -30,7 +30,7 @@ func ResourcePoolGroupDeploymentPolicySchema() map[string]*schema.Schema {
 		},
 		"name": &schema.Schema{
 			Type:     schema.TypeString,
-			Required: true,
+			Optional: true,
 		},
 		"rules": &schema.Schema{
 			Type:     schema.TypeList,

@@ -200,11 +200,9 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	if version, ok := d.GetOk("avi_version"); ok {
 		config.Version = version.(string)
 	}
-
 	if tenant, ok := d.GetOk("avi_tenant"); ok {
 		config.Tenant = tenant.(string)
 	}
-
 	if err := config.validate(); err != nil {
 		return nil, err
 	}

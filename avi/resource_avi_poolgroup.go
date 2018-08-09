@@ -59,7 +59,7 @@ func ResourcePoolGroupSchema() map[string]*schema.Schema {
 		},
 		"name": &schema.Schema{
 			Type:     schema.TypeString,
-			Required: true,
+			Optional: true,
 		},
 		"priority_labels_ref": &schema.Schema{
 			Type:     schema.TypeString,
