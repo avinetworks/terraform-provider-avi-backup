@@ -2781,22 +2781,18 @@ func ResourceIpCommunitySchema() *schema.Resource {
 	}
 }
 
-func ResourceDiscoveredNetworkSchema() *schema.Resource {
+func ResourceTCPApplicationProfileSchema() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"network_ref": &schema.Schema{
+			"proxy_protocol_enabled": &schema.Schema{
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default:  false,
+			},
+			"proxy_protocol_version": &schema.Schema{
 				Type:     schema.TypeString,
-				Required: true,
-			},
-			"subnet": &schema.Schema{
-				Type:     schema.TypeList,
 				Optional: true,
-				Elem:     ResourceIpAddrPrefixSchema(),
-			},
-			"subnet6": &schema.Schema{
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem:     ResourceIpAddrPrefixSchema(),
+				Default:  "PROXY_PROTOCOL_VERSION_1",
 			},
 		},
 	}
@@ -10854,30 +10850,21 @@ func ResourceIptableRuleSetSchema() *schema.Resource {
 	}
 }
 
-func ResourceAlertObjectListSchema() *schema.Resource {
+func ResourceAppCookiePersistenceProfileSchema() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"name": &schema.Schema{
+			"encryption_key": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"prst_hdr_name": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"objects": &schema.Schema{
-				Type:     schema.TypeList,
+			"timeout": &schema.Schema{
+				Type:     schema.TypeInt,
 				Optional: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-			},
-			"source": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"tenant_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"uuid": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Default:  20,
 			},
 		},
 	}
@@ -17146,18 +17133,22 @@ func ResourceIpAddrPrefixSchema() *schema.Resource {
 	}
 }
 
-func ResourceTCPApplicationProfileSchema() *schema.Resource {
+func ResourceDiscoveredNetworkSchema() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"proxy_protocol_enabled": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"proxy_protocol_version": &schema.Schema{
+			"network_ref": &schema.Schema{
 				Type:     schema.TypeString,
+				Required: true,
+			},
+			"subnet": &schema.Schema{
+				Type:     schema.TypeList,
 				Optional: true,
-				Default:  "PROXY_PROTOCOL_VERSION_1",
+				Elem:     ResourceIpAddrPrefixSchema(),
+			},
+			"subnet6": &schema.Schema{
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem:     ResourceIpAddrPrefixSchema(),
 			},
 		},
 	}
@@ -22733,21 +22724,30 @@ func ResourceMatchTargetSchema() *schema.Resource {
 	}
 }
 
-func ResourceAppCookiePersistenceProfileSchema() *schema.Resource {
+func ResourceAlertObjectListSchema() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"encryption_key": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"prst_hdr_name": &schema.Schema{
+			"name": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"timeout": &schema.Schema{
-				Type:     schema.TypeInt,
+			"objects": &schema.Schema{
+				Type:     schema.TypeList,
 				Optional: true,
-				Default:  20,
+				Elem:     &schema.Schema{Type: schema.TypeString},
+			},
+			"source": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"tenant_ref": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"uuid": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
 			},
 		},
 	}
