@@ -25,7 +25,7 @@ terraform plan
 terraform apply
 ```
 
-To pass default values to terraform script create terraform.tfvars file and add values into them in the following format
+To pass default values to terraform script then create terraform.tfvars file in the directory and add values into that file in the following format
 
 ```
 openstack_url = "http://11.5.26.67:/v3"
