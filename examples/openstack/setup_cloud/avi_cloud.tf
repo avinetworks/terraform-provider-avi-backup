@@ -24,7 +24,7 @@ resource "avi_cloud" "avi_cloud_cfg" {
 		config_drive = true
 		username = "admin"
 		insecure = false
-		mgmt_network_name = "avimgmt"
+		mgmt_network_name = "${var.network_name}"
 		tenant_se = true
 		contrail_plugin = false
 		port_security = false

@@ -18,3 +18,5 @@ variable "openstack_url_ip" {}
 
 variable "openstack_password" {}
 
+variable "network_name" {}
+

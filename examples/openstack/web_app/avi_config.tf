@@ -188,7 +188,6 @@ resource "avi_virtualservice" "terraform-virtualservice" {
 
   services {
     port           = 80
-    //enable_ssl     = true
     port_range_end = 80
   }
   analytics_policy {
