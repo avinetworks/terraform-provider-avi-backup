@@ -1,8 +1,8 @@
 provider "openstack" {
-  user_name   = "admin"
-  tenant_name = "admin"
-  password    = "avi123"
-  auth_url    = "http://10.80.3.49:5000/v3"
+  user_name   = "${var.openstack_username}"
+  tenant_name = "${var.openstack_tenant_name}"
+  password    = "${var.openstack_password}"
+  auth_url    = "${var.openstack_url}"
 }
 
 provider "avi" {
