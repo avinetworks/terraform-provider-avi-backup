@@ -287,6 +287,7 @@ func ApiRead(d *schema.ResourceData, meta interface{}, objType string, s map[str
 	client := meta.(*clients.AviClient)
 	var obj interface{}
 	uuid := ""
+	url := ""
 	log.Printf("[DEBUG] ApiRead reading object with objType %v id %v\n", objType, d.Id())
 	if d.Id() != "" {
 		// extract the uuid from it.
@@ -340,8 +341,12 @@ func ApiRead(d *schema.ResourceData, meta interface{}, objType string, s map[str
 			log.Printf("[ERROR] ApiRead in modifying api response object %v\n", err)
 		}
 		if _, err := ApiDataToSchema(mod_api_res, d, s); err == nil {
-			uuid := mod_api_res.(map[string]interface{})["uuid"].(string)
-			url := mod_api_res.(map[string]interface{})["url"].(string)
+			if mod_api_res.(map[string]interface{})["uuid"] != nil {
+				uuid = mod_api_res.(map[string]interface{})["uuid"].(string)
+			}
+			if mod_api_res.(map[string]interface{})["url"] != nil {
+				url = mod_api_res.(map[string]interface{})["url"].(string)
+			}
 			//url = strings.SplitN(url, "#", 2)[0]
 			if url != "" {
 				d.SetId(url)
