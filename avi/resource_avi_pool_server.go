@@ -68,6 +68,7 @@ func ResourceAviPoolServerSchema() map[string]*schema.Schema {
 		"nw_ref": &schema.Schema{
 			Type:     schema.TypeString,
 			Optional: true,
+			Computed: true,
 		},
 		"prst_hdr_val": &schema.Schema{
 			Type:     schema.TypeString,
@@ -81,6 +82,7 @@ func ResourceAviPoolServerSchema() map[string]*schema.Schema {
 		"vm_ref": &schema.Schema{
 			Type:     schema.TypeString,
 			Optional: true,
+			Computed: true,
 		},
 	}
 }
@@ -174,7 +176,7 @@ func resourceAviServerCreateOrUpdate(d *schema.ResourceData, meta interface{}) e
 		pserver.IP = &models.IPAddr{Type: t.(string), Addr: d.Get("ip").(string)}
 	}
 
-	uri := "api/pool/" + pUUID + "?include_name=true"
+	uri := "api/pool/" + pUUID
 	var response interface{}
 	patchPool := models.Pool{}
 	patchPool.Name = poolObj.Name
@@ -258,7 +260,7 @@ func ResourceAviServerRead(d *schema.ResourceData, meta interface{}) error {
 func resourceAviServerReadApi(d *schema.ResourceData, meta interface{}) (error, string, *models.Pool, *models.Server) {
 	client := meta.(*clients.AviClient)
 	pUUID, pName := UUIDFromID(d.Get("pool_ref").(string))
-	uri := "api/pool/" + pUUID + "?include_name=true"
+	uri := "api/pool/" + pUUID
 	var poolObj *models.Pool
 	err := client.AviSession.Get(uri, &poolObj)
 	if err != nil {

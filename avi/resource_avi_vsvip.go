@@ -17,6 +17,7 @@ func ResourceVsVipSchema() map[string]*schema.Schema {
 		"cloud_ref": &schema.Schema{
 			Type:     schema.TypeString,
 			Optional: true,
+			Computed: true,
 		},
 		"dns_info": &schema.Schema{
 			Type:     schema.TypeList,
@@ -35,6 +36,7 @@ func ResourceVsVipSchema() map[string]*schema.Schema {
 		"tenant_ref": &schema.Schema{
 			Type:     schema.TypeString,
 			Optional: true,
+			Computed: true,
 		},
 		"uuid": &schema.Schema{
 			Type:     schema.TypeString,
@@ -49,6 +51,7 @@ func ResourceVsVipSchema() map[string]*schema.Schema {
 		"vrf_context_ref": &schema.Schema{
 			Type:     schema.TypeString,
 			Optional: true,
+			Computed: true,
 		},
 		"vsvip_cloud_config_cksum": &schema.Schema{
 			Type:     schema.TypeString,
@@ -100,7 +103,7 @@ func resourceAviVsVipUpdate(d *schema.ResourceData, meta interface{}) error {
 	var apiResponse interface{}
 	client := meta.(*clients.AviClient)
 	uuid := d.Get("uuid").(string)
-	vsvippath := "api/vsvip/" + uuid + "?include_name=true"
+	vsvippath := "api/vsvip/" + uuid + "?skip_default=true"
 	err = client.AviSession.Get(vsvippath, &existingvsvip)
 	var vipobjs []interface{}
 	autoAllocFlag := false
@@ -152,7 +155,7 @@ func resourceAviVsVipDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*clients.AviClient)
 	uuid := d.Get("uuid").(string)
 	if uuid != "" {
-		path := "api/" + objType + "/" + uuid
+		path := "api/" + objType + "/" + uuid + "?skip_default=true"
 		err := client.AviSession.Delete(path)
 		if err != nil && !(strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "204") || strings.Contains(err.Error(), "403")) {
 			log.Println("[INFO] resourceAviVsVipDelete not found")

@@ -48,7 +48,7 @@ func testAccCheckAVIPoolExists(resourcename string) resource.TestCheckFunc {
 		}
 		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
 		uuid := strings.Split(url, "#")[0]
-		path := "api" + uuid
+		path := "api/" + uuid + "?skip_default=true"
 		err := conn.Get(path, &obj)
 		if err != nil {
 			return err
@@ -67,7 +67,7 @@ func testAccCheckAVIPoolDestroy(s *terraform.State) error {
 		}
 		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
 		uuid := strings.Split(url, "#")[0]
-		path := "api" + uuid
+		path := "api/" + uuid + "?skip_default=true"
 		err := conn.Get(path, &obj)
 		if err != nil {
 			if strings.Contains(err.Error(), "404") {
@@ -93,25 +93,23 @@ data "avi_cloud" "default_cloud" {
 data "avi_vrfcontext" "global_vrf" {
 	name= "global"
 }
+
 resource "avi_pool" "testpool" {
-	name = "p42-test"
-	server_count = 1
-	servers {
-		hostname= "10.90.64.66"
-		ip= {
-		  type= "V4"
-		  addr= "10.90.64.66"
-		}
-		port= 8080
-		enabled = false
-		ratio = 7
-	}
-	fail_action= {
-		type= "FAIL_ACTION_CLOSE_CONN"
-	}
-	vrf_ref="${data.avi_vrfcontext.global_vrf.id}"
-	tenant_ref= "${data.avi_tenant.default_tenant.id}"
-	cloud_ref= "${data.avi_cloud.default_cloud.id}"
+  name= "p42-test",
+  "tenant_ref" = "${data.avi_tenant.default_tenant.id}"
+  cloud_ref= "${data.avi_cloud.default_cloud.id}"
+  ignore_servers = false
+  servers {
+    ip= {
+      type= "V4",
+      addr= "10.90.64.66",
+    }
+    port= 8080
+	enabled = false
+  }
+  fail_action= {
+    type= "FAIL_ACTION_CLOSE_CONN"
+  }
 }
 `
 
@@ -126,24 +124,22 @@ data "avi_cloud" "default_cloud" {
 data "avi_vrfcontext" "global_vrf" {
 	name= "global"
 }
+
 resource "avi_pool" "testpool" {
-	name = "p42-abc"
-	server_count = 1
-	servers {
-		hostname= "10.90.64.66"
-		ip= {
-		  type= "V4"
-		  addr= "10.90.64.66"
-		}
-		port= 8080
-		enabled = false
-		ratio = 7
-	}
-	fail_action= {
-		type= "FAIL_ACTION_CLOSE_CONN"
-	}
-	vrf_ref="${data.avi_vrfcontext.global_vrf.id}"
-	tenant_ref= "${data.avi_tenant.default_tenant.id}"
-	cloud_ref= "${data.avi_cloud.default_cloud.id}"
+  name= "p42-abc",
+  "tenant_ref" = "${data.avi_tenant.default_tenant.id}"
+  cloud_ref= "${data.avi_cloud.default_cloud.id}"
+  ignore_servers = false
+  servers {
+    ip= {
+      type= "V4",
+      addr= "10.90.64.66",
+    }
+    port= 8080
+	enabled = false
+  }
+  fail_action= {
+    type= "FAIL_ACTION_CLOSE_CONN"
+  }
 }
 `

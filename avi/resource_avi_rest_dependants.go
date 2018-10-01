@@ -14733,6 +14733,7 @@ func ResourceServerSchema() *schema.Resource {
 			"hostname": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
+				Computed: true,
 			},
 			"ip": &schema.Schema{
 				Type:     schema.TypeSet,

@@ -14,6 +14,7 @@ func dataSourceAviScheduler() *schema.Resource {
 			"backup_config_ref": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
+				Computed: true,
 			},
 			"enabled": &schema.Schema{
 				Type:     schema.TypeBool,
