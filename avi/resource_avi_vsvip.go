@@ -103,7 +103,7 @@ func resourceAviVsVipUpdate(d *schema.ResourceData, meta interface{}) error {
 	var apiResponse interface{}
 	client := meta.(*clients.AviClient)
 	uuid := d.Get("uuid").(string)
-	vsvippath := "api/vsvip/" + uuid + "?skip_default=true"
+	vsvippath := "api/vsvip/" + uuid
 	err = client.AviSession.Get(vsvippath, &existingvsvip)
 	var vipobjs []interface{}
 	autoAllocFlag := false
@@ -155,7 +155,7 @@ func resourceAviVsVipDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*clients.AviClient)
 	uuid := d.Get("uuid").(string)
 	if uuid != "" {
-		path := "api/" + objType + "/" + uuid + "?skip_default=true"
+		path := "api/" + objType + "/" + uuid
 		err := client.AviSession.Delete(path)
 		if err != nil && !(strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "204") || strings.Contains(err.Error(), "403")) {
 			log.Println("[INFO] resourceAviVsVipDelete not found")

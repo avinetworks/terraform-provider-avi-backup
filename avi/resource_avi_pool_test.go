@@ -48,7 +48,7 @@ func testAccCheckAVIPoolExists(resourcename string) resource.TestCheckFunc {
 		}
 		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
 		uuid := strings.Split(url, "#")[0]
-		path := "api/" + uuid + "?skip_default=true"
+		path := "api" + uuid
 		err := conn.Get(path, &obj)
 		if err != nil {
 			return err
@@ -67,7 +67,7 @@ func testAccCheckAVIPoolDestroy(s *terraform.State) error {
 		}
 		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
 		uuid := strings.Split(url, "#")[0]
-		path := "api/" + uuid + "?skip_default=true"
+		path := "api" + uuid
 		err := conn.Get(path, &obj)
 		if err != nil {
 			if strings.Contains(err.Error(), "404") {

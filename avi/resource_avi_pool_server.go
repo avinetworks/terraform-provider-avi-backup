@@ -259,12 +259,12 @@ func ResourceAviServerRead(d *schema.ResourceData, meta interface{}) error {
 
 func resourceAviServerReadApi(d *schema.ResourceData, meta interface{}) (error, string, *models.Pool, *models.Server) {
 	client := meta.(*clients.AviClient)
-	pUUID, pName := UUIDFromID(d.Get("pool_ref").(string))
+	pUUID := UUIDFromID(d.Get("pool_ref").(string))
 	uri := "api/pool/" + pUUID
 	var poolObj *models.Pool
 	err := client.AviSession.Get(uri, &poolObj)
 	if err != nil {
-		log.Printf("[ERROR] pool %v uuid %v not found", pName, pUUID)
+		log.Printf("[ERROR] pool uuid %v not found", pUUID)
 		return err, pUUID, nil, nil
 	}
 	log.Printf("[INFO] found pool %v", poolObj.Name)

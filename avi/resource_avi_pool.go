@@ -334,9 +334,9 @@ func resourceAviPoolUpdate(d *schema.ResourceData, meta interface{}) error {
 			return err
 		}
 		client := meta.(*clients.AviClient)
-		pUUID, pName := UUIDFromID(d.Id())
+		pUUID := UUIDFromID(d.Id())
 		path := "api/pool" + "/" + pUUID
-		log.Printf("[DEBUG] resourceAviPoolUpdate reading object with id %v name %v\n", pUUID, pName)
+		log.Printf("[DEBUG] resourceAviPoolUpdate reading object with id %v\n", pUUID)
 		var obj interface{}
 		var apiResponse interface{}
 		err = client.AviSession.Get(path, &obj)
