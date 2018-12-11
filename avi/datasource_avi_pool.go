@@ -112,6 +112,7 @@ func dataSourceAviPool() *schema.Resource {
 			"health_monitor_refs": &schema.Schema{
 				Type:     schema.TypeList,
 				Optional: true,
+				Computed: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"host_check_enabled": &schema.Schema{

@@ -116,6 +116,7 @@ func ResourcePoolSchema() map[string]*schema.Schema {
 		"health_monitor_refs": &schema.Schema{
 			Type:     schema.TypeList,
 			Optional: true,
+			Computed: true,
 			Elem:     &schema.Schema{Type: schema.TypeString},
 		},
 		"host_check_enabled": &schema.Schema{
@@ -217,7 +218,7 @@ func ResourcePoolSchema() map[string]*schema.Schema {
 		"server_count": &schema.Schema{
 			Type:     schema.TypeInt,
 			Optional: true,
-			Computed: true,
+			Default:  0,
 		},
 		"server_name": &schema.Schema{
 			Type:     schema.TypeString,

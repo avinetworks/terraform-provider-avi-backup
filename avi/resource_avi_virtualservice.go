@@ -138,6 +138,7 @@ func ResourceVirtualServiceSchema() map[string]*schema.Schema {
 		"error_page_profile_ref": &schema.Schema{
 			Type:     schema.TypeString,
 			Optional: true,
+			Computed: true,
 		},
 		"flow_dist": &schema.Schema{
 			Type:     schema.TypeString,
@@ -282,6 +283,7 @@ func ResourceVirtualServiceSchema() map[string]*schema.Schema {
 		"ssl_key_and_certificate_refs": &schema.Schema{
 			Type:     schema.TypeList,
 			Optional: true,
+			Computed: true,
 			Elem:     &schema.Schema{Type: schema.TypeString},
 		},
 		"ssl_profile_ref": &schema.Schema{

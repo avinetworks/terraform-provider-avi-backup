@@ -14,6 +14,7 @@ func dataSourceAviAlertConfig() *schema.Resource {
 			"action_group_ref": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
+				Computed: true,
 			},
 			"alert_rule": &schema.Schema{
 				Type:     schema.TypeSet,
@@ -78,6 +79,7 @@ func dataSourceAviAlertConfig() *schema.Resource {
 			"tenant_ref": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
+				Computed: true,
 			},
 			"threshold": &schema.Schema{
 				Type:     schema.TypeInt,
@@ -92,6 +94,7 @@ func dataSourceAviAlertConfig() *schema.Resource {
 			"uuid": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
+				Computed: true,
 			},
 		},
 	}

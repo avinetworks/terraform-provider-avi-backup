@@ -191,6 +191,7 @@ func dataSourceAviCloud() *schema.Resource {
 			"uuid": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
+				Computed: true,
 			},
 			"vca_configuration": &schema.Schema{
 				Type:     schema.TypeSet,

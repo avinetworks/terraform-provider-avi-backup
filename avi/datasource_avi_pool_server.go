@@ -59,6 +59,7 @@ func dataSourceAviServer() *schema.Resource {
 			"nw_ref": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
+				Computed: true,
 			},
 			"prst_hdr_val": &schema.Schema{
 				Type:     schema.TypeString,
@@ -72,6 +73,7 @@ func dataSourceAviServer() *schema.Resource {
 			"vm_ref": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
+				Computed: true,
 			},
 		},
 	}
