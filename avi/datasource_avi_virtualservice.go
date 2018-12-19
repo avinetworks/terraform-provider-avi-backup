@@ -181,6 +181,10 @@ func dataSourceAviVirtualService() *schema.Resource {
 				Optional: true,
 				Computed: true,
 			},
+			"min_pools_up": &schema.Schema{
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
@@ -241,6 +245,11 @@ func dataSourceAviVirtualService() *schema.Resource {
 				Optional: true,
 				Computed: true,
 			},
+			"security_policy_ref": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+			},
 			"server_network_profile_ref": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
@@ -288,6 +297,14 @@ func dataSourceAviVirtualService() *schema.Resource {
 				Type:     schema.TypeInt,
 				Optional: true,
 				Default:  1024,
+			},
+			"sso_policy": &schema.Schema{
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem:     ResourceSSOPolicySchema(),
+				Set: func(v interface{}) int {
+					return 0
+				},
 			},
 			"static_dns_records": &schema.Schema{
 				Type:     schema.TypeList,

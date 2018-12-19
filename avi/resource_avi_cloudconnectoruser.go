@@ -30,6 +30,14 @@ func ResourceCloudConnectorUserSchema() map[string]*schema.Schema {
 				return 0
 			},
 		},
+		"gcp_credentials": &schema.Schema{
+			Type:     schema.TypeSet,
+			Optional: true,
+			Elem:     ResourceGCPCredentialsSchema(),
+			Set: func(v interface{}) int {
+				return 0
+			},
+		},
 		"name": &schema.Schema{
 			Type:     schema.TypeString,
 			Required: true,

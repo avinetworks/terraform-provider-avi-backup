@@ -176,7 +176,7 @@ func dataSourceAviControllerProperties() *schema.Resource {
 			"se_from_marketplace": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
-			},
+				Default:  "IMAGE"},
 			"se_offline_del": &schema.Schema{
 				Type:     schema.TypeInt,
 				Optional: true,

@@ -76,6 +76,7 @@ func Provider() terraform.ResourceProvider {
 			"avi_dnspolicy":                     dataSourceAviDnsPolicy(),
 			"avi_hardwaresecuritymodulegroup":   dataSourceAviHardwareSecurityModuleGroup(),
 			"avi_vrfcontext":                    dataSourceAviVrfContext(),
+			"avi_securitypolicy":                dataSourceAviSecurityPolicy(),
 			"avi_cloudproperties":               dataSourceAviCloudProperties(),
 			"avi_applicationpersistenceprofile": dataSourceAviApplicationPersistenceProfile(),
 			"avi_backup":                        dataSourceAviBackup(),
@@ -142,6 +143,7 @@ func Provider() terraform.ResourceProvider {
 			"avi_dnspolicy":                     resourceAviDnsPolicy(),
 			"avi_hardwaresecuritymodulegroup":   resourceAviHardwareSecurityModuleGroup(),
 			"avi_vrfcontext":                    resourceAviVrfContext(),
+			"avi_securitypolicy":                resourceAviSecurityPolicy(),
 			"avi_cloudproperties":               resourceAviCloudProperties(),
 			"avi_applicationpersistenceprofile": resourceAviApplicationPersistenceProfile(),
 			"avi_backup":                        resourceAviBackup(),
@@ -198,7 +200,7 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 		Password:   d.Get("avi_password").(string),
 		Controller: d.Get("avi_controller").(string),
 		Tenant:     "admin",
-		Version:    "18.1.5",
+		Version:    "18.2.1",
 		AuthToken:  d.Get("avi_authtoken").(string),
 	}
 	if username, ok := d.GetOk("avi_username"); ok {

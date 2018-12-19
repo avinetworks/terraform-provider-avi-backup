@@ -131,6 +131,11 @@ func dataSourceAviAnalyticsProfile() *schema.Resource {
 				Optional: true,
 				Default:  false,
 			},
+			"disable_vs_analytics": &schema.Schema{
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default:  false,
+			},
 			"enable_advanced_analytics": &schema.Schema{
 				Type:     schema.TypeBool,
 				Optional: true,

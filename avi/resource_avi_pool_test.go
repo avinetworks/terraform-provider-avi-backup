@@ -91,7 +91,7 @@ data "avi_cloud" "default_cloud" {
 resource "avi_pool" "testPool" {
 "ignore_servers" = false
 "name" = "testPool"
-"health_monitor_refs" = ["/api/healthmonitor/healthmonitor-1975fc9b-038c-4139-b695-c53a27625cd4"]
+"health_monitor_refs" = ["/api/healthmonitor/?name=System-HTTP"]
 "tenant_ref" = "${data.avi_tenant.default_tenant.id}"
 "servers" {
 "ip" {
@@ -121,7 +121,7 @@ data "avi_cloud" "default_cloud" {
 resource "avi_pool" "testPool" {
 "ignore_servers" = false
 "name" = "testPool-abc"
-"health_monitor_refs" = ["/api/healthmonitor/healthmonitor-1975fc9b-038c-4139-b695-c53a27625cd4"]
+"health_monitor_refs" = ["/api/healthmonitor/?name=System-HTTP"]
 "tenant_ref" = "${data.avi_tenant.default_tenant.id}"
 "servers" {
 "ip" {
