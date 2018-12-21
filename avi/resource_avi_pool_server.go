@@ -54,12 +54,13 @@ func ResourceAviPoolServerSchema() map[string]*schema.Schema {
 			Optional: true,
 		},
 		"ip": &schema.Schema{
-			Type:     schema.TypeSet,
+			Type:     schema.TypeString,
 			Required: true,
-			Elem:     ResourceIpAddrSchema(),
-			Set: func(v interface{}) int {
-				return 0
-			},
+		},
+		"type": &schema.Schema{
+			Type:     schema.TypeString,
+			Optional: true,
+			Default:  "V4",
 		},
 		"location": &schema.Schema{
 			Type:     schema.TypeSet,
@@ -76,6 +77,7 @@ func ResourceAviPoolServerSchema() map[string]*schema.Schema {
 		"nw_ref": &schema.Schema{
 			Type:     schema.TypeString,
 			Optional: true,
+			Computed: true,
 		},
 		"port": &schema.Schema{
 			Type:     schema.TypeInt,
@@ -117,6 +119,7 @@ func ResourceAviPoolServerSchema() map[string]*schema.Schema {
 		"vm_ref": &schema.Schema{
 			Type:     schema.TypeString,
 			Optional: true,
+			Computed: true,
 		},
 	}
 }
@@ -197,7 +200,7 @@ func resourceAviServerCreateOrUpdate(d *schema.ResourceData, meta interface{}) e
 		pserver.PrstHdrVal = &pHdrVal
 	}
 	if Ratio, ok := d.GetOk("ratio"); ok {
-		r := Ratio.(int32)
+		r := int32(Ratio.(int))
 		pserver.Ratio = &r
 	}
 	if ResolveServerByDNS, ok := d.GetOk("resolve_server_by_dns"); ok {

@@ -50,12 +50,13 @@ func dataSourceAviServer() *schema.Resource {
 				Optional: true,
 			},
 			"ip": &schema.Schema{
-				Type:     schema.TypeSet,
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"type": &schema.Schema{
+				Type:     schema.TypeString,
 				Optional: true,
-				Elem:     ResourceIpAddrSchema(),
-				Set: func(v interface{}) int {
-					return 0
-				},
+				Default:  "V4",
 			},
 			"location": &schema.Schema{
 				Type:     schema.TypeSet,

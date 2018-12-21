@@ -4583,11 +4583,6 @@ func ResourceAuthProfileHTTPClientParamsSchema() *schema.Resource {
 				Optional: true,
 				Default:  5,
 			},
-			"group_member_is_full_dn": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
 			"request_header": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
