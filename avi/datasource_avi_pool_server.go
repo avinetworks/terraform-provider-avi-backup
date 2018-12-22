@@ -15,6 +15,15 @@ func dataSourceAviServer() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
+			"ip": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"type": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+				Default:  "V4",
+			},
 			"autoscaling_group_name": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
@@ -48,15 +57,6 @@ func dataSourceAviServer() *schema.Resource {
 			"hostname": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
-			},
-			"ip": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"type": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "V4",
 			},
 			"location": &schema.Schema{
 				Type:     schema.TypeSet,

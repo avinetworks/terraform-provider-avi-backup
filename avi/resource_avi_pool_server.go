@@ -19,6 +19,15 @@ func ResourceAviPoolServerSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Required: true,
 		},
+		"ip": &schema.Schema{
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"type": &schema.Schema{
+			Type:     schema.TypeString,
+			Optional: true,
+			Default:  "V4",
+		},
 		"autoscaling_group_name": &schema.Schema{
 			Type:     schema.TypeString,
 			Optional: true,
@@ -52,15 +61,6 @@ func ResourceAviPoolServerSchema() map[string]*schema.Schema {
 		"hostname": &schema.Schema{
 			Type:     schema.TypeString,
 			Optional: true,
-		},
-		"ip": &schema.Schema{
-			Type:     schema.TypeString,
-			Required: true,
-		},
-		"type": &schema.Schema{
-			Type:     schema.TypeString,
-			Optional: true,
-			Default:  "V4",
 		},
 		"location": &schema.Schema{
 			Type:     schema.TypeSet,
