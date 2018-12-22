@@ -353,7 +353,6 @@ func resourceAviPoolUpdate(d *schema.ResourceData, meta interface{}) error {
 				d.Set("servers", td["servers"])
 			}
 		} else {
-			d.SetId("")
 			log.Printf("[ERROR] ApiRead object with uuid %v not found err %v\n", pUUID, err)
 		}
 		set_ignore_servers = true
