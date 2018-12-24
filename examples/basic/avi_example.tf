@@ -3,7 +3,7 @@ provider "avi" {
   avi_tenant = "admin"
   avi_password = "${var.avi_password}"
   avi_controller= "${var.avi_controller}"
-  avi_version = "18.1.2"
+  avi_version = "18.1.5"
 }
 
 data "avi_applicationprofile" "system_http_profile" {
