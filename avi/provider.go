@@ -120,7 +120,6 @@ func Provider() terraform.ResourceProvider {
 			"avi_httppolicyset":                 dataSourceAviHTTPPolicySet(),
 			"avi_serviceengine":                 dataSourceAviServiceEngine(),
 			"avi_fileservice":                   dataSourceAviFileService(),
-			"avi_server":                        dataSourceAviServer(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"avi_useraccountprofile":            resourceAviUserAccountProfile(),
@@ -188,7 +187,6 @@ func Provider() terraform.ResourceProvider {
 			"avi_serviceengine":                 resourceAviServiceEngine(),
 			"avi_useraccount":                   resourceAviUserAccount(),
 			"avi_fileservice":                   resourceAviFileService(),
-			"avi_server":                        resourceAviServer(),
 		},
 		ConfigureFunc: providerConfigure,
 	}
@@ -200,7 +198,7 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 		Password:   d.Get("avi_password").(string),
 		Controller: d.Get("avi_controller").(string),
 		Tenant:     "admin",
-		Version:    "18.2.1",
+		Version:    "18.2.2",
 		AuthToken:  d.Get("avi_authtoken").(string),
 	}
 	if username, ok := d.GetOk("avi_username"); ok {

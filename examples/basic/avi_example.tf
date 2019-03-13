@@ -3,7 +3,7 @@ provider "avi" {
   avi_tenant = "admin"
   avi_password = "${var.avi_password}"
   avi_controller= "${var.avi_controller}"
-  avi_version = "18.1.2"
+  avi_version = "18.2.2"
 }
 
 data "avi_applicationprofile" "system_http_profile" {
@@ -47,9 +47,6 @@ data "avi_vrfcontext" "global_vrf" {
   name= "global"
   cloud_ref = "${data.avi_cloud.default_cloud.id}"
 }
-
-
-
 
 resource "avi_networkprofile" "test_networkprofile" {
   name= "networkprofile-42"
@@ -106,7 +103,6 @@ resource "avi_healthmonitor" "test_hm_1" {
   tenant_ref= "${data.avi_tenant.default_tenant.id}"
 }
 
-
 resource "avi_pool" "testpool" {
   name= "pool-42",
   health_monitor_refs= ["${avi_healthmonitor.test_hm_1.id}"]
@@ -120,6 +116,13 @@ resource "avi_pool" "testpool" {
     }
     port= 8080
   }
+  servers {
+    ip= {
+      type= "V4",
+      addr= "10.90.64.67",
+    }
+    port= 8080
+  }
   fail_action= {
     type= "FAIL_ACTION_CLOSE_CONN"
   }
@@ -127,40 +130,32 @@ resource "avi_pool" "testpool" {
 
 resource "avi_pool" "test-p2" {
   name= "pool-p2",
-  //health_monitor_refs= ["${avi_healthmonitor.test_hm_1.id}"]
+  health_monitor_refs= ["${avi_healthmonitor.test_hm_1.id}"]
   tenant_ref= "${data.avi_tenant.default_tenant.id}"
   cloud_ref= "${data.avi_cloud.default_cloud.id}"
   application_persistence_profile_ref= "${avi_applicationpersistenceprofile.test_applicationpersistenceprofile.id}"
   fail_action= {
     type= "FAIL_ACTION_CLOSE_CONN"
   }
-  ignore_servers= true
-}
-
-resource "avi_server" "test_server_p21" {
-  ip = "10.90.64.111"
-  port = "80"
-  pool_ref = "${avi_pool.test-p2.id}"
-  hostname = "foo"
-}
-
-resource "avi_server" "test_server_p22" {
-  ip = "10.90.64.112"
-  port = "80"
-  pool_ref = "${avi_pool.test-p2.id}"
-  hostname = "bar1"
-}
-
-resource "avi_server" "test_server_p23" {
-  ip = "10.90.64.113"
-  port = "80"
-  pool_ref = "${avi_pool.test-p2.id}"
-  hostname = "goo"
-}
-
-resource "avi_server" "test_server" {
-  ip = "10.90.64.111"
-  port = "80"
-  pool_ref = "${avi_pool.testpool.id}"
-  hostname = "10.90.64.111"
+  servers {
+    ip= {
+      type= "V4",
+      addr= "10.90.64.100",
+    }
+    port= 8080
+  }
+  servers {
+    ip= {
+      type= "V4",
+      addr= "10.90.64.101",
+    }
+    port= 8080
+  }
+  servers {
+    ip= {
+      type= "V4",
+      addr= "10.90.64.102",
+    }
+    port= 8080
+  }
 }
