@@ -677,7 +677,7 @@ func ResourceServiceEngineGroupSchema() map[string]*schema.Schema {
 		"vs_scaleout_timeout": &schema.Schema{
 			Type:     schema.TypeInt,
 			Optional: true,
-			Default:  600,
+			Default:  30,
 		},
 		"vs_se_scaleout_additional_wait_time": &schema.Schema{
 			Type:     schema.TypeInt,
