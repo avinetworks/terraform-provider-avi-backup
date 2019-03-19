@@ -228,7 +228,7 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	}
 
 	if config.InstanceLoginKey != "" {
-		cmd_string := fmt.Sprintf(`ssh -o StrictHostKeyChecking no -t -i %s admin@%s echo -e %s \n %s| sudo /opt/avi/scripts/initialize_admin_user.py`,
+		cmd_string := fmt.Sprintf(`ssh -t -i %s admin@%s "sudo /opt/avi/scripts/initialize_admin_user.py 54.189.101.131 avi123$%^"`,
 			config.InstanceLoginKey, config.Controller, config.Controller, config.Password)
 		log.Printf("Executing command: %s", cmd_string)
 		cmd := exec.Command("bash", "-c", cmd_string)
