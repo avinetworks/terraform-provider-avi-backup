@@ -6,6 +6,7 @@
 package avi
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/avinetworks/sdk/go/clients"
 	"github.com/avinetworks/sdk/go/session"
@@ -13,6 +14,7 @@ import (
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/terraform"
 	"log"
+	"os/exec"
 )
 
 func Provider() terraform.ResourceProvider {
@@ -53,6 +55,12 @@ func Provider() terraform.ResourceProvider {
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("AVI_AUTHTOKEN", nil),
 				Description: "Avi token for Avi Controller.",
+			},
+			"instance_login_key": &schema.Schema{
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("AVI_INSTANCE_LOGIN_KEY", nil),
+				Description: "Instance (secrete) key to login to controller instance on AWS.",
 			},
 		},
 		DataSourcesMap: map[string]*schema.Resource{
@@ -196,12 +204,13 @@ func Provider() terraform.ResourceProvider {
 
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	config := Credentials{
-		Username:   "admin",
-		Password:   d.Get("avi_password").(string),
-		Controller: d.Get("avi_controller").(string),
-		Tenant:     "admin",
-		Version:    "18.2.1",
-		AuthToken:  d.Get("avi_authtoken").(string),
+		Username:         "admin",
+		Password:         d.Get("avi_password").(string),
+		Controller:       d.Get("avi_controller").(string),
+		Tenant:           "admin",
+		Version:          "19.1.1",
+		AuthToken:        d.Get("avi_authtoken").(string),
+		InstanceLoginKey: "",
 	}
 	if username, ok := d.GetOk("avi_username"); ok {
 		config.Username = username.(string)
@@ -212,6 +221,28 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 
 	if tenant, ok := d.GetOk("avi_tenant"); ok {
 		config.Tenant = tenant.(string)
+	}
+
+	if instance_login_key, ok := d.GetOk("instance_login_key"); ok {
+		config.InstanceLoginKey = instance_login_key.(string)
+	}
+
+	if config.InstanceLoginKey != "" {
+		cmd_string := fmt.Sprintf(`ssh -o StrictHostKeyChecking no -t -i %s admin@%s echo -e %s \n %s| sudo /opt/avi/scripts/initialize_admin_user.py`,
+			config.InstanceLoginKey, config.Controller, config.Controller, config.Password)
+		log.Printf("Executing command: %s", cmd_string)
+		cmd := exec.Command("bash", "-c", cmd_string)
+		//cmd := exec.Command("ls", "-ltr")
+		//cmd.Stdin = strings.NewReader("some input")
+		var out bytes.Buffer
+		cmd.Stdout = &out
+		err := cmd.Run()
+		if err != nil {
+			err = multierror.Append(err, fmt.Errorf("Error during welcome workflow. "+
+				"Not able to update the password for controller."))
+			return nil, err
+		}
+		log.Printf("Default password updated.: %q\n", out.String())
 	}
 
 	if err := config.validate(); err != nil {
@@ -232,13 +263,14 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 }
 
 type Credentials struct {
-	Username   string
-	Password   string
-	Controller string
-	Port       string
-	Tenant     string
-	Version    string
-	AuthToken  string
+	Username         string
+	Password         string
+	Controller       string
+	Port             string
+	Tenant           string
+	Version          string
+	AuthToken        string
+	InstanceLoginKey string
 }
 
 func (c *Credentials) validate() error {
