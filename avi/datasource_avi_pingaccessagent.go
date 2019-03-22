@@ -7,51 +7,36 @@ package avi
 
 import "github.com/hashicorp/terraform/helper/schema"
 
-func dataSourceAviAuthProfile() *schema.Resource {
+func dataSourceAviPingAccessAgent() *schema.Resource {
 	return &schema.Resource{
-		Read: ResourceAviAuthProfileRead,
+		Read: ResourceAviPingAccessAgentRead,
 		Schema: map[string]*schema.Schema{
 			"description": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"http": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceAuthProfileHTTPClientParamsSchema(),
-			},
-			"ldap": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceLdapAuthSettingsSchema(),
-			},
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"pa_agent_ref": &schema.Schema{
+			"pingaccess_pool_ref": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
-			"saml": &schema.Schema{
+			"primary_server": &schema.Schema{
 				Type:     schema.TypeSet,
 				Optional: true,
-				Elem:     ResourceSamlSettingsSchema(),
+				Elem:     ResourcePoolServerSchema(),
 			},
-			"tacacs_plus": &schema.Schema{
-				Type:     schema.TypeSet,
+			"properties_file_data": &schema.Schema{
+				Type:     schema.TypeString,
 				Optional: true,
-				Elem:     ResourceTacacsPlusAuthSettingsSchema(),
 			},
 			"tenant_ref": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
-			},
-			"type": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 			},
 			"uuid": &schema.Schema{
 				Type:     schema.TypeString,
