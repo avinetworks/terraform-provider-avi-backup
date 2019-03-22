@@ -19,6 +19,11 @@ func ResourceVirtualServiceSchema() map[string]*schema.Schema {
 			Optional: true,
 			Default:  "ACTIVE_STANDBY_SE_1",
 		},
+		"allow_invalid_client_cert": &schema.Schema{
+			Type:     schema.TypeBool,
+			Optional: true,
+			Default:  false,
+		},
 		"analytics_policy": &schema.Schema{
 			Type:     schema.TypeSet,
 			Optional: true,

@@ -64,6 +64,7 @@ In addition to all arguments above, the following attributes are exported:
 * `num_dns_ip` - Number of ip addresses of this gslb service to be returned by the dns service.
 * `pool_algorithm` - The load balancing algorithm will pick a gslb pool within the gslb service list of available pools.
 * `site_persistence_enabled` - Enable site-persistence for the gslbservice.
+* `skip_vs_site_selection_policy` - A dns vs hosting a gslb service can have dns policies.
 * `tenant_ref` - It is a reference to an object of type tenant.
 * `ttl` - Ttl value (in seconds) for records served for this gslb service by the dns service.
 * `use_edns_client_subnet` - Use the client ip subnet from the edns option as source ipaddress for client geo-location and consistent hash algorithm.

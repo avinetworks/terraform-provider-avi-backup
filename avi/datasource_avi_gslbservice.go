@@ -90,6 +90,11 @@ func dataSourceAviGslbService() *schema.Resource {
 				Optional: true,
 				Default:  false,
 			},
+			"skip_vs_site_selection_policy": &schema.Schema{
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default:  false,
+			},
 			"tenant_ref": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,

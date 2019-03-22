@@ -7233,6 +7233,11 @@ func ResourcevNICSchema() *schema.Resource {
 				Optional: true,
 				Default:  true,
 			},
+			"dp_deletion_done": &schema.Schema{
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default:  false,
+			},
 			"enabled": &schema.Schema{
 				Type:     schema.TypeBool,
 				Optional: true,
@@ -8644,6 +8649,11 @@ func ResourcePortalConfigurationSchema() *schema.Resource {
 				Default:  false,
 			},
 			"disable_remote_cli_shell": &schema.Schema{
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default:  false,
+			},
+			"disable_swagger": &schema.Schema{
 				Type:     schema.TypeBool,
 				Optional: true,
 				Default:  false,
@@ -10718,12 +10728,10 @@ func ResourceSeHBEventDetailsSchema() *schema.Resource {
 			"se_ref1": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
-				Computed: true,
 			},
 			"se_ref2": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
-				Computed: true,
 			},
 		},
 	}
@@ -13150,7 +13158,6 @@ func ResourceCRLSchema() *schema.Resource {
 			"last_refreshed": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
-				Computed: true,
 			},
 			"last_update": &schema.Schema{
 				Type:     schema.TypeString,
@@ -20400,16 +20407,17 @@ func ResourceSecureChannelMappingSchema() *schema.Resource {
 	}
 }
 
-func ResourceDebugSeCpuSharesSchema() *schema.Resource {
+func ResourceAbPoolSchema() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"cpu": &schema.Schema{
-				Type:     schema.TypeInt,
+			"pool_ref": &schema.Schema{
+				Type:     schema.TypeString,
 				Required: true,
 			},
-			"shares": &schema.Schema{
+			"ratio": &schema.Schema{
 				Type:     schema.TypeInt,
-				Required: true,
+				Optional: true,
+				Default:  0,
 			},
 		},
 	}
@@ -23490,17 +23498,16 @@ func ResourceVinfraVmDetailsSchema() *schema.Resource {
 	}
 }
 
-func ResourceAbPoolSchema() *schema.Resource {
+func ResourceDebugSeCpuSharesSchema() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"pool_ref": &schema.Schema{
-				Type:     schema.TypeString,
+			"cpu": &schema.Schema{
+				Type:     schema.TypeInt,
 				Required: true,
 			},
-			"ratio": &schema.Schema{
+			"shares": &schema.Schema{
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  0,
+				Required: true,
 			},
 		},
 	}
