@@ -28,7 +28,8 @@ resource "aws_instance" "avi_controller" {
       private_key="${file("/home/shrikantc/Downloads/no_def_pass_ctrl.pem")}"
     }
     inline = [
-      "echo -e ${aws_instance.avi_controller.public_ip}\\n${var.avi_password}|sudo /opt/avi/scripts/initialize_admin_user.py",
+      "sleep 120",
+      "echo -e \"${aws_instance.avi_controller.public_ip}\n${var.avi_password}\"|sudo /opt/avi/scripts/initialize_admin_user.py",
     ]
   }
 //  user_data = "echo -e 34.219.106.121\\navi123$%^|sudo /opt/avi/scripts/initialize_admin_user.py"
