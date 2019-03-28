@@ -43,6 +43,7 @@ resource "VirtualService" "foo" {
 The following arguments are supported:
 
     * `active_standby_se_tag` - (Optional ) argument_description.
+        * `allow_invalid_client_cert` - (Optional ) argument_description.
         * `analytics_policy` - (Optional ) argument_description.
         * `analytics_profile_ref` - (Optional ) argument_description.
         * `apic_contract_graph` - (Optional ) argument_description.
@@ -128,5 +129,5 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 
 In addition to all arguments above, the following attributes are exported:
 
-                                                                                                                                                                                                                                                                    * `uuid` - argument_description.
+                                                                                                                                                                                                                                                                        * `uuid` - argument_description.
                                         

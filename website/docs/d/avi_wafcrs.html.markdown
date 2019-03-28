@@ -19,42 +19,40 @@
 
 ---
 layout: "avi"
-page_title: "AVI: avi_authprofile"
-sidebar_current: "docs-avi-datasource-authprofile"
+page_title: "AVI: avi_wafcrs"
+sidebar_current: "docs-avi-datasource-wafcrs"
 description: |-
-  Get information of Avi AuthProfile.
+  Get information of Avi WafCRS.
 ---
 
-# avi_authprofile
+# avi_wafcrs
 
-This data source is used to to get avi_authprofile objects.
+This data source is used to to get avi_wafcrs objects.
 
 ## Example Usage
 
 ```hcl
-data "AuthProfile" "foo_AuthProfile" {
-    uuid = "AuthProfile-f9cf6b3e-a411-436f-95e2-2982ba2b217b"
+data "WafCRS" "foo_WafCRS" {
+    uuid = "WafCRS-f9cf6b3e-a411-436f-95e2-2982ba2b217b"
     name = "foo"
 }
 ```
 
 ## Argument Reference
 
-* `name` - (Optional) Search AuthProfile by name.
-* `uuid` - (Optional) Search AuthProfile by uuid.
+* `name` - (Optional) Search WafCRS by name.
+* `uuid` - (Optional) Search WafCRS by uuid.
 
 ## Attributes Reference
 
 In addition to all arguments above, the following attributes are exported:
 
-* `description` - General description.
-* `http` - Http user authentication params.
-* `ldap` - Ldap server and directory settings.
-* `name` - Name of the auth profile.
-* `pa_agent_ref` - Pingaccessagent uuid.
-* `saml` - Saml settings.
-* `tacacs_plus` - Tacacs+ settings.
-* `tenant_ref` - It is a reference to an object of type tenant.
-* `type` - Type of the auth profile.
-* `uuid` - Uuid of the auth profile.
+* `description` - A short description of this ruleset.
+* `groups` - Waf rules are sorted in groups based on their characterization.
+* `integrity` - Integrity protection value.
+* `name` - The name of this ruleset object.
+* `release_date` - The release date of this version in rfc 3339 / iso 8601 format.
+* `tenant_ref` - Tenant that this object belongs to.
+* `uuid` - Field introduced in 18.1.1.
+* `version` - The version of this ruleset object.
 

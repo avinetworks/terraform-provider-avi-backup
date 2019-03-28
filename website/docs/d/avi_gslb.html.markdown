@@ -56,6 +56,7 @@ In addition to all arguments above, the following attributes are exported:
 * `maintenance_mode` - This field disables the configuration operations on the leader for all federated objects.
 * `name` - Name for the gslb object.
 * `send_interval` - Frequency with which group members communicate.
+* `send_interval_prior_to_maintenance_mode` - The user can specify a send-interval while entering maintenance mode.
 * `sites` - Select avi site member belonging to this gslb.
 * `tenant_ref` - It is a reference to an object of type tenant.
 * `third_party_sites` - Third party site member belonging to this gslb.

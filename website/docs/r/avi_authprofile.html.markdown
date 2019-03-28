@@ -46,6 +46,7 @@ The following arguments are supported:
         * `http` - (Optional ) argument_description.
         * `ldap` - (Optional ) argument_description.
         * `name` - (Required) argument_description.
+        * `pa_agent_ref` - (Optional ) argument_description.
         * `saml` - (Optional ) argument_description.
         * `tacacs_plus` - (Optional ) argument_description.
         * `tenant_ref` - (Optional ) argument_description.
@@ -63,5 +64,5 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 
 In addition to all arguments above, the following attributes are exported:
 
-                                    * `uuid` - argument_description.
+                                        * `uuid` - argument_description.
     

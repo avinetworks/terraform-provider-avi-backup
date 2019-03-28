@@ -19,20 +19,20 @@
 
 ---
 layout: "avi"
-page_title: "Avi: avi_wafpolicy"
-sidebar_current: "docs-avi-resource-wafpolicy"
+page_title: "Avi: avi_serviceenginepolicy"
+sidebar_current: "docs-avi-resource-serviceenginepolicy"
 description: |-
-  Creates and manages Avi WafPolicy.
+  Creates and manages Avi ServiceEnginePolicy.
 ---
 
-# avi_wafpolicy
+# avi_serviceenginepolicy
 
-The WafPolicy resource allows the creation and management of Avi WafPolicy
+The ServiceEnginePolicy resource allows the creation and management of Avi ServiceEnginePolicy
 
 ## Example Usage
 
 ```hcl
-resource "WafPolicy" "foo" {
+resource "ServiceEnginePolicy" "foo" {
     name = "terraform-example-foo"
     tenant = "admin"
 }
@@ -42,22 +42,10 @@ resource "WafPolicy" "foo" {
 
 The following arguments are supported:
 
-    * `allow_mode_delegation` - (Optional ) argument_description.
-        * `created_by` - (Optional ) argument_description.
-        * `crs_groups` - (Optional ) argument_description.
-        * `description` - (Optional ) argument_description.
-        * `enable_app_learning` - (Optional ) argument_description.
-        * `failure_mode` - (Optional ) argument_description.
-        * `mode` - (Optional ) argument_description.
-        * `name` - (Required) argument_description.
-        * `paranoia_level` - (Optional ) argument_description.
-        * `positive_security_model` - (Optional ) argument_description.
-        * `post_crs_groups` - (Optional ) argument_description.
-        * `pre_crs_groups` - (Optional ) argument_description.
+    * `name` - (Optional ) argument_description.
+        * `se_group_ref` - (Optional ) argument_description.
         * `tenant_ref` - (Optional ) argument_description.
-            * `waf_crs_ref` - (Optional ) argument_description.
-        * `waf_profile_ref` - (Optional ) argument_description.
-        * `whitelist` - (Optional ) argument_description.
+            * `vrf_ref` - (Optional ) argument_description.
     
 ### Timeouts
 
@@ -71,5 +59,5 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 
 In addition to all arguments above, the following attributes are exported:
 
-                                                        * `uuid` - argument_description.
-                
+                * `uuid` - argument_description.
+        

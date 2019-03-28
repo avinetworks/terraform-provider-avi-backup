@@ -47,6 +47,11 @@ func ResourceServiceEngineGroupSchema() map[string]*schema.Schema {
 			Optional: true,
 			Default:  0,
 		},
+		"app_learning_memory_percent": &schema.Schema{
+			Type:     schema.TypeInt,
+			Optional: true,
+			Default:  0,
+		},
 		"archive_shm_limit": &schema.Schema{
 			Type:     schema.TypeInt,
 			Optional: true,
@@ -524,6 +529,11 @@ func ResourceServiceEngineGroupSchema() map[string]*schema.Schema {
 			Optional: true,
 			Default:  1501,
 		},
+		"se_routing": &schema.Schema{
+			Type:     schema.TypeBool,
+			Optional: true,
+			Default:  true,
+		},
 		"se_sb_dedicated_core": &schema.Schema{
 			Type:     schema.TypeBool,
 			Optional: true,
@@ -614,6 +624,10 @@ func ResourceServiceEngineGroupSchema() map[string]*schema.Schema {
 			Optional: true,
 			Default:  100,
 		},
+		"use_standard_alb": &schema.Schema{
+			Type:     schema.TypeBool,
+			Optional: true,
+		},
 		"uuid": &schema.Schema{
 			Type:     schema.TypeString,
 			Optional: true,
@@ -677,7 +691,7 @@ func ResourceServiceEngineGroupSchema() map[string]*schema.Schema {
 		"vs_scaleout_timeout": &schema.Schema{
 			Type:     schema.TypeInt,
 			Optional: true,
-			Default:  30,
+			Default:  600,
 		},
 		"vs_se_scaleout_additional_wait_time": &schema.Schema{
 			Type:     schema.TypeInt,
@@ -703,16 +717,6 @@ func ResourceServiceEngineGroupSchema() map[string]*schema.Schema {
 			Type:     schema.TypeBool,
 			Optional: true,
 			Default:  false,
-		},
-		"waf_learning_interval": &schema.Schema{
-			Type:     schema.TypeInt,
-			Optional: true,
-			Default:  10,
-		},
-		"waf_learning_memory": &schema.Schema{
-			Type:     schema.TypeInt,
-			Optional: true,
-			Default:  0,
 		},
 		"waf_mempool": &schema.Schema{
 			Type:     schema.TypeBool,

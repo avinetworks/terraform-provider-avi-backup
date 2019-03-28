@@ -50,6 +50,7 @@ data "VirtualService" "foo_VirtualService" {
 In addition to all arguments above, the following attributes are exported:
 
 * `active_standby_se_tag` - This configuration only applies if the virtualservice is in legacy active standby ha mode and load distribution among active standby is enabled.
+* `allow_invalid_client_cert` - Process request even if invalid client certificate is presented.
 * `analytics_policy` - Determines analytics settings for the application.
 * `analytics_profile_ref` - Specifies settings related to analytics.
 * `apic_contract_graph` - The name of the contract/graph associated with the virtual service.

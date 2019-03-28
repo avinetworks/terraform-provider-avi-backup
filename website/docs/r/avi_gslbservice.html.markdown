@@ -59,6 +59,7 @@ The following arguments are supported:
         * `num_dns_ip` - (Optional ) argument_description.
         * `pool_algorithm` - (Optional ) argument_description.
         * `site_persistence_enabled` - (Optional ) argument_description.
+        * `skip_vs_site_selection_policy` - (Optional ) argument_description.
         * `tenant_ref` - (Optional ) argument_description.
         * `ttl` - (Optional ) argument_description.
         * `use_edns_client_subnet` - (Optional ) argument_description.
@@ -76,5 +77,5 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 
 In addition to all arguments above, the following attributes are exported:
 
-                                                                                    * `uuid` - argument_description.
+                                                                                        * `uuid` - argument_description.
         

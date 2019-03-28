@@ -47,6 +47,7 @@ The following arguments are supported:
         * `east_west_placement` - (Optional ) argument_description.
         * `name` - (Required) argument_description.
         * `tenant_ref` - (Optional ) argument_description.
+        * `use_standard_alb` - (Optional ) argument_description.
             * `vip` - (Optional ) argument_description.
         * `vrf_context_ref` - (Optional ) argument_description.
         * `vsvip_cloud_config_cksum` - (Optional ) argument_description.
@@ -63,5 +64,5 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 
 In addition to all arguments above, the following attributes are exported:
 
-                        * `uuid` - argument_description.
+                            * `uuid` - argument_description.
                 

@@ -56,6 +56,10 @@ func ResourceGslbSchema() map[string]*schema.Schema {
 			Optional: true,
 			Default:  15,
 		},
+		"send_interval_prior_to_maintenance_mode": &schema.Schema{
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
 		"sites": &schema.Schema{
 			Type:     schema.TypeList,
 			Optional: true,

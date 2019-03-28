@@ -51,6 +51,7 @@ The following arguments are supported:
         * `maintenance_mode` - (Optional ) argument_description.
         * `name` - (Required) argument_description.
         * `send_interval` - (Optional ) argument_description.
+        * `send_interval_prior_to_maintenance_mode` - (Optional ) argument_description.
         * `sites` - (Optional ) argument_description.
         * `tenant_ref` - (Optional ) argument_description.
         * `third_party_sites` - (Optional ) argument_description.
@@ -68,5 +69,5 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 
 In addition to all arguments above, the following attributes are exported:
 
-                                                    * `uuid` - argument_description.
+                                                        * `uuid` - argument_description.
         

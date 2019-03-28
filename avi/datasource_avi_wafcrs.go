@@ -7,56 +7,44 @@ package avi
 
 import "github.com/hashicorp/terraform/helper/schema"
 
-func dataSourceAviAuthProfile() *schema.Resource {
+func dataSourceAviWafCRS() *schema.Resource {
 	return &schema.Resource{
-		Read: ResourceAviAuthProfileRead,
+		Read: ResourceAviWafCRSRead,
 		Schema: map[string]*schema.Schema{
 			"description": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"http": &schema.Schema{
-				Type:     schema.TypeSet,
+			"groups": &schema.Schema{
+				Type:     schema.TypeList,
 				Optional: true,
-				Elem:     ResourceAuthProfileHTTPClientParamsSchema(),
+				Elem:     ResourceWafRuleGroupSchema(),
 			},
-			"ldap": &schema.Schema{
-				Type:     schema.TypeSet,
+			"integrity": &schema.Schema{
+				Type:     schema.TypeString,
 				Optional: true,
-				Elem:     ResourceLdapAuthSettingsSchema(),
 			},
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"pa_agent_ref": &schema.Schema{
+			"release_date": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
-				Computed: true,
-			},
-			"saml": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceSamlSettingsSchema(),
-			},
-			"tacacs_plus": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceTacacsPlusAuthSettingsSchema(),
 			},
 			"tenant_ref": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
-			"type": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
 			"uuid": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
+			},
+			"version": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
 			},
 		},
 	}
