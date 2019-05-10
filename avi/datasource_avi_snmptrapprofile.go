@@ -11,21 +11,21 @@ func dataSourceAviSnmpTrapProfile() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviSnmpTrapProfileRead,
 		Schema: map[string]*schema.Schema{
-			"name": &schema.Schema{
+			"name": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"tenant_ref": &schema.Schema{
+			"tenant_ref": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
-			"trap_servers": &schema.Schema{
+			"trap_servers": {
 				Type:     schema.TypeList,
 				Optional: true,
 				Elem:     ResourceSnmpTrapServerSchema(),
 			},
-			"uuid": &schema.Schema{
+			"uuid": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,

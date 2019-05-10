@@ -97,7 +97,6 @@ resource "avi_vsdatascriptset" "testvsdatascriptset" {
     pool_group_refs= []
     pool_refs= []
     string_group_refs= []
-    protocol_parser_refs= []
 }
 `
 
@@ -116,6 +115,5 @@ resource "avi_vsdatascriptset" "testvsdatascriptset" {
     pool_group_refs= []
     pool_refs= []
     string_group_refs= []
-    protocol_parser_refs= []
 }
 `

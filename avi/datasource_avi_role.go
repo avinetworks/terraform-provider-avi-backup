@@ -11,21 +11,21 @@ func dataSourceAviRole() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviRoleRead,
 		Schema: map[string]*schema.Schema{
-			"name": &schema.Schema{
+			"name": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"privileges": &schema.Schema{
+			"privileges": {
 				Type:     schema.TypeList,
 				Optional: true,
 				Elem:     ResourcePermissionSchema(),
 			},
-			"tenant_ref": &schema.Schema{
+			"tenant_ref": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
-			"uuid": &schema.Schema{
+			"uuid": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,

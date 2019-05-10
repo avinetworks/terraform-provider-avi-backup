@@ -11,83 +11,83 @@ func dataSourceAviAlertConfig() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviAlertConfigRead,
 		Schema: map[string]*schema.Schema{
-			"action_group_ref": &schema.Schema{
+			"action_group_ref": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
-			"alert_rule": &schema.Schema{
+			"alert_rule": {
 				Type:     schema.TypeSet,
 				Optional: true,
 				Elem:     ResourceAlertRuleSchema(),
 			},
-			"autoscale_alert": &schema.Schema{
+			"autoscale_alert": {
 				Type:     schema.TypeBool,
 				Optional: true,
 			},
-			"category": &schema.Schema{
+			"category": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"description": &schema.Schema{
+			"description": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"enabled": &schema.Schema{
+			"enabled": {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Default:  true,
 			},
-			"expiry_time": &schema.Schema{
+			"expiry_time": {
 				Type:     schema.TypeInt,
 				Optional: true,
 				Default:  86400,
 			},
-			"name": &schema.Schema{
+			"name": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"obj_uuid": &schema.Schema{
+			"obj_uuid": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"object_type": &schema.Schema{
+			"object_type": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"recommendation": &schema.Schema{
+			"recommendation": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"rolling_window": &schema.Schema{
+			"rolling_window": {
 				Type:     schema.TypeInt,
 				Optional: true,
 				Default:  300,
 			},
-			"source": &schema.Schema{
+			"source": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"summary": &schema.Schema{
+			"summary": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"tenant_ref": &schema.Schema{
+			"tenant_ref": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
-			"threshold": &schema.Schema{
+			"threshold": {
 				Type:     schema.TypeInt,
 				Optional: true,
 				Default:  1,
 			},
-			"throttle": &schema.Schema{
+			"throttle": {
 				Type:     schema.TypeInt,
 				Optional: true,
 				Default:  600,
 			},
-			"uuid": &schema.Schema{
+			"uuid": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,

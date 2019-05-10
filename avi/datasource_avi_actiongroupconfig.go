@@ -11,53 +11,53 @@ func dataSourceAviActionGroupConfig() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviActionGroupConfigRead,
 		Schema: map[string]*schema.Schema{
-			"action_script_config_ref": &schema.Schema{
+			"action_script_config_ref": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
-			"autoscale_trigger_notification": &schema.Schema{
+			"autoscale_trigger_notification": {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Default:  false,
 			},
-			"description": &schema.Schema{
+			"description": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"email_config_ref": &schema.Schema{
+			"email_config_ref": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
-			"external_only": &schema.Schema{
+			"external_only": {
 				Type:     schema.TypeBool,
 				Optional: true,
 			},
-			"level": &schema.Schema{
+			"level": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"name": &schema.Schema{
+			"name": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"snmp_trap_profile_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"syslog_config_ref": &schema.Schema{
+			"snmp_trap_profile_ref": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
-			"tenant_ref": &schema.Schema{
+			"syslog_config_ref": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
-			"uuid": &schema.Schema{
+			"tenant_ref": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+			},
+			"uuid": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,

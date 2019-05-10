@@ -11,21 +11,21 @@ func dataSourceAviHardwareSecurityModuleGroup() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviHardwareSecurityModuleGroupRead,
 		Schema: map[string]*schema.Schema{
-			"hsm": &schema.Schema{
+			"hsm": {
 				Type:     schema.TypeSet,
 				Optional: true,
 				Elem:     ResourceHardwareSecurityModuleSchema(),
 			},
-			"name": &schema.Schema{
+			"name": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"tenant_ref": &schema.Schema{
+			"tenant_ref": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
-			"uuid": &schema.Schema{
+			"uuid": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,

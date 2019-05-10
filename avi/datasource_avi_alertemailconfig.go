@@ -11,28 +11,28 @@ func dataSourceAviAlertEmailConfig() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviAlertEmailConfigRead,
 		Schema: map[string]*schema.Schema{
-			"cc_emails": &schema.Schema{
+			"cc_emails": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"description": &schema.Schema{
+			"description": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"name": &schema.Schema{
+			"name": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"tenant_ref": &schema.Schema{
+			"tenant_ref": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
-			"to_emails": &schema.Schema{
+			"to_emails": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"uuid": &schema.Schema{
+			"uuid": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,

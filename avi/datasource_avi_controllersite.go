@@ -7,15 +7,11 @@ package avi
 
 import "github.com/hashicorp/terraform/helper/schema"
 
-func dataSourceAviMicroServiceGroup() *schema.Resource {
+func dataSourceAviControllerSite() *schema.Resource {
 	return &schema.Resource{
-		Read: ResourceAviMicroServiceGroupRead,
+		Read: ResourceAviControllerSiteRead,
 		Schema: map[string]*schema.Schema{
-			"created_by": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"description": {
+			"address": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
@@ -23,11 +19,10 @@ func dataSourceAviMicroServiceGroup() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"service_refs": {
-				Type:     schema.TypeList,
+			"port": {
+				Type:     schema.TypeInt,
 				Optional: true,
-				Computed: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
+				Default:  443,
 			},
 			"tenant_ref": {
 				Type:     schema.TypeString,
