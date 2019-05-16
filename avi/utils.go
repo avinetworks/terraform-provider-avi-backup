@@ -457,15 +457,21 @@ func ResourceImporter(d *schema.ResourceData, meta interface{}, objType string, 
 			obj := apiResults[index].(map[string]interface{})
 			log.Printf("[DEBUG] ResourceImporter processing obj %v results %v\n", obj, results[index])
 			result := new(schema.ResourceData)
-			if _, err := ApiDataToSchema(obj, result, s); err == nil {
-				log.Printf("[DEBUG] ResourceImporter Processing obj %v\n", obj)
-				url := obj["url"].(string)
-				uuid := obj["uuid"].(string)
-				//url = strings.SplitN(url, "#", 2)[0]
-				result.SetId(url)
-				result.Set("uuid", uuid)
-				result.SetType("avi_" + objType)
-				results[index] = result
+			if local_data, err := SchemaToAviData(results, s); err == nil {
+				mod_api_res, err := SetDefaultsInAPIRes(obj, local_data, s)
+				if err != nil {
+					log.Printf("[ERROR] ApiRead in modifying api response object %v\n", err)
+				}
+				if _, err := ApiDataToSchema(mod_api_res, result, s); err == nil {
+					log.Printf("[DEBUG] ResourceImporter Processing obj %v\n", obj)
+					url := obj["url"].(string)
+					uuid := obj["uuid"].(string)
+					//url = strings.SplitN(url, "#", 2)[0]
+					result.SetId(url)
+					result.Set("uuid", uuid)
+					result.SetType("avi_" + objType)
+					results[index] = result
+				}
 			}
 		}
 		return results, nil
