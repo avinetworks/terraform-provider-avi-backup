@@ -29,6 +29,11 @@ func TestAVIAutoScaleLaunchConfigBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"avi_autoscalelaunchconfig.testAutoScaleLaunchConfig", "name", "testdefault-autoscalelaunchconfig-abc")),
 			},
+			{
+				ResourceName:      "avi_autoscalelaunchconfig.testAutoScaleLaunchConfig",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
 		},
 	})
 

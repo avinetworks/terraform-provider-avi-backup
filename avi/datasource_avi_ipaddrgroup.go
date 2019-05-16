@@ -11,59 +11,57 @@ func dataSourceAviIpAddrGroup() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviIpAddrGroupRead,
 		Schema: map[string]*schema.Schema{
-			"addrs": &schema.Schema{
+			"addrs": {
 				Type:     schema.TypeList,
-				Optional: true,
+				Computed: true,
 				Elem:     ResourceIpAddrSchema(),
 			},
-			"apic_epg_name": &schema.Schema{
+			"apic_epg_name": {
 				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"country_codes": &schema.Schema{
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-			},
-			"description": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"ip_ports": &schema.Schema{
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem:     ResourceIpAddrPortSchema(),
-			},
-			"marathon_app_name": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"marathon_service_port": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-			},
-			"name": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"prefixes": &schema.Schema{
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem:     ResourceIpAddrPrefixSchema(),
-			},
-			"ranges": &schema.Schema{
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem:     ResourceIpAddrRangeSchema(),
-			},
-			"tenant_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"uuid": &schema.Schema{
+			"country_codes": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
+			},
+			"description": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"ip_ports": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceIpAddrPortSchema(),
+			},
+			"marathon_app_name": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"marathon_service_port": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"name": {
 				Type:     schema.TypeString,
 				Optional: true,
+			},
+			"prefixes": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceIpAddrPrefixSchema(),
+			},
+			"ranges": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceIpAddrRangeSchema(),
+			},
+			"tenant_ref": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"uuid": {
+				Type:     schema.TypeString,
 				Computed: true,
 			},
 		},

@@ -29,6 +29,11 @@ func TestAVIAlertScriptConfigBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"avi_alertscriptconfig.testAlertScriptConfig", "name", "testse_grp_cleanup_old_spec_se-abc")),
 			},
+			{
+				ResourceName:      "avi_alertscriptconfig.testAlertScriptConfig",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
 		},
 	})
 

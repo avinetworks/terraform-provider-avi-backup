@@ -29,6 +29,11 @@ func TestAVIVrfContextBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"avi_vrfcontext.testVrfContext", "name", "testglobal-abc")),
 			},
+			{
+				ResourceName:      "avi_vrfcontext.testVrfContext",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
 		},
 	})
 

@@ -29,6 +29,11 @@ func TestAVIWafProfileBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"avi_wafprofile.testWafProfile", "name", "testSystem-WAF-Profile-abc")),
 			},
+			{
+				ResourceName:      "avi_wafprofile.testWafProfile",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
 		},
 	})
 
@@ -4081,7 +4086,6 @@ EOF
 "response_body_default_action" = "phase:4,deny,status:403,log,auditlog"
 "request_hdr_default_action" = "phase:1,deny,status:403,log,auditlog"
 "static_extensions" = [".gif",".jpg",".jpeg",".png",".js",".css",".ico",".svg",".webp"]
-"buffer_response_body_for_inspection" = false
 "restricted_extensions" = [".asa",".asax",".ascx",".axd",".backup",".bak",".bat",".cdx",".cer",".cfg",".cmd",".com",".config",".conf",".cs",".csproj",".csr",".dat",".db",".dbf",".dll",".dos",".htr",".htw",".ida",".idc",".idq",".inc",".ini",".key",".licx",".lnk",".log",".mdb",".old",".pass",".pdb",".pol",".printer",".pwd",".resources",".resx",".sql",".sys",".vb",".vbs",".vbproj",".vsdisco",".webinfo",".xsd",".xsx"]
 "allowed_http_versions" = ["ONE_ZERO","ONE_ONE"]
 "restricted_headers" = ["Proxy-Connection","Lock-Token","Content-Range","Translate","via","if"]
@@ -8091,7 +8095,6 @@ EOF
 "response_body_default_action" = "phase:4,deny,status:403,log,auditlog"
 "request_hdr_default_action" = "phase:1,deny,status:403,log,auditlog"
 "static_extensions" = [".gif",".jpg",".jpeg",".png",".js",".css",".ico",".svg",".webp"]
-"buffer_response_body_for_inspection" = false
 "restricted_extensions" = [".asa",".asax",".ascx",".axd",".backup",".bak",".bat",".cdx",".cer",".cfg",".cmd",".com",".config",".conf",".cs",".csproj",".csr",".dat",".db",".dbf",".dll",".dos",".htr",".htw",".ida",".idc",".idq",".inc",".ini",".key",".licx",".lnk",".log",".mdb",".old",".pass",".pdb",".pol",".printer",".pwd",".resources",".resx",".sql",".sys",".vb",".vbs",".vbproj",".vsdisco",".webinfo",".xsd",".xsx"]
 "allowed_http_versions" = ["ONE_ZERO","ONE_ONE"]
 "restricted_headers" = ["Proxy-Connection","Lock-Token","Content-Range","Translate","via","if"]

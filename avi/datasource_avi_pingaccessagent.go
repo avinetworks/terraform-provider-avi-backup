@@ -11,36 +11,33 @@ func dataSourceAviPingAccessAgent() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviPingAccessAgentRead,
 		Schema: map[string]*schema.Schema{
-			"description": &schema.Schema{
+			"description": {
 				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"name": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"pingaccess_pool_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"primary_server": &schema.Schema{
-				Type:     schema.TypeSet,
+			"name": {
+				Type:     schema.TypeString,
 				Optional: true,
+			},
+			"pingaccess_pool_ref": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"primary_server": {
+				Type:     schema.TypeSet,
+				Computed: true,
 				Elem:     ResourcePoolServerSchema(),
 			},
-			"properties_file_data": &schema.Schema{
+			"properties_file_data": {
 				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"tenant_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"uuid": &schema.Schema{
+			"tenant_ref": {
 				Type:     schema.TypeString,
 				Optional: true,
+			},
+			"uuid": {
+				Type:     schema.TypeString,
 				Computed: true,
 			},
 		},

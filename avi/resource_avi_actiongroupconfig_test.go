@@ -29,6 +29,11 @@ func TestAVIActionGroupConfigBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"avi_actiongroupconfig.testActionGroupConfig", "name", "testSystem-Alert-Level-High-abc")),
 			},
+			{
+				ResourceName:      "avi_actiongroupconfig.testActionGroupConfig",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
 		},
 	})
 

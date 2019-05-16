@@ -11,33 +11,29 @@ func dataSourceAviTrafficCloneProfile() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviTrafficCloneProfileRead,
 		Schema: map[string]*schema.Schema{
-			"clone_servers": &schema.Schema{
+			"clone_servers": {
 				Type:     schema.TypeList,
-				Optional: true,
+				Computed: true,
 				Elem:     ResourceCloneServerSchema(),
 			},
-			"cloud_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"name": &schema.Schema{
+			"cloud_ref": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"preserve_client_ip": &schema.Schema{
+			"name": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"preserve_client_ip": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"tenant_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"uuid": &schema.Schema{
+			"tenant_ref": {
 				Type:     schema.TypeString,
 				Optional: true,
+			},
+			"uuid": {
+				Type:     schema.TypeString,
 				Computed: true,
 			},
 		},

@@ -11,739 +11,657 @@ func dataSourceAviServiceEngineGroup() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviServiceEngineGroupRead,
 		Schema: map[string]*schema.Schema{
-			"accelerated_networking": &schema.Schema{
+			"accelerated_networking": {
 				Type:     schema.TypeBool,
-				Optional: true,
+				Computed: true,
 			},
-			"active_standby": &schema.Schema{
+			"active_standby": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Computed: true,
 			},
-			"advertise_backend_networks": &schema.Schema{
+			"advertise_backend_networks": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Computed: true,
 			},
-			"aggressive_failure_detection": &schema.Schema{
+			"aggressive_failure_detection": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Computed: true,
 			},
-			"algo": &schema.Schema{
+			"algo": {
 				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "PLACEMENT_ALGO_PACKED"},
-			"allow_burst": &schema.Schema{
+				Computed: true,
+			},
+			"allow_burst": {
 				Type:     schema.TypeBool,
-				Optional: true,
+				Computed: true,
 			},
-			"app_cache_percent": &schema.Schema{
+			"app_cache_percent": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  0,
+				Computed: true,
 			},
-			"app_learning_memory_percent": &schema.Schema{
+			"app_learning_memory_percent": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  0,
+				Computed: true,
 			},
-			"archive_shm_limit": &schema.Schema{
+			"archive_shm_limit": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  8,
+				Computed: true,
 			},
-			"async_ssl": &schema.Schema{
+			"async_ssl": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Computed: true,
 			},
-			"async_ssl_threads": &schema.Schema{
+			"async_ssl_threads": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  1,
+				Computed: true,
 			},
-			"auto_rebalance": &schema.Schema{
+			"auto_rebalance": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Computed: true,
 			},
-			"auto_rebalance_capacity_per_se": &schema.Schema{
+			"auto_rebalance_capacity_per_se": {
 				Type:     schema.TypeList,
-				Optional: true,
+				Computed: true,
 				Elem:     &schema.Schema{Type: schema.TypeInt},
 			},
-			"auto_rebalance_criteria": &schema.Schema{
+			"auto_rebalance_criteria": {
 				Type:     schema.TypeList,
-				Optional: true,
+				Computed: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
-			"auto_rebalance_interval": &schema.Schema{
+			"auto_rebalance_interval": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  300,
-			},
-			"auto_redistribute_active_standby_load": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"bgp_state_update_interval": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  10,
-			},
-			"buffer_se": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  1,
-			},
-			"cloud_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"config_debugs_on_all_cores": &schema.Schema{
+			"auto_redistribute_active_standby_load": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Computed: true,
 			},
-			"connection_memory_percentage": &schema.Schema{
+			"bgp_state_update_interval": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  50,
+				Computed: true,
 			},
-			"cpu_reserve": &schema.Schema{
+			"buffer_se": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"cloud_ref": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"config_debugs_on_all_cores": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Computed: true,
 			},
-			"cpu_socket_affinity": &schema.Schema{
+			"connection_memory_percentage": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"cpu_reserve": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Computed: true,
 			},
-			"custom_securitygroups_data": &schema.Schema{
+			"cpu_socket_affinity": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"custom_securitygroups_data": {
 				Type:     schema.TypeList,
-				Optional: true,
+				Computed: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
-			"custom_securitygroups_mgmt": &schema.Schema{
+			"custom_securitygroups_mgmt": {
 				Type:     schema.TypeList,
-				Optional: true,
+				Computed: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
-			"custom_tag": &schema.Schema{
+			"custom_tag": {
 				Type:     schema.TypeList,
-				Optional: true,
+				Computed: true,
 				Elem:     ResourceCustomTagSchema(),
 			},
-			"data_network_id": &schema.Schema{
+			"data_network_id": {
 				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"datascript_timeout": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  1000000,
-			},
-			"dedicated_dispatcher_core": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"description": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"disable_avi_securitygroups": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"disable_csum_offloads": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"disable_gro": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  true,
-			},
-			"disable_se_memory_check": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"disable_tso": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  true,
-			},
-			"disk_per_se": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  10,
-			},
-			"distribute_load_active_standby": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"distribute_queues": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"enable_gratarp_permanent": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"enable_hsm_priming": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"enable_multi_lb": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"enable_routing": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"enable_vip_on_all_interfaces": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  true,
-			},
-			"enable_vmac": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"ephemeral_portrange_end": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-			},
-			"ephemeral_portrange_start": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-			},
-			"extra_config_multiplier": &schema.Schema{
-				Type:     schema.TypeFloat,
-				Optional: true,
-				Default:  "0.0"},
-			"extra_shared_config_memory": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  0,
-			},
-			"floating_intf_ip": &schema.Schema{
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem:     ResourceIpAddrSchema(),
-			},
-			"floating_intf_ip_se_2": &schema.Schema{
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem:     ResourceIpAddrSchema(),
-			},
-			"flow_table_new_syn_max_entries": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  0,
-			},
-			"free_list_size": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  1024,
-			},
-			"gratarp_permanent_periodicity": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  10,
-			},
-			"ha_mode": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "HA_MODE_SHARED"},
-			"hardwaresecuritymodulegroup_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"heap_minimum_config_memory": &schema.Schema{
+			"datascript_timeout": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  8,
+				Computed: true,
 			},
-			"hm_on_standby": &schema.Schema{
+			"dedicated_dispatcher_core": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  true,
+				Computed: true,
 			},
-			"host_attribute_key": &schema.Schema{
+			"description": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Computed: true,
 			},
-			"host_attribute_value": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"host_gateway_monitor": &schema.Schema{
+			"disable_avi_securitygroups": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Computed: true,
 			},
-			"hypervisor": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
+			"disable_csum_offloads": {
+				Type:     schema.TypeBool,
+				Computed: true,
 			},
-			"ignore_rtt_threshold": &schema.Schema{
+			"disable_gro": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"disable_se_memory_check": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"disable_tso": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"disk_per_se": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  5000,
+				Computed: true,
 			},
-			"ingress_access_data": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "SG_INGRESS_ACCESS_ALL"},
-			"ingress_access_mgmt": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "SG_INGRESS_ACCESS_ALL"},
-			"instance_flavor": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
+			"distribute_load_active_standby": {
+				Type:     schema.TypeBool,
+				Computed: true,
 			},
-			"iptables": &schema.Schema{
+			"distribute_queues": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"enable_gratarp_permanent": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"enable_hsm_priming": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"enable_multi_lb": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"enable_routing": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"enable_vip_on_all_interfaces": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"enable_vmac": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"ephemeral_portrange_end": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"ephemeral_portrange_start": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"extra_config_multiplier": {
+				Type:     schema.TypeFloat,
+				Computed: true,
+			},
+			"extra_shared_config_memory": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"floating_intf_ip": {
 				Type:     schema.TypeList,
-				Optional: true,
+				Computed: true,
+				Elem:     ResourceIpAddrSchema(),
+			},
+			"floating_intf_ip_se_2": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceIpAddrSchema(),
+			},
+			"flow_table_new_syn_max_entries": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"free_list_size": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"gratarp_permanent_periodicity": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"ha_mode": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"hardwaresecuritymodulegroup_ref": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"heap_minimum_config_memory": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"hm_on_standby": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"host_attribute_key": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"host_attribute_value": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"host_gateway_monitor": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"hypervisor": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"ignore_rtt_threshold": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"ingress_access_data": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"ingress_access_mgmt": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"instance_flavor": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"iptables": {
+				Type:     schema.TypeList,
+				Computed: true,
 				Elem:     ResourceIptableRuleSetSchema(),
 			},
-			"least_load_core_selection": &schema.Schema{
+			"least_load_core_selection": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  true,
-			},
-			"license_tier": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"license_type": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"log_disksz": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  10000,
-			},
-			"max_cpu_usage": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  80,
-			},
-			"max_memory_per_mempool": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  64,
-			},
-			"max_public_ips_per_lb": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  30,
-			},
-			"max_rules_per_lb": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  150,
-			},
-			"max_scaleout_per_vs": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  4,
-			},
-			"max_se": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  10,
-			},
-			"max_vs_per_se": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  10,
-			},
-			"mem_reserve": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  true,
-			},
-			"memory_for_config_update": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  15,
-			},
-			"memory_per_se": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  2048,
-			},
-			"mgmt_network_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"mgmt_subnet": &schema.Schema{
+			"license_tier": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"license_type": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"log_disksz": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"max_cpu_usage": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"max_memory_per_mempool": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"max_public_ips_per_lb": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"max_rules_per_lb": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"max_scaleout_per_vs": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"max_se": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"max_vs_per_se": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"mem_reserve": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"memory_for_config_update": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"memory_per_se": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"mgmt_network_ref": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"mgmt_subnet": {
 				Type:     schema.TypeSet,
-				Optional: true,
+				Computed: true,
 				Elem:     ResourceIpAddrPrefixSchema(),
 			},
-			"min_cpu_usage": &schema.Schema{
+			"min_cpu_usage": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  30,
+				Computed: true,
 			},
-			"min_scaleout_per_vs": &schema.Schema{
+			"min_scaleout_per_vs": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  1,
+				Computed: true,
 			},
-			"min_se": &schema.Schema{
+			"min_se": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  1,
+				Computed: true,
 			},
-			"minimum_connection_memory": &schema.Schema{
+			"minimum_connection_memory": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  20,
+				Computed: true,
 			},
-			"n_log_streaming_threads": &schema.Schema{
+			"n_log_streaming_threads": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  1,
+				Computed: true,
 			},
-			"name": &schema.Schema{
+			"name": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"non_significant_log_throttle": &schema.Schema{
+			"nat_flow_tcp_closed_timeout": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  100,
+				Computed: true,
 			},
-			"num_dispatcher_cores": &schema.Schema{
+			"nat_flow_tcp_established_timeout": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  0,
+				Computed: true,
 			},
-			"num_flow_cores_sum_changes_to_ignore": &schema.Schema{
+			"nat_flow_tcp_half_closed_timeout": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  8,
+				Computed: true,
 			},
-			"openstack_availability_zones": &schema.Schema{
+			"nat_flow_tcp_handshake_timeout": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"nat_flow_udp_noresponse_timeout": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"nat_flow_udp_response_timeout": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"non_significant_log_throttle": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"num_dispatcher_cores": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"num_flow_cores_sum_changes_to_ignore": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"openstack_availability_zones": {
 				Type:     schema.TypeList,
-				Optional: true,
+				Computed: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
-			"openstack_mgmt_network_name": &schema.Schema{
+			"openstack_mgmt_network_name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Computed: true,
 			},
-			"openstack_mgmt_network_uuid": &schema.Schema{
+			"openstack_mgmt_network_uuid": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Computed: true,
 			},
-			"os_reserved_memory": &schema.Schema{
+			"os_reserved_memory": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  0,
+				Computed: true,
 			},
-			"per_app": &schema.Schema{
+			"per_app": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Computed: true,
 			},
-			"placement_mode": &schema.Schema{
+			"placement_mode": {
 				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "PLACEMENT_MODE_AUTO"},
-			"realtime_se_metrics": &schema.Schema{
+				Computed: true,
+			},
+			"realtime_se_metrics": {
 				Type:     schema.TypeSet,
-				Optional: true,
+				Computed: true,
 				Elem:     ResourceMetricsRealTimeUpdateSchema(),
 			},
-			"reboot_on_stop": &schema.Schema{
+			"reboot_on_panic": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Computed: true,
 			},
-			"se_bandwidth_type": &schema.Schema{
+			"se_bandwidth_type": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Computed: true,
 			},
-			"se_deprovision_delay": &schema.Schema{
+			"se_deprovision_delay": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  120,
+				Computed: true,
 			},
-			"se_dos_profile": &schema.Schema{
+			"se_dos_profile": {
 				Type:     schema.TypeSet,
-				Optional: true,
+				Computed: true,
 				Elem:     ResourceDosThresholdProfileSchema(),
 			},
-			"se_dpdk_pmd": &schema.Schema{
+			"se_dpdk_pmd": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  0,
+				Computed: true,
 			},
-			"se_flow_probe_retries": &schema.Schema{
+			"se_flow_probe_retries": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  2,
+				Computed: true,
 			},
-			"se_flow_probe_timer": &schema.Schema{
+			"se_flow_probe_retry_timer": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  100,
+				Computed: true,
 			},
-			"se_ipc_udp_port": &schema.Schema{
+			"se_ipc_udp_port": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  1500,
+				Computed: true,
 			},
-			"se_name_prefix": &schema.Schema{
+			"se_name_prefix": {
 				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "Avi"},
-			"se_pcap_lookahead": &schema.Schema{
+				Computed: true,
+			},
+			"se_pcap_lookahead": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Computed: true,
 			},
-			"se_pcap_reinit_frequency": &schema.Schema{
+			"se_pcap_reinit_frequency": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  0,
+				Computed: true,
 			},
-			"se_pcap_reinit_threshold": &schema.Schema{
+			"se_pcap_reinit_threshold": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  0,
+				Computed: true,
 			},
-			"se_probe_port": &schema.Schema{
+			"se_probe_port": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  7,
+				Computed: true,
 			},
-			"se_remote_punt_udp_port": &schema.Schema{
+			"se_remote_punt_udp_port": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  1501,
+				Computed: true,
 			},
-			"se_routing": &schema.Schema{
+			"se_routing": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  true,
+				Computed: true,
 			},
-			"se_sb_dedicated_core": &schema.Schema{
+			"se_sb_dedicated_core": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Computed: true,
 			},
-			"se_sb_threads": &schema.Schema{
+			"se_sb_threads": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  1,
+				Computed: true,
 			},
-			"se_thread_multiplier": &schema.Schema{
+			"se_thread_multiplier": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  1,
+				Computed: true,
 			},
-			"se_tracert_port_range": &schema.Schema{
+			"se_tracert_port_range": {
 				Type:     schema.TypeSet,
-				Optional: true,
+				Computed: true,
 				Elem:     ResourcePortRangeSchema(),
 			},
-			"se_tunnel_mode": &schema.Schema{
+			"se_tunnel_mode": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  0,
-			},
-			"se_tunnel_udp_port": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  1550,
-			},
-			"se_udp_encap_ipc": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  0,
-			},
-			"se_use_dpdk": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  0,
-			},
-			"se_vs_hb_max_pkts_in_batch": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  64,
-			},
-			"se_vs_hb_max_vs_in_pkt": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  256,
-			},
-			"self_se_election": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"service_ip6_subnets": &schema.Schema{
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem:     ResourceIpAddrPrefixSchema(),
-			},
-			"service_ip_subnets": &schema.Schema{
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem:     ResourceIpAddrPrefixSchema(),
-			},
-			"shm_minimum_config_memory": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  4,
-			},
-			"significant_log_throttle": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  100,
-			},
-			"ssl_preprocess_sni_hostname": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  true,
-			},
-			"tenant_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"udf_log_throttle": &schema.Schema{
+			"se_tunnel_udp_port": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  100,
-			},
-			"use_standard_alb": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-			},
-			"uuid": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"vcenter_clusters": &schema.Schema{
+			"se_udp_encap_ipc": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"se_use_dpdk": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"se_vs_hb_max_pkts_in_batch": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"se_vs_hb_max_vs_in_pkt": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"self_se_election": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"service_ip6_subnets": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceIpAddrPrefixSchema(),
+			},
+			"service_ip_subnets": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceIpAddrPrefixSchema(),
+			},
+			"shm_minimum_config_memory": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"significant_log_throttle": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"ssl_preprocess_sni_hostname": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"tenant_ref": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"udf_log_throttle": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"use_standard_alb": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"uuid": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"vcenter_clusters": {
 				Type:     schema.TypeSet,
-				Optional: true,
+				Computed: true,
 				Elem:     ResourceVcenterClustersSchema(),
 			},
-			"vcenter_datastore_mode": &schema.Schema{
+			"vcenter_datastore_mode": {
 				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "VCENTER_DATASTORE_ANY"},
-			"vcenter_datastores": &schema.Schema{
+				Computed: true,
+			},
+			"vcenter_datastores": {
 				Type:     schema.TypeList,
-				Optional: true,
+				Computed: true,
 				Elem:     ResourceVcenterDatastoreSchema(),
 			},
-			"vcenter_datastores_include": &schema.Schema{
+			"vcenter_datastores_include": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Computed: true,
 			},
-			"vcenter_folder": &schema.Schema{
+			"vcenter_folder": {
 				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "AviSeFolder"},
-			"vcenter_hosts": &schema.Schema{
+				Computed: true,
+			},
+			"vcenter_hosts": {
 				Type:     schema.TypeSet,
-				Optional: true,
+				Computed: true,
 				Elem:     ResourceVcenterHostsSchema(),
 			},
-			"vcpus_per_se": &schema.Schema{
+			"vcpus_per_se": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  1,
+				Computed: true,
 			},
-			"vip_asg": &schema.Schema{
+			"vip_asg": {
 				Type:     schema.TypeSet,
-				Optional: true,
+				Computed: true,
 				Elem:     ResourceVipAutoscaleGroupSchema(),
 			},
-			"vs_host_redundancy": &schema.Schema{
+			"vs_host_redundancy": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  true,
+				Computed: true,
 			},
-			"vs_scalein_timeout": &schema.Schema{
+			"vs_scalein_timeout": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  30,
+				Computed: true,
 			},
-			"vs_scalein_timeout_for_upgrade": &schema.Schema{
+			"vs_scalein_timeout_for_upgrade": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  30,
+				Computed: true,
 			},
-			"vs_scaleout_timeout": &schema.Schema{
+			"vs_scaleout_timeout": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  600,
+				Computed: true,
 			},
-			"vs_se_scaleout_additional_wait_time": &schema.Schema{
+			"vs_se_scaleout_additional_wait_time": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  0,
+				Computed: true,
 			},
-			"vs_se_scaleout_ready_timeout": &schema.Schema{
+			"vs_se_scaleout_ready_timeout": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  25,
+				Computed: true,
 			},
-			"vs_switchover_timeout": &schema.Schema{
+			"vs_switchover_timeout": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  300,
+				Computed: true,
 			},
-			"vss_placement": &schema.Schema{
+			"vss_placement": {
 				Type:     schema.TypeSet,
-				Optional: true,
+				Computed: true,
 				Elem:     ResourceVssPlacementSchema(),
 			},
-			"vss_placement_enabled": &schema.Schema{
+			"vss_placement_enabled": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Computed: true,
 			},
-			"waf_mempool": &schema.Schema{
+			"waf_mempool": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  true,
+				Computed: true,
 			},
-			"waf_mempool_size": &schema.Schema{
+			"waf_mempool_size": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  64,
+				Computed: true,
 			},
 		},
 	}

@@ -11,31 +11,29 @@ func dataSourceAviStringGroup() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviStringGroupRead,
 		Schema: map[string]*schema.Schema{
-			"description": &schema.Schema{
+			"description": {
 				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"kv": &schema.Schema{
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem:     ResourceKeyValueSchema(),
-			},
-			"name": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"tenant_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"type": &schema.Schema{
+			"kv": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceKeyValueSchema(),
+			},
+			"name": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"uuid": &schema.Schema{
+			"tenant_ref": {
 				Type:     schema.TypeString,
 				Optional: true,
+			},
+			"type": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"uuid": {
+				Type:     schema.TypeString,
 				Computed: true,
 			},
 		},

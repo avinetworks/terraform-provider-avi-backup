@@ -11,74 +11,68 @@ func dataSourceAviSSLProfile() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviSSLProfileRead,
 		Schema: map[string]*schema.Schema{
-			"accepted_ciphers": &schema.Schema{
+			"accepted_ciphers": {
 				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "AES:3DES:RC4"},
-			"accepted_versions": &schema.Schema{
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem:     ResourceSSLVersionSchema(),
-			},
-			"cipher_enums": &schema.Schema{
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-			},
-			"description": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"dhparam": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"enable_ssl_session_reuse": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  true,
-			},
-			"name": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"prefer_client_cipher_ordering": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"send_close_notify": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  true,
-			},
-			"ssl_rating": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceSSLRatingSchema(),
-			},
-			"ssl_session_timeout": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  86400,
-			},
-			"tags": &schema.Schema{
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem:     ResourceTagSchema(),
-			},
-			"tenant_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"type": &schema.Schema{
+			"accepted_versions": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceSSLVersionSchema(),
+			},
+			"cipher_enums": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
+			},
+			"description": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"dhparam": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"enable_ssl_session_reuse": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"name": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Default:  "SSL_PROFILE_TYPE_APPLICATION"},
-			"uuid": &schema.Schema{
+			},
+			"prefer_client_cipher_ordering": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"send_close_notify": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"ssl_rating": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceSSLRatingSchema(),
+			},
+			"ssl_session_timeout": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"tags": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceTagSchema(),
+			},
+			"tenant_ref": {
 				Type:     schema.TypeString,
 				Optional: true,
+			},
+			"type": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"uuid": {
+				Type:     schema.TypeString,
 				Computed: true,
 			},
 		},

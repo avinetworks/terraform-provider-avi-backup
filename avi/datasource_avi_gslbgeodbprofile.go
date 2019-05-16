@@ -11,32 +11,29 @@ func dataSourceAviGslbGeoDbProfile() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviGslbGeoDbProfileRead,
 		Schema: map[string]*schema.Schema{
-			"description": &schema.Schema{
+			"description": {
 				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"entries": &schema.Schema{
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem:     ResourceGslbGeoDbEntrySchema(),
-			},
-			"is_federated": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  true,
-			},
-			"name": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"tenant_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"uuid": &schema.Schema{
+			"entries": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceGslbGeoDbEntrySchema(),
+			},
+			"is_federated": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"name": {
 				Type:     schema.TypeString,
 				Optional: true,
+			},
+			"tenant_ref": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"uuid": {
+				Type:     schema.TypeString,
 				Computed: true,
 			},
 		},

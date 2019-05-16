@@ -29,6 +29,11 @@ func TestAVIStringGroupBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"avi_stringgroup.testStringGroup", "name", "testSystem-Compressible-Content-Types-abc")),
 			},
+			{
+				ResourceName:      "avi_stringgroup.testStringGroup",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
 		},
 	})
 

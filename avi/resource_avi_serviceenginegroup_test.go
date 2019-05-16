@@ -29,6 +29,11 @@ func TestAVIServiceEngineGroupBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"avi_serviceenginegroup.testServiceEngineGroup", "name", "testDefault-Group-abc")),
 			},
+			{
+				ResourceName:      "avi_serviceenginegroup.testServiceEngineGroup",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
 		},
 	})
 

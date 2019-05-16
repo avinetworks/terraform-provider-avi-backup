@@ -29,6 +29,11 @@ func TestAVIUserAccountProfileBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"avi_useraccountprofile.testUserAccountProfile", "name", "testDefault-User-Account-Profile-abc")),
 			},
+			{
+				ResourceName:      "avi_useraccountprofile.testUserAccountProfile",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
 		},
 	})
 

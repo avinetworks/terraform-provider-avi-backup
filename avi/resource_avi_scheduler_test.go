@@ -29,6 +29,11 @@ func TestAVISchedulerBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"avi_scheduler.testScheduler", "name", "testDefault-Scheduler-abc")),
 			},
+			{
+				ResourceName:      "avi_scheduler.testScheduler",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
 		},
 	})
 

@@ -11,32 +11,30 @@ func dataSourceAviWafProfile() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviWafProfileRead,
 		Schema: map[string]*schema.Schema{
-			"config": &schema.Schema{
+			"config": {
 				Type:     schema.TypeSet,
-				Optional: true,
+				Computed: true,
 				Elem:     ResourceWafConfigSchema(),
 			},
-			"description": &schema.Schema{
+			"description": {
 				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"files": &schema.Schema{
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem:     ResourceWafDataFileSchema(),
-			},
-			"name": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"tenant_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"uuid": &schema.Schema{
+			"files": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceWafDataFileSchema(),
+			},
+			"name": {
 				Type:     schema.TypeString,
 				Optional: true,
+			},
+			"tenant_ref": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"uuid": {
+				Type:     schema.TypeString,
 				Computed: true,
 			},
 		},

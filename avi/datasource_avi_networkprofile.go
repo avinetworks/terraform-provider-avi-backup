@@ -11,32 +11,29 @@ func dataSourceAviNetworkProfile() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviNetworkProfileRead,
 		Schema: map[string]*schema.Schema{
-			"connection_mirror": &schema.Schema{
+			"connection_mirror": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"description": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"name": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"profile": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceNetworkProfileUnionSchema(),
-			},
-			"tenant_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"uuid": &schema.Schema{
+			"description": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"name": {
 				Type:     schema.TypeString,
 				Optional: true,
+			},
+			"profile": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceNetworkProfileUnionSchema(),
+			},
+			"tenant_ref": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"uuid": {
+				Type:     schema.TypeString,
 				Computed: true,
 			},
 		},

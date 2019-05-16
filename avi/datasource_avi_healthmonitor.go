@@ -11,95 +11,88 @@ func dataSourceAviHealthMonitor() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviHealthMonitorRead,
 		Schema: map[string]*schema.Schema{
-			"description": &schema.Schema{
+			"description": {
 				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"dns_monitor": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceHealthMonitorDNSSchema(),
-			},
-			"external_monitor": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceHealthMonitorExternalSchema(),
-			},
-			"failed_checks": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  2,
-			},
-			"http_monitor": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceHealthMonitorHttpSchema(),
-			},
-			"https_monitor": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceHealthMonitorHttpSchema(),
-			},
-			"is_federated": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"monitor_port": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-			},
-			"name": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"radius_monitor": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceHealthMonitorRadiusSchema(),
-			},
-			"receive_timeout": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  4,
-			},
-			"send_interval": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  10,
-			},
-			"sip_monitor": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceHealthMonitorSIPSchema(),
-			},
-			"successful_checks": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  2,
-			},
-			"tcp_monitor": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceHealthMonitorTcpSchema(),
-			},
-			"tenant_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"type": &schema.Schema{
+			"dns_monitor": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceHealthMonitorDNSSchema(),
+			},
+			"external_monitor": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceHealthMonitorExternalSchema(),
+			},
+			"failed_checks": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"http_monitor": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceHealthMonitorHttpSchema(),
+			},
+			"https_monitor": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceHealthMonitorHttpSchema(),
+			},
+			"is_federated": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"monitor_port": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"name": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"udp_monitor": &schema.Schema{
+			"radius_monitor": {
 				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceHealthMonitorRadiusSchema(),
+			},
+			"receive_timeout": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"send_interval": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"sip_monitor": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceHealthMonitorSIPSchema(),
+			},
+			"successful_checks": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"tcp_monitor": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceHealthMonitorTcpSchema(),
+			},
+			"tenant_ref": {
+				Type:     schema.TypeString,
 				Optional: true,
+			},
+			"type": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"udp_monitor": {
+				Type:     schema.TypeSet,
+				Computed: true,
 				Elem:     ResourceHealthMonitorUdpSchema(),
 			},
-			"uuid": &schema.Schema{
+			"uuid": {
 				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
 		},

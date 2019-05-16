@@ -29,6 +29,11 @@ func TestAVIErrorPageBodyBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"avi_errorpagebody.testErrorPageBody", "name", "testCustom-Error-Page-abc")),
 			},
+			{
+				ResourceName:      "avi_errorpagebody.testErrorPageBody",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
 		},
 	})
 

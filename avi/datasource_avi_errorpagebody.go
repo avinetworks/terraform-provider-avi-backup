@@ -11,26 +11,24 @@ func dataSourceAviErrorPageBody() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviErrorPageBodyRead,
 		Schema: map[string]*schema.Schema{
-			"error_page_body": &schema.Schema{
+			"error_page_body": {
 				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"format": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "ERROR_PAGE_FORMAT_HTML"},
-			"name": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"tenant_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"uuid": &schema.Schema{
+			"format": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"name": {
 				Type:     schema.TypeString,
 				Optional: true,
+			},
+			"tenant_ref": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"uuid": {
+				Type:     schema.TypeString,
 				Computed: true,
 			},
 		},

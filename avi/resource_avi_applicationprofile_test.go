@@ -29,6 +29,11 @@ func TestAVIApplicationProfileBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"avi_applicationprofile.testApplicationProfile", "name", "testSystem-Secure-HTTP-abc")),
 			},
+			{
+				ResourceName:      "avi_applicationprofile.testApplicationProfile",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
 		},
 	})
 

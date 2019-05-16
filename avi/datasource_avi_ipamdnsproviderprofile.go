@@ -11,77 +11,74 @@ func dataSourceAviIpamDnsProviderProfile() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviIpamDnsProviderProfileRead,
 		Schema: map[string]*schema.Schema{
-			"allocate_ip_in_vrf": &schema.Schema{
+			"allocate_ip_in_vrf": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"aws_profile": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceIpamDnsAwsProfileSchema(),
-			},
-			"azure_profile": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceIpamDnsAzureProfileSchema(),
-			},
-			"custom_profile": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceIpamDnsCustomProfileSchema(),
-			},
-			"gcp_profile": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceIpamDnsGCPProfileSchema(),
-			},
-			"infoblox_profile": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceIpamDnsInfobloxProfileSchema(),
-			},
-			"internal_profile": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceIpamDnsInternalProfileSchema(),
-			},
-			"name": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"oci_profile": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceIpamDnsOCIProfileSchema(),
-			},
-			"openstack_profile": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceIpamDnsOpenstackProfileSchema(),
-			},
-			"proxy_configuration": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceProxyConfigurationSchema(),
-			},
-			"tenant_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"tencent_profile": &schema.Schema{
+			"aws_profile": {
 				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceIpamDnsAwsProfileSchema(),
+			},
+			"azure_profile": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceIpamDnsAzureProfileSchema(),
+			},
+			"custom_profile": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceIpamDnsCustomProfileSchema(),
+			},
+			"gcp_profile": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceIpamDnsGCPProfileSchema(),
+			},
+			"infoblox_profile": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceIpamDnsInfobloxProfileSchema(),
+			},
+			"internal_profile": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceIpamDnsInternalProfileSchema(),
+			},
+			"name": {
+				Type:     schema.TypeString,
 				Optional: true,
+			},
+			"oci_profile": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceIpamDnsOCIProfileSchema(),
+			},
+			"openstack_profile": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceIpamDnsOpenstackProfileSchema(),
+			},
+			"proxy_configuration": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceProxyConfigurationSchema(),
+			},
+			"tenant_ref": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"tencent_profile": {
+				Type:     schema.TypeSet,
+				Computed: true,
 				Elem:     ResourceIpamDnsTencentProfileSchema(),
 			},
-			"type": &schema.Schema{
+			"type": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Computed: true,
 			},
-			"uuid": &schema.Schema{
+			"uuid": {
 				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
 		},

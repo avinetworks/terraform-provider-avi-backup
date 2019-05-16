@@ -29,6 +29,11 @@ func TestAVIHealthMonitorBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"avi_healthmonitor.testHealthMonitor", "name", "testSystem-HTTP-abc")),
 			},
+			{
+				ResourceName:      "avi_healthmonitor.testHealthMonitor",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
 		},
 	})
 

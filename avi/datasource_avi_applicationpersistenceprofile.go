@@ -11,55 +11,52 @@ func dataSourceAviApplicationPersistenceProfile() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviApplicationPersistenceProfileRead,
 		Schema: map[string]*schema.Schema{
-			"app_cookie_persistence_profile": &schema.Schema{
+			"app_cookie_persistence_profile": {
 				Type:     schema.TypeSet,
-				Optional: true,
+				Computed: true,
 				Elem:     ResourceAppCookiePersistenceProfileSchema(),
 			},
-			"description": &schema.Schema{
+			"description": {
 				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"hdr_persistence_profile": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceHdrPersistenceProfileSchema(),
-			},
-			"http_cookie_persistence_profile": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceHttpCookiePersistenceProfileSchema(),
-			},
-			"ip_persistence_profile": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceIPPersistenceProfileSchema(),
-			},
-			"is_federated": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"name": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"persistence_type": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"server_hm_down_recovery": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "HM_DOWN_PICK_NEW_SERVER"},
-			"tenant_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"uuid": &schema.Schema{
+			"hdr_persistence_profile": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceHdrPersistenceProfileSchema(),
+			},
+			"http_cookie_persistence_profile": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceHttpCookiePersistenceProfileSchema(),
+			},
+			"ip_persistence_profile": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceIPPersistenceProfileSchema(),
+			},
+			"is_federated": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"name": {
 				Type:     schema.TypeString,
 				Optional: true,
+			},
+			"persistence_type": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"server_hm_down_recovery": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"tenant_ref": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"uuid": {
+				Type:     schema.TypeString,
 				Computed: true,
 			},
 		},

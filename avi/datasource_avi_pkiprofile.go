@@ -11,53 +11,47 @@ func dataSourceAviPKIProfile() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviPKIProfileRead,
 		Schema: map[string]*schema.Schema{
-			"ca_certs": &schema.Schema{
+			"ca_certs": {
 				Type:     schema.TypeList,
-				Optional: true,
+				Computed: true,
 				Elem:     ResourceSSLCertificateSchema(),
 			},
-			"created_by": &schema.Schema{
+			"created_by": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Computed: true,
 			},
-			"crl_check": &schema.Schema{
+			"crl_check": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  true,
+				Computed: true,
 			},
-			"crls": &schema.Schema{
+			"crls": {
 				Type:     schema.TypeList,
-				Optional: true,
+				Computed: true,
 				Elem:     ResourceCRLSchema(),
 			},
-			"ignore_peer_chain": &schema.Schema{
+			"ignore_peer_chain": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"is_federated": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"name": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"tenant_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"uuid": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
+			"is_federated": {
+				Type:     schema.TypeBool,
 				Computed: true,
 			},
-			"validate_only_leaf_crl": &schema.Schema{
-				Type:     schema.TypeBool,
+			"name": {
+				Type:     schema.TypeString,
 				Optional: true,
-				Default:  true,
+			},
+			"tenant_ref": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"uuid": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"validate_only_leaf_crl": {
+				Type:     schema.TypeBool,
+				Computed: true,
 			},
 		},
 	}

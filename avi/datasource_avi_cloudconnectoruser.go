@@ -11,55 +11,53 @@ func dataSourceAviCloudConnectorUser() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviCloudConnectorUserRead,
 		Schema: map[string]*schema.Schema{
-			"azure_serviceprincipal": &schema.Schema{
+			"azure_serviceprincipal": {
 				Type:     schema.TypeSet,
-				Optional: true,
+				Computed: true,
 				Elem:     ResourceAzureServicePrincipalCredentialsSchema(),
 			},
-			"azure_userpass": &schema.Schema{
+			"azure_userpass": {
 				Type:     schema.TypeSet,
-				Optional: true,
+				Computed: true,
 				Elem:     ResourceAzureUserPassCredentialsSchema(),
 			},
-			"gcp_credentials": &schema.Schema{
+			"gcp_credentials": {
 				Type:     schema.TypeSet,
-				Optional: true,
+				Computed: true,
 				Elem:     ResourceGCPCredentialsSchema(),
 			},
-			"name": &schema.Schema{
+			"name": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"oci_credentials": &schema.Schema{
+			"oci_credentials": {
 				Type:     schema.TypeSet,
-				Optional: true,
+				Computed: true,
 				Elem:     ResourceOCICredentialsSchema(),
 			},
-			"password": &schema.Schema{
+			"password": {
 				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"private_key": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"public_key": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"tenant_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"tencent_credentials": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceTencentCredentialsSchema(),
+			"private_key": {
+				Type:     schema.TypeString,
+				Computed: true,
 			},
-			"uuid": &schema.Schema{
+			"public_key": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"tenant_ref": {
 				Type:     schema.TypeString,
 				Optional: true,
+			},
+			"tencent_credentials": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceTencentCredentialsSchema(),
+			},
+			"uuid": {
+				Type:     schema.TypeString,
 				Computed: true,
 			},
 		},

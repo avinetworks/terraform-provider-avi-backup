@@ -11,22 +11,20 @@ func dataSourceAviAlertScriptConfig() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviAlertScriptConfigRead,
 		Schema: map[string]*schema.Schema{
-			"action_script": &schema.Schema{
+			"action_script": {
 				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"name": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"tenant_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"uuid": &schema.Schema{
+			"name": {
 				Type:     schema.TypeString,
 				Optional: true,
+			},
+			"tenant_ref": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"uuid": {
+				Type:     schema.TypeString,
 				Computed: true,
 			},
 		},

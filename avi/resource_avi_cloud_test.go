@@ -29,6 +29,11 @@ func TestAVICloudBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"avi_cloud.testCloud", "name", "testDefault-Cloud-abc")),
 			},
+			{
+				ResourceName:      "avi_cloud.testCloud",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
 		},
 	})
 

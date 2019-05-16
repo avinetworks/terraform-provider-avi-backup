@@ -29,6 +29,11 @@ func TestAVIIpAddrGroupBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"avi_ipaddrgroup.testIpAddrGroup", "name", "testInternal-abc")),
 			},
+			{
+				ResourceName:      "avi_ipaddrgroup.testIpAddrGroup",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
 		},
 	})
 

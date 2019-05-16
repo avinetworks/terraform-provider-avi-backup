@@ -11,51 +11,47 @@ func dataSourceAviSecurityPolicy() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviSecurityPolicyRead,
 		Schema: map[string]*schema.Schema{
-			"description": &schema.Schema{
+			"description": {
 				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"dns_attacks": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceDnsAttacksSchema(),
-			},
-			"dns_policy_index": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  0,
-			},
-			"name": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"network_security_policy_index": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  0,
-			},
-			"oper_mode": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "DETECTION"},
-			"tcp_attacks": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceTcpAttacksSchema(),
-			},
-			"tenant_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"udp_attacks": &schema.Schema{
+			"dns_attacks": {
 				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     ResourceUdpAttacksSchema(),
+				Computed: true,
+				Elem:     ResourceDnsAttacksSchema(),
 			},
-			"uuid": &schema.Schema{
+			"dns_policy_index": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"name": {
 				Type:     schema.TypeString,
 				Optional: true,
+			},
+			"network_security_policy_index": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"oper_mode": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"tcp_attacks": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceTcpAttacksSchema(),
+			},
+			"tenant_ref": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"udp_attacks": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceUdpAttacksSchema(),
+			},
+			"uuid": {
+				Type:     schema.TypeString,
 				Computed: true,
 			},
 		},

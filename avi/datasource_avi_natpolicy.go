@@ -11,31 +11,29 @@ func dataSourceAviNatPolicy() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviNatPolicyRead,
 		Schema: map[string]*schema.Schema{
-			"created_by": &schema.Schema{
+			"created_by": {
 				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"description": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"name": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"rules": &schema.Schema{
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem:     ResourceNatRuleSchema(),
-			},
-			"tenant_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"uuid": &schema.Schema{
+			"description": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"name": {
 				Type:     schema.TypeString,
 				Optional: true,
+			},
+			"rules": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceNatRuleSchema(),
+			},
+			"tenant_ref": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"uuid": {
+				Type:     schema.TypeString,
 				Computed: true,
 			},
 		},

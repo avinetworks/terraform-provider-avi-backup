@@ -11,27 +11,25 @@ func dataSourceAviAlertSyslogConfig() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviAlertSyslogConfigRead,
 		Schema: map[string]*schema.Schema{
-			"description": &schema.Schema{
+			"description": {
 				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"name": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"syslog_servers": &schema.Schema{
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem:     ResourceAlertSyslogServerSchema(),
-			},
-			"tenant_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"uuid": &schema.Schema{
+			"name": {
 				Type:     schema.TypeString,
 				Optional: true,
+			},
+			"syslog_servers": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceAlertSyslogServerSchema(),
+			},
+			"tenant_ref": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"uuid": {
+				Type:     schema.TypeString,
 				Computed: true,
 			},
 		},

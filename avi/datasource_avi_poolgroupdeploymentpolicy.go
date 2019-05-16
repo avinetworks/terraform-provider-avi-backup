@@ -11,56 +11,49 @@ func dataSourceAviPoolGroupDeploymentPolicy() *schema.Resource {
 	return &schema.Resource{
 		Read: ResourceAviPoolGroupDeploymentPolicyRead,
 		Schema: map[string]*schema.Schema{
-			"auto_disable_old_prod_pools": &schema.Schema{
+			"auto_disable_old_prod_pools": {
 				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  true,
+				Computed: true,
 			},
-			"description": &schema.Schema{
+			"description": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Computed: true,
 			},
-			"evaluation_duration": &schema.Schema{
+			"evaluation_duration": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  300,
+				Computed: true,
 			},
-			"name": &schema.Schema{
+			"name": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"rules": &schema.Schema{
+			"rules": {
 				Type:     schema.TypeList,
-				Optional: true,
+				Computed: true,
 				Elem:     ResourcePGDeploymentRuleSchema(),
 			},
-			"scheme": &schema.Schema{
+			"scheme": {
 				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "BLUE_GREEN"},
-			"target_test_traffic_ratio": &schema.Schema{
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  100,
-			},
-			"tenant_ref": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"test_traffic_ratio_rampup": &schema.Schema{
+			"target_test_traffic_ratio": {
 				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  100,
-			},
-			"uuid": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
-			"webhook_ref": &schema.Schema{
+			"tenant_ref": {
 				Type:     schema.TypeString,
 				Optional: true,
+			},
+			"test_traffic_ratio_rampup": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"uuid": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"webhook_ref": {
+				Type:     schema.TypeString,
 				Computed: true,
 			},
 		},

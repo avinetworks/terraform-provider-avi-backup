@@ -29,6 +29,11 @@ func TestAVIRoleBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"avi_role.testRole", "name", "testApplication-Admin-abc")),
 			},
+			{
+				ResourceName:      "avi_role.testRole",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
 		},
 	})
 

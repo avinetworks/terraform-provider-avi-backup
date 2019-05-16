@@ -29,6 +29,11 @@ func TestAVISSLProfileBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"avi_sslprofile.testSSLProfile", "name", "testSystem-Standard-abc")),
 			},
+			{
+				ResourceName:      "avi_sslprofile.testSSLProfile",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
 		},
 	})
 
