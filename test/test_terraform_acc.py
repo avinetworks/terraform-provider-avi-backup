@@ -6,7 +6,7 @@ LOG = logging.getLogger(__name__)
 
 
 def test_terraform_acc():
-    cmd = "cd ../; make testacc"
+    cmd = "make testacc"
     LOG.info("executing command %s ", cmd)
     out = subprocess.check_output(shlex.split(cmd))
     LOG.info("terraform testacc : out %s ", out)
