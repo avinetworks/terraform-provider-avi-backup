@@ -69,7 +69,7 @@ func dataSourceAviGslbService() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"num_dns_ip": {
 				Type:     schema.TypeInt,

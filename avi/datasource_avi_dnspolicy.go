@@ -21,7 +21,7 @@ func dataSourceAviDnsPolicy() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"rule": {
 				Type:     schema.TypeList,

@@ -63,7 +63,7 @@ func dataSourceAviServiceEngine() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"resources": {
 				Type:     schema.TypeSet,

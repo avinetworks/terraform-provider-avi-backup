@@ -13,7 +13,7 @@ func dataSourceAviServiceEnginePolicy() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"nat_policy_ref": {
 				Type:     schema.TypeString,

@@ -49,7 +49,7 @@ func dataSourceAviHealthMonitor() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"radius_monitor": {
 				Type:     schema.TypeSet,

@@ -40,7 +40,7 @@ func dataSourceAviApplicationProfile() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"preserve_client_ip": {
 				Type:     schema.TypeBool,

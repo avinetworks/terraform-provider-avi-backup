@@ -101,7 +101,7 @@ func dataSourceAviCloud() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"nsx_configuration": {
 				Type:     schema.TypeSet,

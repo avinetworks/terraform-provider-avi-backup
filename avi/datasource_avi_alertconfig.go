@@ -42,7 +42,7 @@ func dataSourceAviAlertConfig() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"obj_uuid": {
 				Type:     schema.TypeString,

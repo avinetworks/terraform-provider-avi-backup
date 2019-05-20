@@ -44,7 +44,7 @@ func dataSourceAviIpAddrGroup() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"prefixes": {
 				Type:     schema.TypeList,

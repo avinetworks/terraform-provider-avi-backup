@@ -34,7 +34,7 @@ func dataSourceAviNetwork() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"synced_from_se": {
 				Type:     schema.TypeBool,

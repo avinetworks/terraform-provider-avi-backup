@@ -33,7 +33,7 @@ func dataSourceAviScheduler() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"run_mode": {
 				Type:     schema.TypeString,

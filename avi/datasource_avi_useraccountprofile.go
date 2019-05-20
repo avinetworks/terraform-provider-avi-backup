@@ -33,7 +33,7 @@ func dataSourceAviUserAccountProfile() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"uuid": {
 				Type:     schema.TypeString,

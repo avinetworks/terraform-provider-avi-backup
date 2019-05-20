@@ -13,7 +13,7 @@ func dataSourceAviCertificateManagementProfile() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"script_params": {
 				Type:     schema.TypeList,

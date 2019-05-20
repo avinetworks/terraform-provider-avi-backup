@@ -370,7 +370,7 @@ func dataSourceAviServiceEngineGroup() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"nat_flow_tcp_closed_timeout": {
 				Type:     schema.TypeInt,

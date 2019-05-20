@@ -37,7 +37,7 @@ func dataSourceAviActionGroupConfig() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"snmp_trap_profile_ref": {
 				Type:     schema.TypeString,

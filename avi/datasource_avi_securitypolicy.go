@@ -26,7 +26,7 @@ func dataSourceAviSecurityPolicy() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"network_security_policy_index": {
 				Type:     schema.TypeInt,

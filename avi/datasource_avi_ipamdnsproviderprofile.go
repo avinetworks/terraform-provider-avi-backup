@@ -47,7 +47,7 @@ func dataSourceAviIpamDnsProviderProfile() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"oci_profile": {
 				Type:     schema.TypeSet,

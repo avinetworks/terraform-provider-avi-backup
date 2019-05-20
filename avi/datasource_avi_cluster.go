@@ -13,7 +13,7 @@ func dataSourceAviCluster() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"nodes": {
 				Type:     schema.TypeList,

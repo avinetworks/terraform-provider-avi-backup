@@ -42,7 +42,7 @@ func dataSourceAviWafPolicy() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"paranoia_level": {
 				Type:     schema.TypeString,

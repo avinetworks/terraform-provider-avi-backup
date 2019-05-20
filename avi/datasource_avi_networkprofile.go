@@ -21,7 +21,7 @@ func dataSourceAviNetworkProfile() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"profile": {
 				Type:     schema.TypeSet,

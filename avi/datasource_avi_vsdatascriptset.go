@@ -31,7 +31,7 @@ func dataSourceAviVSDataScriptSet() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"pool_group_refs": {
 				Type:     schema.TypeList,

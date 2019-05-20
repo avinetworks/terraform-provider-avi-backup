@@ -169,7 +169,7 @@ func dataSourceAviPool() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"networks": {
 				Type:     schema.TypeList,

@@ -28,7 +28,7 @@ func dataSourceAviCloudConnectorUser() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"oci_credentials": {
 				Type:     schema.TypeSet,

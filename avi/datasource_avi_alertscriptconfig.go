@@ -17,7 +17,7 @@ func dataSourceAviAlertScriptConfig() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"tenant_ref": {
 				Type:     schema.TypeString,

@@ -39,7 +39,7 @@ func dataSourceAviSSLProfile() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"prefer_client_cipher_ordering": {
 				Type:     schema.TypeBool,

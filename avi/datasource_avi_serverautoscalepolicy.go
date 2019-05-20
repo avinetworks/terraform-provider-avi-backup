@@ -45,7 +45,7 @@ func dataSourceAviServerAutoScalePolicy() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"scalein_alertconfig_refs": {
 				Type:     schema.TypeList,

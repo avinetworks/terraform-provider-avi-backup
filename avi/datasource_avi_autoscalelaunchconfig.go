@@ -26,7 +26,7 @@ func dataSourceAviAutoScaleLaunchConfig() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"openstack": {
 				Type:     schema.TypeSet,

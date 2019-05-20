@@ -37,7 +37,7 @@ func dataSourceAviBackupConfiguration() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"remote_directory": {
 				Type:     schema.TypeString,

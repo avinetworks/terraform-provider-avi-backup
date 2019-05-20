@@ -17,7 +17,7 @@ func dataSourceAviPingAccessAgent() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"pingaccess_pool_ref": {
 				Type:     schema.TypeString,

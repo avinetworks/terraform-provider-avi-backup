@@ -26,7 +26,7 @@ func dataSourceAviWafCRS() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"release_date": {
 				Type:     schema.TypeString,

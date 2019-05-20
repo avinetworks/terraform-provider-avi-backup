@@ -17,7 +17,7 @@ func dataSourceAviControllerSite() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"port": {
 				Type:     schema.TypeInt,

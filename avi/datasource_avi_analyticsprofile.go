@@ -289,7 +289,7 @@ func dataSourceAviAnalyticsProfile() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"ondemand_metrics_idle_timeout": {
 				Type:     schema.TypeInt,

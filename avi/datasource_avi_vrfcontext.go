@@ -41,7 +41,7 @@ func dataSourceAviVrfContext() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"static_routes": {
 				Type:     schema.TypeList,

@@ -17,7 +17,7 @@ func dataSourceAviAlertSyslogConfig() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"syslog_servers": {
 				Type:     schema.TypeList,

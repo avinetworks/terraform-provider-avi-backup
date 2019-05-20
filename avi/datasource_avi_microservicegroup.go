@@ -21,7 +21,7 @@ func dataSourceAviMicroServiceGroup() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"service_refs": {
 				Type:     schema.TypeList,

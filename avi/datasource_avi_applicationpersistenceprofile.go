@@ -41,7 +41,7 @@ func dataSourceAviApplicationPersistenceProfile() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"persistence_type": {
 				Type:     schema.TypeString,

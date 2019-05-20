@@ -165,7 +165,7 @@ func dataSourceAviVirtualService() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"network_profile_ref": {
 				Type:     schema.TypeString,

@@ -51,7 +51,7 @@ func dataSourceAviGslb() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"send_interval": {
 				Type:     schema.TypeInt,

@@ -51,7 +51,7 @@ func dataSourceAviPoolGroup() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"priority_labels_ref": {
 				Type:     schema.TypeString,

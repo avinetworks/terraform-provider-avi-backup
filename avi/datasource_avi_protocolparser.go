@@ -17,7 +17,7 @@ func dataSourceAviProtocolParser() *schema.Resource {
 			},
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"parser_code": {
 				Type:     schema.TypeString,
