@@ -1,19 +1,19 @@
 ---
 layout: "avi"
-page_title: "Avi: avi_snmptrapprofile"
-sidebar_current: "docs-avi-resource-snmptrapprofile"
+page_title: "Avi: avi_controllersite"
+sidebar_current: "docs-avi-resource-controllersite"
 description: |-
-  Creates and manages Avi SnmpTrapProfile.
+  Creates and manages Avi ControllerSite.
 ---
 
-# avi_snmptrapprofile
+# avi_controllersite
 
-The SnmpTrapProfile resource allows the creation and management of Avi SnmpTrapProfile
+The ControllerSite resource allows the creation and management of Avi ControllerSite
 
 ## Example Usage
 
 ```hcl
-resource "avi_snmptrapprofile" "foo" {
+resource "avi_controllersite" "foo" {
     name = "terraform-example-foo"
     tenant_ref = "/api/tenant/?name=admin"
 }
@@ -23,9 +23,10 @@ resource "avi_snmptrapprofile" "foo" {
 
 The following arguments are supported:
 
-* `name` - (Required) A user-friendly name of the snmp trap configuration.
-* `tenant_ref` - (Optional) It is a reference to an object of type tenant.
-* `trap_servers` - (Optional) The ip address or hostname of the snmp trap destination server.
+* `address` - (Optional) Ip address or a dns resolvable, fully qualified domain name of the site controller cluster.
+* `name` - (Optional) Name for the site controller cluster.
+* `port` - (Optional) The controller site cluster's rest api port number.
+* `tenant_ref` - (Optional) Reference for the tenant.
 
 
 ### Timeouts
@@ -40,5 +41,5 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 
 In addition to all arguments above, the following attributes are exported:
 
-* `uuid` -  Uuid of the snmp trap profile object.
+* `uuid` -  Reference for the site controller cluster.
 
