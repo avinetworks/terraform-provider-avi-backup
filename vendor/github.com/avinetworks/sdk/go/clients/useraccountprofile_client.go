@@ -45,51 +45,75 @@ func (client *UserAccountProfileClient) getAPIPath(uuid string) string {
 }
 
 // GetAll is a collection API to get a list of UserAccountProfile objects
-func (client *UserAccountProfileClient) GetAll() ([]*models.UserAccountProfile, error) {
+func (client *UserAccountProfileClient) GetAll(tenant ...string) ([]*models.UserAccountProfile, error) {
 	var plist []*models.UserAccountProfile
-	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist, loc_tenant)
 	return plist, err
 }
 
 // Get an existing UserAccountProfile by uuid
-func (client *UserAccountProfileClient) Get(uuid string) (*models.UserAccountProfile, error) {
+func (client *UserAccountProfileClient) Get(uuid string, tenant ...string) (*models.UserAccountProfile, error) {
 	var obj *models.UserAccountProfile
-	err := client.aviSession.Get(client.getAPIPath(uuid), &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Get(client.getAPIPath(uuid), &obj, loc_tenant)
 	return obj, err
 }
 
 // GetByName - Get an existing UserAccountProfile by name
-func (client *UserAccountProfileClient) GetByName(name string) (*models.UserAccountProfile, error) {
+func (client *UserAccountProfileClient) GetByName(name string, tenant ...string) (*models.UserAccountProfile, error) {
 	var obj *models.UserAccountProfile
-	err := client.aviSession.GetObjectByName("useraccountprofile", name, &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetObjectByName("useraccountprofile", name, &obj, loc_tenant)
 	return obj, err
 }
 
 // GetObject - Get an existing UserAccountProfile by filters like name, cloud, tenant
 // Api creates UserAccountProfile object with every call.
-func (client *UserAccountProfileClient) GetObject(options ...session.ApiOptionsParams) (*models.UserAccountProfile, error) {
+func (client *UserAccountProfileClient) GetObject(tenant string, options ...session.ApiOptionsParams) (*models.UserAccountProfile, error) {
 	var obj *models.UserAccountProfile
+	loc_tenant := ""
+	if tenant != "" {
+		loc_tenant = tenant
+	}
 	newOptions := make([]session.ApiOptionsParams, len(options)+1)
 	for i, p := range options {
 		newOptions[i] = p
 	}
 	newOptions[len(options)] = session.SetResult(&obj)
-	err := client.aviSession.GetObject("useraccountprofile", newOptions...)
+	err := client.aviSession.GetObject("useraccountprofile", loc_tenant, newOptions...)
 	return obj, err
 }
 
 // Create a new UserAccountProfile object
-func (client *UserAccountProfileClient) Create(obj *models.UserAccountProfile) (*models.UserAccountProfile, error) {
+func (client *UserAccountProfileClient) Create(obj *models.UserAccountProfile, tenant ...string) (*models.UserAccountProfile, error) {
 	var robj *models.UserAccountProfile
-	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj, loc_tenant)
 	return robj, err
 }
 
 // Update an existing UserAccountProfile object
-func (client *UserAccountProfileClient) Update(obj *models.UserAccountProfile) (*models.UserAccountProfile, error) {
+func (client *UserAccountProfileClient) Update(obj *models.UserAccountProfile, tenant ...string) (*models.UserAccountProfile, error) {
 	var robj *models.UserAccountProfile
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(*obj.UUID)
-	err := client.aviSession.Put(path, obj, &robj)
+	err := client.aviSession.Put(path, obj, &robj, loc_tenant)
 	return robj, err
 }
 
@@ -97,25 +121,37 @@ func (client *UserAccountProfileClient) Update(obj *models.UserAccountProfile) (
 // patchOp: Patch operation - add, replace, or delete
 // patch: Patch payload should be compatible with the models.UserAccountProfile
 // or it should be json compatible of form map[string]interface{}
-func (client *UserAccountProfileClient) Patch(uuid string, patch interface{}, patchOp string) (*models.UserAccountProfile, error) {
+func (client *UserAccountProfileClient) Patch(uuid string, patch interface{}, patchOp string, tenant ...string) (*models.UserAccountProfile, error) {
 	var robj *models.UserAccountProfile
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(uuid)
-	err := client.aviSession.Patch(path, patch, patchOp, &robj)
+	err := client.aviSession.Patch(path, patch, patchOp, &robj, loc_tenant)
 	return robj, err
 }
 
 // Delete an existing UserAccountProfile object with a given UUID
-func (client *UserAccountProfileClient) Delete(uuid string) error {
-	return client.aviSession.Delete(client.getAPIPath(uuid))
+func (client *UserAccountProfileClient) Delete(uuid string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	return client.aviSession.Delete(client.getAPIPath(uuid), loc_tenant)
 }
 
 // DeleteByName - Delete an existing UserAccountProfile object with a given name
-func (client *UserAccountProfileClient) DeleteByName(name string) error {
-	res, err := client.GetByName(name)
+func (client *UserAccountProfileClient) DeleteByName(name string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	res, err := client.GetByName(name, loc_tenant)
 	if err != nil {
 		return err
 	}
-	return client.Delete(*res.UUID)
+	return client.Delete(*res.UUID, loc_tenant)
 }
 
 // GetAviSession

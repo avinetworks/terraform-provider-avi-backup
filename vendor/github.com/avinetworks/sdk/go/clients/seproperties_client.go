@@ -45,51 +45,75 @@ func (client *SePropertiesClient) getAPIPath(uuid string) string {
 }
 
 // GetAll is a collection API to get a list of SeProperties objects
-func (client *SePropertiesClient) GetAll() ([]*models.SeProperties, error) {
+func (client *SePropertiesClient) GetAll(tenant ...string) ([]*models.SeProperties, error) {
 	var plist []*models.SeProperties
-	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist, loc_tenant)
 	return plist, err
 }
 
 // Get an existing SeProperties by uuid
-func (client *SePropertiesClient) Get(uuid string) (*models.SeProperties, error) {
+func (client *SePropertiesClient) Get(uuid string, tenant ...string) (*models.SeProperties, error) {
 	var obj *models.SeProperties
-	err := client.aviSession.Get(client.getAPIPath(uuid), &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Get(client.getAPIPath(uuid), &obj, loc_tenant)
 	return obj, err
 }
 
 // GetByName - Get an existing SeProperties by name
-func (client *SePropertiesClient) GetByName(name string) (*models.SeProperties, error) {
+func (client *SePropertiesClient) GetByName(name string, tenant ...string) (*models.SeProperties, error) {
 	var obj *models.SeProperties
-	err := client.aviSession.GetObjectByName("seproperties", name, &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetObjectByName("seproperties", name, &obj, loc_tenant)
 	return obj, err
 }
 
 // GetObject - Get an existing SeProperties by filters like name, cloud, tenant
 // Api creates SeProperties object with every call.
-func (client *SePropertiesClient) GetObject(options ...session.ApiOptionsParams) (*models.SeProperties, error) {
+func (client *SePropertiesClient) GetObject(tenant string, options ...session.ApiOptionsParams) (*models.SeProperties, error) {
 	var obj *models.SeProperties
+	loc_tenant := ""
+	if tenant != "" {
+		loc_tenant = tenant
+	}
 	newOptions := make([]session.ApiOptionsParams, len(options)+1)
 	for i, p := range options {
 		newOptions[i] = p
 	}
 	newOptions[len(options)] = session.SetResult(&obj)
-	err := client.aviSession.GetObject("seproperties", newOptions...)
+	err := client.aviSession.GetObject("seproperties", loc_tenant, newOptions...)
 	return obj, err
 }
 
 // Create a new SeProperties object
-func (client *SePropertiesClient) Create(obj *models.SeProperties) (*models.SeProperties, error) {
+func (client *SePropertiesClient) Create(obj *models.SeProperties, tenant ...string) (*models.SeProperties, error) {
 	var robj *models.SeProperties
-	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj, loc_tenant)
 	return robj, err
 }
 
 // Update an existing SeProperties object
-func (client *SePropertiesClient) Update(obj *models.SeProperties) (*models.SeProperties, error) {
+func (client *SePropertiesClient) Update(obj *models.SeProperties, tenant ...string) (*models.SeProperties, error) {
 	var robj *models.SeProperties
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(*obj.UUID)
-	err := client.aviSession.Put(path, obj, &robj)
+	err := client.aviSession.Put(path, obj, &robj, loc_tenant)
 	return robj, err
 }
 
@@ -97,25 +121,37 @@ func (client *SePropertiesClient) Update(obj *models.SeProperties) (*models.SePr
 // patchOp: Patch operation - add, replace, or delete
 // patch: Patch payload should be compatible with the models.SeProperties
 // or it should be json compatible of form map[string]interface{}
-func (client *SePropertiesClient) Patch(uuid string, patch interface{}, patchOp string) (*models.SeProperties, error) {
+func (client *SePropertiesClient) Patch(uuid string, patch interface{}, patchOp string, tenant ...string) (*models.SeProperties, error) {
 	var robj *models.SeProperties
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(uuid)
-	err := client.aviSession.Patch(path, patch, patchOp, &robj)
+	err := client.aviSession.Patch(path, patch, patchOp, &robj, loc_tenant)
 	return robj, err
 }
 
 // Delete an existing SeProperties object with a given UUID
-func (client *SePropertiesClient) Delete(uuid string) error {
-	return client.aviSession.Delete(client.getAPIPath(uuid))
+func (client *SePropertiesClient) Delete(uuid string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	return client.aviSession.Delete(client.getAPIPath(uuid), loc_tenant)
 }
 
 // DeleteByName - Delete an existing SeProperties object with a given name
-func (client *SePropertiesClient) DeleteByName(name string) error {
-	res, err := client.GetByName(name)
+func (client *SePropertiesClient) DeleteByName(name string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	res, err := client.GetByName(name, loc_tenant)
 	if err != nil {
 		return err
 	}
-	return client.Delete(*res.UUID)
+	return client.Delete(*res.UUID, loc_tenant)
 }
 
 // GetAviSession

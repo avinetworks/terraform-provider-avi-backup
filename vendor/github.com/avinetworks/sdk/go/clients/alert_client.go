@@ -45,51 +45,75 @@ func (client *AlertClient) getAPIPath(uuid string) string {
 }
 
 // GetAll is a collection API to get a list of Alert objects
-func (client *AlertClient) GetAll() ([]*models.Alert, error) {
+func (client *AlertClient) GetAll(tenant ...string) ([]*models.Alert, error) {
 	var plist []*models.Alert
-	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist, loc_tenant)
 	return plist, err
 }
 
 // Get an existing Alert by uuid
-func (client *AlertClient) Get(uuid string) (*models.Alert, error) {
+func (client *AlertClient) Get(uuid string, tenant ...string) (*models.Alert, error) {
 	var obj *models.Alert
-	err := client.aviSession.Get(client.getAPIPath(uuid), &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Get(client.getAPIPath(uuid), &obj, loc_tenant)
 	return obj, err
 }
 
 // GetByName - Get an existing Alert by name
-func (client *AlertClient) GetByName(name string) (*models.Alert, error) {
+func (client *AlertClient) GetByName(name string, tenant ...string) (*models.Alert, error) {
 	var obj *models.Alert
-	err := client.aviSession.GetObjectByName("alert", name, &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetObjectByName("alert", name, &obj, loc_tenant)
 	return obj, err
 }
 
 // GetObject - Get an existing Alert by filters like name, cloud, tenant
 // Api creates Alert object with every call.
-func (client *AlertClient) GetObject(options ...session.ApiOptionsParams) (*models.Alert, error) {
+func (client *AlertClient) GetObject(tenant string, options ...session.ApiOptionsParams) (*models.Alert, error) {
 	var obj *models.Alert
+	loc_tenant := ""
+	if tenant != "" {
+		loc_tenant = tenant
+	}
 	newOptions := make([]session.ApiOptionsParams, len(options)+1)
 	for i, p := range options {
 		newOptions[i] = p
 	}
 	newOptions[len(options)] = session.SetResult(&obj)
-	err := client.aviSession.GetObject("alert", newOptions...)
+	err := client.aviSession.GetObject("alert", loc_tenant, newOptions...)
 	return obj, err
 }
 
 // Create a new Alert object
-func (client *AlertClient) Create(obj *models.Alert) (*models.Alert, error) {
+func (client *AlertClient) Create(obj *models.Alert, tenant ...string) (*models.Alert, error) {
 	var robj *models.Alert
-	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj, loc_tenant)
 	return robj, err
 }
 
 // Update an existing Alert object
-func (client *AlertClient) Update(obj *models.Alert) (*models.Alert, error) {
+func (client *AlertClient) Update(obj *models.Alert, tenant ...string) (*models.Alert, error) {
 	var robj *models.Alert
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(*obj.UUID)
-	err := client.aviSession.Put(path, obj, &robj)
+	err := client.aviSession.Put(path, obj, &robj, loc_tenant)
 	return robj, err
 }
 
@@ -97,25 +121,37 @@ func (client *AlertClient) Update(obj *models.Alert) (*models.Alert, error) {
 // patchOp: Patch operation - add, replace, or delete
 // patch: Patch payload should be compatible with the models.Alert
 // or it should be json compatible of form map[string]interface{}
-func (client *AlertClient) Patch(uuid string, patch interface{}, patchOp string) (*models.Alert, error) {
+func (client *AlertClient) Patch(uuid string, patch interface{}, patchOp string, tenant ...string) (*models.Alert, error) {
 	var robj *models.Alert
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(uuid)
-	err := client.aviSession.Patch(path, patch, patchOp, &robj)
+	err := client.aviSession.Patch(path, patch, patchOp, &robj, loc_tenant)
 	return robj, err
 }
 
 // Delete an existing Alert object with a given UUID
-func (client *AlertClient) Delete(uuid string) error {
-	return client.aviSession.Delete(client.getAPIPath(uuid))
+func (client *AlertClient) Delete(uuid string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	return client.aviSession.Delete(client.getAPIPath(uuid), loc_tenant)
 }
 
 // DeleteByName - Delete an existing Alert object with a given name
-func (client *AlertClient) DeleteByName(name string) error {
-	res, err := client.GetByName(name)
+func (client *AlertClient) DeleteByName(name string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	res, err := client.GetByName(name, loc_tenant)
 	if err != nil {
 		return err
 	}
-	return client.Delete(*res.UUID)
+	return client.Delete(*res.UUID, loc_tenant)
 }
 
 // GetAviSession

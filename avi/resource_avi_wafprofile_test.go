@@ -1,93 +1,93 @@
 package avi
 
 import (
-	"fmt"
-	"github.com/avinetworks/sdk/go/clients"
-	"github.com/hashicorp/terraform/helper/resource"
-	"github.com/hashicorp/terraform/terraform"
-	"strings"
-	"testing"
+    "fmt"
+    "testing"
+    "strings"
+    "github.com/avinetworks/sdk/go/clients"
+    "github.com/hashicorp/terraform/helper/resource"
+    "github.com/hashicorp/terraform/terraform"
 )
 
 func TestAVIWafProfileBasic(t *testing.T) {
-	resource.Test(t, resource.TestCase{
-		PreCheck:     func() { testAccPreCheck(t) },
-		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckAVIWafProfileDestroy,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccAVIWafProfileConfig,
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckAVIWafProfileExists("avi_wafprofile.testWafProfile"),
-					resource.TestCheckResourceAttr(
-						"avi_wafprofile.testWafProfile", "name", "testSystem-WAF-Profile")),
-			},
-			{
-				Config: testAccAVIWafProfileupdatedConfig,
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckAVIWafProfileExists("avi_wafprofile.testWafProfile"),
-					resource.TestCheckResourceAttr(
-						"avi_wafprofile.testWafProfile", "name", "testSystem-WAF-Profile-abc")),
-			},
-		},
-	})
+    resource.Test(t, resource.TestCase{
+        PreCheck:  func() { testAccPreCheck(t) },
+        Providers: testAccProviders,
+        CheckDestroy: testAccCheckAVIWafProfileDestroy,
+        Steps: []resource.TestStep{
+            {
+                Config: testAccAVIWafProfileConfig,
+                Check: resource.ComposeTestCheckFunc(
+                    testAccCheckAVIWafProfileExists("avi_wafprofile.testWafProfile"),
+                    resource.TestCheckResourceAttr(
+                        "avi_wafprofile.testWafProfile", "name", "testSystem-WAF-Profile")),
+            },
+            {
+                Config: testAccAVIWafProfileupdatedConfig,
+                Check: resource.ComposeTestCheckFunc(
+                    testAccCheckAVIWafProfileExists("avi_wafprofile.testWafProfile"),
+                    resource.TestCheckResourceAttr(
+                        "avi_wafprofile.testWafProfile", "name", "testSystem-WAF-Profile-abc")),
+            },
+        },
+    })
 
 }
 
 func testAccCheckAVIWafProfileExists(resourcename string) resource.TestCheckFunc {
-	return func(s *terraform.State) error {
-		conn := testAccProvider.Meta().(*clients.AviClient).AviSession
-		var obj interface{}
-		rs, ok := s.RootModule().Resources[resourcename]
-		if !ok {
-			return fmt.Errorf("Not found: %s", resourcename)
-		}
-		if rs.Primary.ID == "" {
-			return fmt.Errorf("No AVI WafProfile ID is set")
-		}
-		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
-		uuid := strings.Split(url, "#")[0]
-		path := "api" + uuid
-		err := conn.Get(path, &obj)
-		if err != nil {
-			return err
-		}
-		return nil
-	}
+    return func(s *terraform.State) error {
+        conn := testAccProvider.Meta().(*clients.AviClient).AviSession
+        var obj interface{}
+        rs, ok := s.RootModule().Resources[resourcename]
+        if !ok {
+            return fmt.Errorf("Not found: %s", resourcename)
+        }
+        if rs.Primary.ID == "" {
+            return fmt.Errorf("No AVI WafProfile ID is set")
+        }
+        url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+        uuid := strings.Split(url, "#")[0]
+        path := "api" + uuid
+        err := conn.Get(path, &obj)
+        if err != nil {
+            return err
+        }
+        return nil
+    }
 
 }
 
 func testAccCheckAVIWafProfileDestroy(s *terraform.State) error {
-	conn := testAccProvider.Meta().(*clients.AviClient).AviSession
-	var obj interface{}
-	for _, rs := range s.RootModule().Resources {
-		if rs.Type != "avi_wafprofile" {
-			continue
-		}
-		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
-		uuid := strings.Split(url, "#")[0]
-		path := "api" + uuid
-		err := conn.Get(path, &obj)
-		if err != nil {
-			if strings.Contains(err.Error(), "404") {
-				return nil
-			}
-			return err
-		}
-		if len(obj.(map[string]interface{})) > 0 {
-			return fmt.Errorf("AVI WafProfile still exists")
-		}
-	}
-	return nil
+    conn := testAccProvider.Meta().(*clients.AviClient).AviSession
+    var obj interface{}
+    for _, rs := range s.RootModule().Resources {
+        if rs.Type != "avi_wafprofile" {
+            continue
+        }
+        url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+        uuid := strings.Split(url, "#")[0]
+        path := "api" + uuid
+        err := conn.Get(path, &obj)
+        if err != nil {
+            if strings.Contains(err.Error(), "404") {
+                return nil
+            }
+            return err
+        }
+        if len(obj.(map[string]interface{})) > 0 {
+            return fmt.Errorf("AVI WafProfile still exists")
+        }
+    }
+    return nil
 }
 
 const testAccAVIWafProfileConfig = `
 data "avi_tenant" "default_tenant"{
-        name= "admin"
+    name= "admin"
 }
 resource "avi_wafprofile" "testWafProfile" {
-"files" {
-"data" = <<EOF
+	"files" {
+	"data" = <<EOF
 # Search engine crawlers and other bots
 
 # site ripper
@@ -123,10 +123,10 @@ Owlin bot
 # misbehaving spider
 Lingewoud-550-Spyder
 EOF
-"name" = "crawlers-user-agents.data"
+	"name" = "crawlers-user-agents.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 <b>Warning</b>:
 No row with the given identifier
 open_basedir restriction in effect
@@ -346,10 +346,10 @@ and must therefore be declared abstract or implement the remaining methods
 namespace must not match the enclosing schema 'targetNamespace'
 requires PDO API version 
 EOF
-"name" = "php-errors.data"
+	"name" = "php-errors.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 __autoload
 addcslashes
 addslashes
@@ -1620,10 +1620,10 @@ zip_read
 zlib_encode
 zlib_get_coding_type
 EOF
-"name" = "php-function-names-933151.data"
+	"name" = "php-function-names-933151.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 # Apache
 # (no slash; also guards against old.htaccess, old.htpasswd, etc.)
 .htaccess
@@ -1670,10 +1670,10 @@ wp-config.txt
 # dotenv
 /.env
 EOF
-"name" = "restricted-files.data"
+	"name" = "restricted-files.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 <jsp:
 javax.servlet
 .addheader
@@ -1692,10 +1692,10 @@ vbscript.encode
 wscript.network
 wscript.shell
 EOF
-"name" = "java-code-leakages.data"
+	"name" = "java-code-leakages.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 powershell.exe
 Add-BitsFile
 Add-Computer
@@ -1950,10 +1950,10 @@ Write-Warning
 -ExecutionPolicy
 -PSConsoleFile
 EOF
-"name" = "windows-powershell-commands.data"
+	"name" = "windows-powershell-commands.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 [java.lang.
 class java.lang.
 java.lang.NullPointerException
@@ -1965,10 +1965,10 @@ at org.apache.coyote.
 at org.apache.tomcat.
 at org.apache.jasper.
 EOF
-"name" = "java-errors.data"
+	"name" = "java-errors.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 MySqlClient.
 Server message
 SQL error
@@ -2050,10 +2050,10 @@ Warning
 Roadhouse.Cms.
 DB2 SQL error:
 EOF
-"name" = "sql-errors.data"
+	"name" = "sql-errors.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 allow_call_time_pass_reference
 allow_url_fopen
 allow_url_include
@@ -2331,10 +2331,10 @@ zlib.output_compression
 zlib.output_compression_level
 zlib.output_handler
 EOF
-"name" = "php-config-directives.data"
+	"name" = "php-config-directives.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 $GLOBALS
 $HTTP_COOKIE_VARS
 $HTTP_ENV_VARS
@@ -2355,10 +2355,10 @@ $_SESSION
 $argc
 $argv
 EOF
-"name" = "php-variables.data"
+	"name" = "php-variables.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 .aptitude/config
 .bash_config
 .bash_history
@@ -3414,10 +3414,10 @@ config/database.php
 # Note: this string might be benign in REQUEST_FILENAME
 /config.php
 EOF
-"name" = "lfi-os-files.data"
+	"name" = "lfi-os-files.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 # Generic HTTP clients (popular libraries)
 
 # http library
@@ -3447,10 +3447,10 @@ typhoeus
 # https://msdn.microsoft.com/en-us/library/windows/desktop/aa382925%28v=vs.85%29.aspx
 winhttp.winhttprequest
 EOF
-"name" = "scripting-user-agents.data"
+	"name" = "scripting-user-agents.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 __halt_compiler
 apache_child_terminate
 base64_decode
@@ -3491,10 +3491,10 @@ wp_safe_remote_post
 wp_safe_remote_request
 zlib_decode
 EOF
-"name" = "php-function-names-933150.data"
+	"name" = "php-function-names-933150.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 bin/bash
 bin/csh
 bin/dash
@@ -3571,10 +3571,10 @@ usr/local/bin/rbash
 usr/local/bin/ruby
 usr/local/bin/wget
 EOF
-"name" = "unix-shell.data"
+	"name" = "unix-shell.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 /.adSensepostnottherenonobook
 /<invalid>hello.html
 /actSensepostnottherenonotive
@@ -3593,10 +3593,10 @@ appscan_fingerprint
 w00tw00t.at.ISC.SANS.DFind
 w00tw00t.at.blackhats.romanian.anti-sec
 EOF
-"name" = "scanners-urls.data"
+	"name" = "scanners-urls.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 abs
 acos
 adddate
@@ -3834,10 +3834,10 @@ year
 yearweek
 xmltype
 EOF
-"name" = "sql-function-names.data"
+	"name" = "sql-function-names.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 acunetix-product
 (acunetix web vulnerability scanner
 acunetix-scanning-agreement
@@ -3847,10 +3847,10 @@ x-ratproxy-loop
 bytes=0-,5-0,5-1,5-2,5-3,5-4,5-5,5-6,5-7,5-8,5-9,5-10,5-11,5-12,5-13,5-14
 x-scanner
 EOF
-"name" = "scanners-headers.data"
+	"name" = "scanners-headers.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 # Vulnerability scanners, bruteforce password crackers and exploitation tools
 
 # password cracker
@@ -4050,10 +4050,10 @@ xmlrpc exploit
 # https://wpscan.org/
 WPScan
 EOF
-"name" = "scanners-user-agents.data"
+	"name" = "scanners-user-agents.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 <h2 style="font:8pt/11pt verdana; color:000000">HTTP 403.6 - Forbidden: IP address rejected<br>
 <TITLE>500 Internal Server Error</TITLE>
 Microsoft VBScript runtime (0x8
@@ -4068,35 +4068,35 @@ Microsoft VBScript runtime Error
 ADODB.Command
 Object required: '
 EOF
-"name" = "iis-errors.data"
+	"name" = "iis-errors.data"
 }
-"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
-"config" {
-"regex_match_limit" = "1500"
-"allowed_request_content_types" = ["application/x-www-form-urlencoded","multipart/form-data","text/xml","application/xml","application/x-amf","application/json"]
-"allowed_methods" = ["HTTP_METHOD_GET","HTTP_METHOD_HEAD","HTTP_METHOD_POST","HTTP_METHOD_OPTIONS"]
-"response_hdr_default_action" = "phase:3,deny,status:403,log,auditlog"
-"cookie_format_version" = "0"
-"request_body_default_action" = "phase:2,deny,status:403,log,auditlog"
-"response_body_default_action" = "phase:4,deny,status:403,log,auditlog"
-"request_hdr_default_action" = "phase:1,deny,status:403,log,auditlog"
-"static_extensions" = [".gif",".jpg",".jpeg",".png",".js",".css",".ico",".svg",".webp"]
-"restricted_extensions" = [".asa",".asax",".ascx",".axd",".backup",".bak",".bat",".cdx",".cer",".cfg",".cmd",".com",".config",".conf",".cs",".csproj",".csr",".dat",".db",".dbf",".dll",".dos",".htr",".htw",".ida",".idc",".idq",".inc",".ini",".key",".licx",".lnk",".log",".mdb",".old",".pass",".pdb",".pol",".printer",".pwd",".resources",".resx",".sql",".sys",".vb",".vbs",".vbproj",".vsdisco",".webinfo",".xsd",".xsx"]
-"allowed_http_versions" = ["ONE_ZERO","ONE_ONE"]
-"restricted_headers" = ["Proxy-Connection","Lock-Token","Content-Range","Translate","via","if"]
-"argument_separator" = "&"
-}
-"name" = "testSystem-WAF-Profile"
+	"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
+	"config" {
+		"regex_match_limit" = "1500"
+		"allowed_request_content_types" = ["application/x-www-form-urlencoded","multipart/form-data","text/xml","application/xml","application/x-amf","application/json"]
+		"allowed_methods" = ["HTTP_METHOD_GET","HTTP_METHOD_HEAD","HTTP_METHOD_POST","HTTP_METHOD_OPTIONS"]
+		"response_hdr_default_action" = "phase:3,deny,status:403,log,auditlog"
+		"cookie_format_version" = "0"
+		"request_body_default_action" = "phase:2,deny,status:403,log,auditlog"
+		"response_body_default_action" = "phase:4,deny,status:403,log,auditlog"
+		"request_hdr_default_action" = "phase:1,deny,status:403,log,auditlog"
+		"static_extensions" = [".gif",".jpg",".jpeg",".png",".js",".css",".ico",".svg",".webp"]
+		"restricted_extensions" = [".asa",".asax",".ascx",".axd",".backup",".bak",".bat",".cdx",".cer",".cfg",".cmd",".com",".config",".conf",".cs",".csproj",".csr",".dat",".db",".dbf",".dll",".dos",".htr",".htw",".ida",".idc",".idq",".inc",".ini",".key",".licx",".lnk",".log",".mdb",".old",".pass",".pdb",".pol",".printer",".pwd",".resources",".resx",".sql",".sys",".vb",".vbs",".vbproj",".vsdisco",".webinfo",".xsd",".xsx"]
+		"allowed_http_versions" = ["ONE_ZERO","ONE_ONE"]
+		"restricted_headers" = ["Proxy-Connection","Lock-Token","Content-Range","Translate","via","if"]
+		"argument_separator" = "&"
+	}
+	"name" = "testSystem-WAF-Profile"
 }
 `
 
 const testAccAVIWafProfileupdatedConfig = `
 data "avi_tenant" "default_tenant"{
-        name= "admin"
+    name= "admin"
 }
 resource "avi_wafprofile" "testWafProfile" {
-"files" {
-"data" = <<EOF
+	"files" {
+	"data" = <<EOF
 # Search engine crawlers and other bots
 
 # site ripper
@@ -4132,10 +4132,10 @@ Owlin bot
 # misbehaving spider
 Lingewoud-550-Spyder
 EOF
-"name" = "crawlers-user-agents.data"
+	"name" = "crawlers-user-agents.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 <b>Warning</b>:
 No row with the given identifier
 open_basedir restriction in effect
@@ -4355,10 +4355,10 @@ and must therefore be declared abstract or implement the remaining methods
 namespace must not match the enclosing schema 'targetNamespace'
 requires PDO API version 
 EOF
-"name" = "php-errors.data"
+	"name" = "php-errors.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 __autoload
 addcslashes
 addslashes
@@ -5629,10 +5629,10 @@ zip_read
 zlib_encode
 zlib_get_coding_type
 EOF
-"name" = "php-function-names-933151.data"
+	"name" = "php-function-names-933151.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 # Apache
 # (no slash; also guards against old.htaccess, old.htpasswd, etc.)
 .htaccess
@@ -5679,10 +5679,10 @@ wp-config.txt
 # dotenv
 /.env
 EOF
-"name" = "restricted-files.data"
+	"name" = "restricted-files.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 <jsp:
 javax.servlet
 .addheader
@@ -5701,10 +5701,10 @@ vbscript.encode
 wscript.network
 wscript.shell
 EOF
-"name" = "java-code-leakages.data"
+	"name" = "java-code-leakages.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 powershell.exe
 Add-BitsFile
 Add-Computer
@@ -5959,10 +5959,10 @@ Write-Warning
 -ExecutionPolicy
 -PSConsoleFile
 EOF
-"name" = "windows-powershell-commands.data"
+	"name" = "windows-powershell-commands.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 [java.lang.
 class java.lang.
 java.lang.NullPointerException
@@ -5974,10 +5974,10 @@ at org.apache.coyote.
 at org.apache.tomcat.
 at org.apache.jasper.
 EOF
-"name" = "java-errors.data"
+	"name" = "java-errors.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 MySqlClient.
 Server message
 SQL error
@@ -6059,10 +6059,10 @@ Warning
 Roadhouse.Cms.
 DB2 SQL error:
 EOF
-"name" = "sql-errors.data"
+	"name" = "sql-errors.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 allow_call_time_pass_reference
 allow_url_fopen
 allow_url_include
@@ -6340,10 +6340,10 @@ zlib.output_compression
 zlib.output_compression_level
 zlib.output_handler
 EOF
-"name" = "php-config-directives.data"
+	"name" = "php-config-directives.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 $GLOBALS
 $HTTP_COOKIE_VARS
 $HTTP_ENV_VARS
@@ -6364,10 +6364,10 @@ $_SESSION
 $argc
 $argv
 EOF
-"name" = "php-variables.data"
+	"name" = "php-variables.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 .aptitude/config
 .bash_config
 .bash_history
@@ -7423,10 +7423,10 @@ config/database.php
 # Note: this string might be benign in REQUEST_FILENAME
 /config.php
 EOF
-"name" = "lfi-os-files.data"
+	"name" = "lfi-os-files.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 # Generic HTTP clients (popular libraries)
 
 # http library
@@ -7456,10 +7456,10 @@ typhoeus
 # https://msdn.microsoft.com/en-us/library/windows/desktop/aa382925%28v=vs.85%29.aspx
 winhttp.winhttprequest
 EOF
-"name" = "scripting-user-agents.data"
+	"name" = "scripting-user-agents.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 __halt_compiler
 apache_child_terminate
 base64_decode
@@ -7500,10 +7500,10 @@ wp_safe_remote_post
 wp_safe_remote_request
 zlib_decode
 EOF
-"name" = "php-function-names-933150.data"
+	"name" = "php-function-names-933150.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 bin/bash
 bin/csh
 bin/dash
@@ -7580,10 +7580,10 @@ usr/local/bin/rbash
 usr/local/bin/ruby
 usr/local/bin/wget
 EOF
-"name" = "unix-shell.data"
+	"name" = "unix-shell.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 /.adSensepostnottherenonobook
 /<invalid>hello.html
 /actSensepostnottherenonotive
@@ -7602,10 +7602,10 @@ appscan_fingerprint
 w00tw00t.at.ISC.SANS.DFind
 w00tw00t.at.blackhats.romanian.anti-sec
 EOF
-"name" = "scanners-urls.data"
+	"name" = "scanners-urls.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 abs
 acos
 adddate
@@ -7843,10 +7843,10 @@ year
 yearweek
 xmltype
 EOF
-"name" = "sql-function-names.data"
+	"name" = "sql-function-names.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 acunetix-product
 (acunetix web vulnerability scanner
 acunetix-scanning-agreement
@@ -7856,10 +7856,10 @@ x-ratproxy-loop
 bytes=0-,5-0,5-1,5-2,5-3,5-4,5-5,5-6,5-7,5-8,5-9,5-10,5-11,5-12,5-13,5-14
 x-scanner
 EOF
-"name" = "scanners-headers.data"
+	"name" = "scanners-headers.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 # Vulnerability scanners, bruteforce password crackers and exploitation tools
 
 # password cracker
@@ -8059,10 +8059,10 @@ xmlrpc exploit
 # https://wpscan.org/
 WPScan
 EOF
-"name" = "scanners-user-agents.data"
+	"name" = "scanners-user-agents.data"
 }
 "files" {
-"data" = <<EOF
+	"data" = <<EOF
 <h2 style="font:8pt/11pt verdana; color:000000">HTTP 403.6 - Forbidden: IP address rejected<br>
 <TITLE>500 Internal Server Error</TITLE>
 Microsoft VBScript runtime (0x8
@@ -8077,24 +8077,24 @@ Microsoft VBScript runtime Error
 ADODB.Command
 Object required: '
 EOF
-"name" = "iis-errors.data"
+	"name" = "iis-errors.data"
 }
-"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
-"config" {
-"regex_match_limit" = "1500"
-"allowed_request_content_types" = ["application/x-www-form-urlencoded","multipart/form-data","text/xml","application/xml","application/x-amf","application/json"]
-"allowed_methods" = ["HTTP_METHOD_GET","HTTP_METHOD_HEAD","HTTP_METHOD_POST","HTTP_METHOD_OPTIONS"]
-"response_hdr_default_action" = "phase:3,deny,status:403,log,auditlog"
-"cookie_format_version" = "0"
-"request_body_default_action" = "phase:2,deny,status:403,log,auditlog"
-"response_body_default_action" = "phase:4,deny,status:403,log,auditlog"
-"request_hdr_default_action" = "phase:1,deny,status:403,log,auditlog"
-"static_extensions" = [".gif",".jpg",".jpeg",".png",".js",".css",".ico",".svg",".webp"]
-"restricted_extensions" = [".asa",".asax",".ascx",".axd",".backup",".bak",".bat",".cdx",".cer",".cfg",".cmd",".com",".config",".conf",".cs",".csproj",".csr",".dat",".db",".dbf",".dll",".dos",".htr",".htw",".ida",".idc",".idq",".inc",".ini",".key",".licx",".lnk",".log",".mdb",".old",".pass",".pdb",".pol",".printer",".pwd",".resources",".resx",".sql",".sys",".vb",".vbs",".vbproj",".vsdisco",".webinfo",".xsd",".xsx"]
-"allowed_http_versions" = ["ONE_ZERO","ONE_ONE"]
-"restricted_headers" = ["Proxy-Connection","Lock-Token","Content-Range","Translate","via","if"]
-"argument_separator" = "&"
-}
-"name" = "testSystem-WAF-Profile-abc"
+	"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
+	"config" {
+		"regex_match_limit" = "1500"
+		"allowed_request_content_types" = ["application/x-www-form-urlencoded","multipart/form-data","text/xml","application/xml","application/x-amf","application/json"]
+		"allowed_methods" = ["HTTP_METHOD_GET","HTTP_METHOD_HEAD","HTTP_METHOD_POST","HTTP_METHOD_OPTIONS"]
+		"response_hdr_default_action" = "phase:3,deny,status:403,log,auditlog"
+		"cookie_format_version" = "0"
+		"request_body_default_action" = "phase:2,deny,status:403,log,auditlog"
+		"response_body_default_action" = "phase:4,deny,status:403,log,auditlog"
+		"request_hdr_default_action" = "phase:1,deny,status:403,log,auditlog"
+		"static_extensions" = [".gif",".jpg",".jpeg",".png",".js",".css",".ico",".svg",".webp"]
+		"restricted_extensions" = [".asa",".asax",".ascx",".axd",".backup",".bak",".bat",".cdx",".cer",".cfg",".cmd",".com",".config",".conf",".cs",".csproj",".csr",".dat",".db",".dbf",".dll",".dos",".htr",".htw",".ida",".idc",".idq",".inc",".ini",".key",".licx",".lnk",".log",".mdb",".old",".pass",".pdb",".pol",".printer",".pwd",".resources",".resx",".sql",".sys",".vb",".vbs",".vbproj",".vsdisco",".webinfo",".xsd",".xsx"]
+		"allowed_http_versions" = ["ONE_ZERO","ONE_ONE"]
+		"restricted_headers" = ["Proxy-Connection","Lock-Token","Content-Range","Translate","via","if"]
+		"argument_separator" = "&"
+	}
+	"name" = "testSystem-WAF-Profile-abc"
 }
 `

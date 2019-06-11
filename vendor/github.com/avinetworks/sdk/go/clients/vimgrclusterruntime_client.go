@@ -45,51 +45,75 @@ func (client *VIMgrClusterRuntimeClient) getAPIPath(uuid string) string {
 }
 
 // GetAll is a collection API to get a list of VIMgrClusterRuntime objects
-func (client *VIMgrClusterRuntimeClient) GetAll() ([]*models.VIMgrClusterRuntime, error) {
+func (client *VIMgrClusterRuntimeClient) GetAll(tenant ...string) ([]*models.VIMgrClusterRuntime, error) {
 	var plist []*models.VIMgrClusterRuntime
-	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist, loc_tenant)
 	return plist, err
 }
 
 // Get an existing VIMgrClusterRuntime by uuid
-func (client *VIMgrClusterRuntimeClient) Get(uuid string) (*models.VIMgrClusterRuntime, error) {
+func (client *VIMgrClusterRuntimeClient) Get(uuid string, tenant ...string) (*models.VIMgrClusterRuntime, error) {
 	var obj *models.VIMgrClusterRuntime
-	err := client.aviSession.Get(client.getAPIPath(uuid), &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Get(client.getAPIPath(uuid), &obj, loc_tenant)
 	return obj, err
 }
 
 // GetByName - Get an existing VIMgrClusterRuntime by name
-func (client *VIMgrClusterRuntimeClient) GetByName(name string) (*models.VIMgrClusterRuntime, error) {
+func (client *VIMgrClusterRuntimeClient) GetByName(name string, tenant ...string) (*models.VIMgrClusterRuntime, error) {
 	var obj *models.VIMgrClusterRuntime
-	err := client.aviSession.GetObjectByName("vimgrclusterruntime", name, &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetObjectByName("vimgrclusterruntime", name, &obj, loc_tenant)
 	return obj, err
 }
 
 // GetObject - Get an existing VIMgrClusterRuntime by filters like name, cloud, tenant
 // Api creates VIMgrClusterRuntime object with every call.
-func (client *VIMgrClusterRuntimeClient) GetObject(options ...session.ApiOptionsParams) (*models.VIMgrClusterRuntime, error) {
+func (client *VIMgrClusterRuntimeClient) GetObject(tenant string, options ...session.ApiOptionsParams) (*models.VIMgrClusterRuntime, error) {
 	var obj *models.VIMgrClusterRuntime
+	loc_tenant := ""
+	if tenant != "" {
+		loc_tenant = tenant
+	}
 	newOptions := make([]session.ApiOptionsParams, len(options)+1)
 	for i, p := range options {
 		newOptions[i] = p
 	}
 	newOptions[len(options)] = session.SetResult(&obj)
-	err := client.aviSession.GetObject("vimgrclusterruntime", newOptions...)
+	err := client.aviSession.GetObject("vimgrclusterruntime", loc_tenant, newOptions...)
 	return obj, err
 }
 
 // Create a new VIMgrClusterRuntime object
-func (client *VIMgrClusterRuntimeClient) Create(obj *models.VIMgrClusterRuntime) (*models.VIMgrClusterRuntime, error) {
+func (client *VIMgrClusterRuntimeClient) Create(obj *models.VIMgrClusterRuntime, tenant ...string) (*models.VIMgrClusterRuntime, error) {
 	var robj *models.VIMgrClusterRuntime
-	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj, loc_tenant)
 	return robj, err
 }
 
 // Update an existing VIMgrClusterRuntime object
-func (client *VIMgrClusterRuntimeClient) Update(obj *models.VIMgrClusterRuntime) (*models.VIMgrClusterRuntime, error) {
+func (client *VIMgrClusterRuntimeClient) Update(obj *models.VIMgrClusterRuntime, tenant ...string) (*models.VIMgrClusterRuntime, error) {
 	var robj *models.VIMgrClusterRuntime
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(*obj.UUID)
-	err := client.aviSession.Put(path, obj, &robj)
+	err := client.aviSession.Put(path, obj, &robj, loc_tenant)
 	return robj, err
 }
 
@@ -97,25 +121,37 @@ func (client *VIMgrClusterRuntimeClient) Update(obj *models.VIMgrClusterRuntime)
 // patchOp: Patch operation - add, replace, or delete
 // patch: Patch payload should be compatible with the models.VIMgrClusterRuntime
 // or it should be json compatible of form map[string]interface{}
-func (client *VIMgrClusterRuntimeClient) Patch(uuid string, patch interface{}, patchOp string) (*models.VIMgrClusterRuntime, error) {
+func (client *VIMgrClusterRuntimeClient) Patch(uuid string, patch interface{}, patchOp string, tenant ...string) (*models.VIMgrClusterRuntime, error) {
 	var robj *models.VIMgrClusterRuntime
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(uuid)
-	err := client.aviSession.Patch(path, patch, patchOp, &robj)
+	err := client.aviSession.Patch(path, patch, patchOp, &robj, loc_tenant)
 	return robj, err
 }
 
 // Delete an existing VIMgrClusterRuntime object with a given UUID
-func (client *VIMgrClusterRuntimeClient) Delete(uuid string) error {
-	return client.aviSession.Delete(client.getAPIPath(uuid))
+func (client *VIMgrClusterRuntimeClient) Delete(uuid string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	return client.aviSession.Delete(client.getAPIPath(uuid), loc_tenant)
 }
 
 // DeleteByName - Delete an existing VIMgrClusterRuntime object with a given name
-func (client *VIMgrClusterRuntimeClient) DeleteByName(name string) error {
-	res, err := client.GetByName(name)
+func (client *VIMgrClusterRuntimeClient) DeleteByName(name string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	res, err := client.GetByName(name, loc_tenant)
 	if err != nil {
 		return err
 	}
-	return client.Delete(*res.UUID)
+	return client.Delete(*res.UUID, loc_tenant)
 }
 
 // GetAviSession

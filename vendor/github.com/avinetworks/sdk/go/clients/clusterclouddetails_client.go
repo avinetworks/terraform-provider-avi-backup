@@ -45,51 +45,75 @@ func (client *ClusterCloudDetailsClient) getAPIPath(uuid string) string {
 }
 
 // GetAll is a collection API to get a list of ClusterCloudDetails objects
-func (client *ClusterCloudDetailsClient) GetAll() ([]*models.ClusterCloudDetails, error) {
+func (client *ClusterCloudDetailsClient) GetAll(tenant ...string) ([]*models.ClusterCloudDetails, error) {
 	var plist []*models.ClusterCloudDetails
-	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist, loc_tenant)
 	return plist, err
 }
 
 // Get an existing ClusterCloudDetails by uuid
-func (client *ClusterCloudDetailsClient) Get(uuid string) (*models.ClusterCloudDetails, error) {
+func (client *ClusterCloudDetailsClient) Get(uuid string, tenant ...string) (*models.ClusterCloudDetails, error) {
 	var obj *models.ClusterCloudDetails
-	err := client.aviSession.Get(client.getAPIPath(uuid), &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Get(client.getAPIPath(uuid), &obj, loc_tenant)
 	return obj, err
 }
 
 // GetByName - Get an existing ClusterCloudDetails by name
-func (client *ClusterCloudDetailsClient) GetByName(name string) (*models.ClusterCloudDetails, error) {
+func (client *ClusterCloudDetailsClient) GetByName(name string, tenant ...string) (*models.ClusterCloudDetails, error) {
 	var obj *models.ClusterCloudDetails
-	err := client.aviSession.GetObjectByName("clusterclouddetails", name, &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetObjectByName("clusterclouddetails", name, &obj, loc_tenant)
 	return obj, err
 }
 
 // GetObject - Get an existing ClusterCloudDetails by filters like name, cloud, tenant
 // Api creates ClusterCloudDetails object with every call.
-func (client *ClusterCloudDetailsClient) GetObject(options ...session.ApiOptionsParams) (*models.ClusterCloudDetails, error) {
+func (client *ClusterCloudDetailsClient) GetObject(tenant string, options ...session.ApiOptionsParams) (*models.ClusterCloudDetails, error) {
 	var obj *models.ClusterCloudDetails
+	loc_tenant := ""
+	if tenant != "" {
+		loc_tenant = tenant
+	}
 	newOptions := make([]session.ApiOptionsParams, len(options)+1)
 	for i, p := range options {
 		newOptions[i] = p
 	}
 	newOptions[len(options)] = session.SetResult(&obj)
-	err := client.aviSession.GetObject("clusterclouddetails", newOptions...)
+	err := client.aviSession.GetObject("clusterclouddetails", loc_tenant, newOptions...)
 	return obj, err
 }
 
 // Create a new ClusterCloudDetails object
-func (client *ClusterCloudDetailsClient) Create(obj *models.ClusterCloudDetails) (*models.ClusterCloudDetails, error) {
+func (client *ClusterCloudDetailsClient) Create(obj *models.ClusterCloudDetails, tenant ...string) (*models.ClusterCloudDetails, error) {
 	var robj *models.ClusterCloudDetails
-	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj, loc_tenant)
 	return robj, err
 }
 
 // Update an existing ClusterCloudDetails object
-func (client *ClusterCloudDetailsClient) Update(obj *models.ClusterCloudDetails) (*models.ClusterCloudDetails, error) {
+func (client *ClusterCloudDetailsClient) Update(obj *models.ClusterCloudDetails, tenant ...string) (*models.ClusterCloudDetails, error) {
 	var robj *models.ClusterCloudDetails
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(*obj.UUID)
-	err := client.aviSession.Put(path, obj, &robj)
+	err := client.aviSession.Put(path, obj, &robj, loc_tenant)
 	return robj, err
 }
 
@@ -97,25 +121,37 @@ func (client *ClusterCloudDetailsClient) Update(obj *models.ClusterCloudDetails)
 // patchOp: Patch operation - add, replace, or delete
 // patch: Patch payload should be compatible with the models.ClusterCloudDetails
 // or it should be json compatible of form map[string]interface{}
-func (client *ClusterCloudDetailsClient) Patch(uuid string, patch interface{}, patchOp string) (*models.ClusterCloudDetails, error) {
+func (client *ClusterCloudDetailsClient) Patch(uuid string, patch interface{}, patchOp string, tenant ...string) (*models.ClusterCloudDetails, error) {
 	var robj *models.ClusterCloudDetails
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(uuid)
-	err := client.aviSession.Patch(path, patch, patchOp, &robj)
+	err := client.aviSession.Patch(path, patch, patchOp, &robj, loc_tenant)
 	return robj, err
 }
 
 // Delete an existing ClusterCloudDetails object with a given UUID
-func (client *ClusterCloudDetailsClient) Delete(uuid string) error {
-	return client.aviSession.Delete(client.getAPIPath(uuid))
+func (client *ClusterCloudDetailsClient) Delete(uuid string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	return client.aviSession.Delete(client.getAPIPath(uuid), loc_tenant)
 }
 
 // DeleteByName - Delete an existing ClusterCloudDetails object with a given name
-func (client *ClusterCloudDetailsClient) DeleteByName(name string) error {
-	res, err := client.GetByName(name)
+func (client *ClusterCloudDetailsClient) DeleteByName(name string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	res, err := client.GetByName(name, loc_tenant)
 	if err != nil {
 		return err
 	}
-	return client.Delete(*res.UUID)
+	return client.Delete(*res.UUID, loc_tenant)
 }
 
 // GetAviSession

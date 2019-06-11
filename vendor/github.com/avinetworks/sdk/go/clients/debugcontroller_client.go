@@ -45,51 +45,75 @@ func (client *DebugControllerClient) getAPIPath(uuid string) string {
 }
 
 // GetAll is a collection API to get a list of DebugController objects
-func (client *DebugControllerClient) GetAll() ([]*models.DebugController, error) {
+func (client *DebugControllerClient) GetAll(tenant ...string) ([]*models.DebugController, error) {
 	var plist []*models.DebugController
-	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist, loc_tenant)
 	return plist, err
 }
 
 // Get an existing DebugController by uuid
-func (client *DebugControllerClient) Get(uuid string) (*models.DebugController, error) {
+func (client *DebugControllerClient) Get(uuid string, tenant ...string) (*models.DebugController, error) {
 	var obj *models.DebugController
-	err := client.aviSession.Get(client.getAPIPath(uuid), &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Get(client.getAPIPath(uuid), &obj, loc_tenant)
 	return obj, err
 }
 
 // GetByName - Get an existing DebugController by name
-func (client *DebugControllerClient) GetByName(name string) (*models.DebugController, error) {
+func (client *DebugControllerClient) GetByName(name string, tenant ...string) (*models.DebugController, error) {
 	var obj *models.DebugController
-	err := client.aviSession.GetObjectByName("debugcontroller", name, &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetObjectByName("debugcontroller", name, &obj, loc_tenant)
 	return obj, err
 }
 
 // GetObject - Get an existing DebugController by filters like name, cloud, tenant
 // Api creates DebugController object with every call.
-func (client *DebugControllerClient) GetObject(options ...session.ApiOptionsParams) (*models.DebugController, error) {
+func (client *DebugControllerClient) GetObject(tenant string, options ...session.ApiOptionsParams) (*models.DebugController, error) {
 	var obj *models.DebugController
+	loc_tenant := ""
+	if tenant != "" {
+		loc_tenant = tenant
+	}
 	newOptions := make([]session.ApiOptionsParams, len(options)+1)
 	for i, p := range options {
 		newOptions[i] = p
 	}
 	newOptions[len(options)] = session.SetResult(&obj)
-	err := client.aviSession.GetObject("debugcontroller", newOptions...)
+	err := client.aviSession.GetObject("debugcontroller", loc_tenant, newOptions...)
 	return obj, err
 }
 
 // Create a new DebugController object
-func (client *DebugControllerClient) Create(obj *models.DebugController) (*models.DebugController, error) {
+func (client *DebugControllerClient) Create(obj *models.DebugController, tenant ...string) (*models.DebugController, error) {
 	var robj *models.DebugController
-	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj, loc_tenant)
 	return robj, err
 }
 
 // Update an existing DebugController object
-func (client *DebugControllerClient) Update(obj *models.DebugController) (*models.DebugController, error) {
+func (client *DebugControllerClient) Update(obj *models.DebugController, tenant ...string) (*models.DebugController, error) {
 	var robj *models.DebugController
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(*obj.UUID)
-	err := client.aviSession.Put(path, obj, &robj)
+	err := client.aviSession.Put(path, obj, &robj, loc_tenant)
 	return robj, err
 }
 
@@ -97,25 +121,37 @@ func (client *DebugControllerClient) Update(obj *models.DebugController) (*model
 // patchOp: Patch operation - add, replace, or delete
 // patch: Patch payload should be compatible with the models.DebugController
 // or it should be json compatible of form map[string]interface{}
-func (client *DebugControllerClient) Patch(uuid string, patch interface{}, patchOp string) (*models.DebugController, error) {
+func (client *DebugControllerClient) Patch(uuid string, patch interface{}, patchOp string, tenant ...string) (*models.DebugController, error) {
 	var robj *models.DebugController
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(uuid)
-	err := client.aviSession.Patch(path, patch, patchOp, &robj)
+	err := client.aviSession.Patch(path, patch, patchOp, &robj, loc_tenant)
 	return robj, err
 }
 
 // Delete an existing DebugController object with a given UUID
-func (client *DebugControllerClient) Delete(uuid string) error {
-	return client.aviSession.Delete(client.getAPIPath(uuid))
+func (client *DebugControllerClient) Delete(uuid string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	return client.aviSession.Delete(client.getAPIPath(uuid), loc_tenant)
 }
 
 // DeleteByName - Delete an existing DebugController object with a given name
-func (client *DebugControllerClient) DeleteByName(name string) error {
-	res, err := client.GetByName(name)
+func (client *DebugControllerClient) DeleteByName(name string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	res, err := client.GetByName(name, loc_tenant)
 	if err != nil {
 		return err
 	}
-	return client.Delete(*res.UUID)
+	return client.Delete(*res.UUID, loc_tenant)
 }
 
 // GetAviSession

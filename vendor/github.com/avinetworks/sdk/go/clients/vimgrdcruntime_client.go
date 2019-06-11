@@ -45,51 +45,75 @@ func (client *VIMgrDCRuntimeClient) getAPIPath(uuid string) string {
 }
 
 // GetAll is a collection API to get a list of VIMgrDCRuntime objects
-func (client *VIMgrDCRuntimeClient) GetAll() ([]*models.VIMgrDCRuntime, error) {
+func (client *VIMgrDCRuntimeClient) GetAll(tenant ...string) ([]*models.VIMgrDCRuntime, error) {
 	var plist []*models.VIMgrDCRuntime
-	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist, loc_tenant)
 	return plist, err
 }
 
 // Get an existing VIMgrDCRuntime by uuid
-func (client *VIMgrDCRuntimeClient) Get(uuid string) (*models.VIMgrDCRuntime, error) {
+func (client *VIMgrDCRuntimeClient) Get(uuid string, tenant ...string) (*models.VIMgrDCRuntime, error) {
 	var obj *models.VIMgrDCRuntime
-	err := client.aviSession.Get(client.getAPIPath(uuid), &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Get(client.getAPIPath(uuid), &obj, loc_tenant)
 	return obj, err
 }
 
 // GetByName - Get an existing VIMgrDCRuntime by name
-func (client *VIMgrDCRuntimeClient) GetByName(name string) (*models.VIMgrDCRuntime, error) {
+func (client *VIMgrDCRuntimeClient) GetByName(name string, tenant ...string) (*models.VIMgrDCRuntime, error) {
 	var obj *models.VIMgrDCRuntime
-	err := client.aviSession.GetObjectByName("vimgrdcruntime", name, &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetObjectByName("vimgrdcruntime", name, &obj, loc_tenant)
 	return obj, err
 }
 
 // GetObject - Get an existing VIMgrDCRuntime by filters like name, cloud, tenant
 // Api creates VIMgrDCRuntime object with every call.
-func (client *VIMgrDCRuntimeClient) GetObject(options ...session.ApiOptionsParams) (*models.VIMgrDCRuntime, error) {
+func (client *VIMgrDCRuntimeClient) GetObject(tenant string, options ...session.ApiOptionsParams) (*models.VIMgrDCRuntime, error) {
 	var obj *models.VIMgrDCRuntime
+	loc_tenant := ""
+	if tenant != "" {
+		loc_tenant = tenant
+	}
 	newOptions := make([]session.ApiOptionsParams, len(options)+1)
 	for i, p := range options {
 		newOptions[i] = p
 	}
 	newOptions[len(options)] = session.SetResult(&obj)
-	err := client.aviSession.GetObject("vimgrdcruntime", newOptions...)
+	err := client.aviSession.GetObject("vimgrdcruntime", loc_tenant, newOptions...)
 	return obj, err
 }
 
 // Create a new VIMgrDCRuntime object
-func (client *VIMgrDCRuntimeClient) Create(obj *models.VIMgrDCRuntime) (*models.VIMgrDCRuntime, error) {
+func (client *VIMgrDCRuntimeClient) Create(obj *models.VIMgrDCRuntime, tenant ...string) (*models.VIMgrDCRuntime, error) {
 	var robj *models.VIMgrDCRuntime
-	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj, loc_tenant)
 	return robj, err
 }
 
 // Update an existing VIMgrDCRuntime object
-func (client *VIMgrDCRuntimeClient) Update(obj *models.VIMgrDCRuntime) (*models.VIMgrDCRuntime, error) {
+func (client *VIMgrDCRuntimeClient) Update(obj *models.VIMgrDCRuntime, tenant ...string) (*models.VIMgrDCRuntime, error) {
 	var robj *models.VIMgrDCRuntime
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(*obj.UUID)
-	err := client.aviSession.Put(path, obj, &robj)
+	err := client.aviSession.Put(path, obj, &robj, loc_tenant)
 	return robj, err
 }
 
@@ -97,25 +121,37 @@ func (client *VIMgrDCRuntimeClient) Update(obj *models.VIMgrDCRuntime) (*models.
 // patchOp: Patch operation - add, replace, or delete
 // patch: Patch payload should be compatible with the models.VIMgrDCRuntime
 // or it should be json compatible of form map[string]interface{}
-func (client *VIMgrDCRuntimeClient) Patch(uuid string, patch interface{}, patchOp string) (*models.VIMgrDCRuntime, error) {
+func (client *VIMgrDCRuntimeClient) Patch(uuid string, patch interface{}, patchOp string, tenant ...string) (*models.VIMgrDCRuntime, error) {
 	var robj *models.VIMgrDCRuntime
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(uuid)
-	err := client.aviSession.Patch(path, patch, patchOp, &robj)
+	err := client.aviSession.Patch(path, patch, patchOp, &robj, loc_tenant)
 	return robj, err
 }
 
 // Delete an existing VIMgrDCRuntime object with a given UUID
-func (client *VIMgrDCRuntimeClient) Delete(uuid string) error {
-	return client.aviSession.Delete(client.getAPIPath(uuid))
+func (client *VIMgrDCRuntimeClient) Delete(uuid string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	return client.aviSession.Delete(client.getAPIPath(uuid), loc_tenant)
 }
 
 // DeleteByName - Delete an existing VIMgrDCRuntime object with a given name
-func (client *VIMgrDCRuntimeClient) DeleteByName(name string) error {
-	res, err := client.GetByName(name)
+func (client *VIMgrDCRuntimeClient) DeleteByName(name string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	res, err := client.GetByName(name, loc_tenant)
 	if err != nil {
 		return err
 	}
-	return client.Delete(*res.UUID)
+	return client.Delete(*res.UUID, loc_tenant)
 }
 
 // GetAviSession

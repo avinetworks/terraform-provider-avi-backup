@@ -170,6 +170,20 @@ func NewAviSession(host string, username string, options ...func(*AviSession) er
 	return avisess, err
 }
 
+//SwitchTenant Sets tenant into the avisession.
+func (avisess *AviSession) SwitchTenant(tenant string) (error) {
+	avisess.tenant = tenant
+	if avisess.tenant == "" {
+		avisess.tenant = DEFAULT_API_TENANT
+	}
+	return nil
+}
+
+//GetTenant Sets tenant into the avisession.
+func (avisess *AviSession) GetTenant() (string) {
+	return avisess.tenant
+}
+
 func (avisess *AviSession) initiateSession() error {
 	if avisess.insecure == true {
 		glog.Warning("Strict certificate verification is *DISABLED*")
@@ -373,10 +387,12 @@ func (avisess *AviSession) collectCookiesFromResp(resp *http.Response) {
 
 // restRequest makes a REST request to the Avi Controller's REST API.
 // Returns a byte[] if successful
-func (avisess *AviSession) restRequest(verb string, uri string, payload interface{}, retryNum ...int) ([]byte, error) {
+func (avisess *AviSession) restRequest(verb string, uri string, payload interface{}, tenant string, retryNum ...int) ([]byte, error) {
 	var result []byte
 	url := avisess.prefix + uri
-
+	if tenant == "" {
+		tenant = avisess.tenant
+	}
 	// If optional retryNum arg is provided, then count which retry number this is
 	retry := 0
 	if len(retryNum) > 0 {
@@ -399,7 +415,7 @@ func (avisess *AviSession) restRequest(verb string, uri string, payload interfac
 		return result, errorResult
 	}
 	req.Header.Set("Accept", "application/json")
-
+	req.Header.Set("X-Avi-Tenant", tenant)
 	glog.Infof("Sending req for uri %v", url)
 	resp, err := avisess.client.Do(req)
 	if err != nil {
@@ -433,7 +449,7 @@ func (avisess *AviSession) restRequest(verb string, uri string, payload interfac
 			return nil, err
 		}
 		// Doing this so that a new request is made to the
-		return avisess.restRequest(verb, uri, payload, retry+1)
+		return avisess.restRequest(verb, uri, payload, tenant, retry+1)
 	}
 
 	defer resp.Body.Close()
@@ -717,8 +733,9 @@ func (avisess *AviSession) CheckControllerStatus() (bool, error) {
 }
 
 func (avisess *AviSession) restRequestInterfaceResponse(verb string, url string,
-	payload interface{}, response interface{}) error {
-	res, rerror := avisess.restRequest(verb, url, payload)
+	payload interface{}, response interface{}, tenant ...string) error {
+
+	res, rerror := avisess.restRequest(verb, url, payload, tenant[0])
 	if rerror != nil || res == nil {
 		return rerror
 	}
@@ -726,31 +743,55 @@ func (avisess *AviSession) restRequestInterfaceResponse(verb string, url string,
 }
 
 // Get issues a GET request against the avisess REST API.
-func (avisess *AviSession) Get(uri string, response interface{}) error {
-	return avisess.restRequestInterfaceResponse("GET", uri, nil, response)
+func (avisess *AviSession) Get(uri string, response interface{}, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) == 0 {
+		loc_tenant = avisess.tenant
+	} else {
+		loc_tenant = tenant[0]
+	}
+	return avisess.restRequestInterfaceResponse("GET", uri, nil, response, loc_tenant)
 }
 
 // Post issues a POST request against the avisess REST API.
-func (avisess *AviSession) Post(uri string, payload interface{}, response interface{}) error {
-	return avisess.restRequestInterfaceResponse("POST", uri, payload, response)
+func (avisess *AviSession) Post(uri string, payload interface{}, response interface{}, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) == 0 {
+		loc_tenant = avisess.tenant
+	} else {
+		loc_tenant = tenant[0]
+	}
+	return avisess.restRequestInterfaceResponse("POST", uri, payload, response, loc_tenant)
 }
 
 // Put issues a PUT request against the avisess REST API.
-func (avisess *AviSession) Put(uri string, payload interface{}, response interface{}) error {
-	return avisess.restRequestInterfaceResponse("PUT", uri, payload, response)
+func (avisess *AviSession) Put(uri string, payload interface{}, response interface{}, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) == 0 {
+		loc_tenant = avisess.tenant
+	} else {
+		loc_tenant = tenant[0]
+	}
+	return avisess.restRequestInterfaceResponse("PUT", uri, payload, response, loc_tenant)
 }
 
 // Post issues a PATCH request against the avisess REST API.
 // allowed patchOp - add, replace, remove
-func (avisess *AviSession) Patch(uri string, payload interface{}, patchOp string, response interface{}) error {
+func (avisess *AviSession) Patch(uri string, payload interface{}, patchOp string, response interface{}, tenant ...string) error {
 	var patchPayload = make(map[string]interface{})
 	patchPayload[patchOp] = payload
 	glog.Info(" PATCH OP %v data %v", patchOp, payload)
-	return avisess.restRequestInterfaceResponse("PATCH", uri, patchPayload, response)
+	loc_tenant := ""
+	if len(tenant) == 0 {
+		loc_tenant = avisess.tenant
+	} else {
+		loc_tenant = tenant[0]
+	}
+	return avisess.restRequestInterfaceResponse("PATCH", uri, patchPayload, response, loc_tenant)
 }
 
 // Delete issues a DELETE request against the avisess REST API.
-func (avisess *AviSession) Delete(uri string, params ...interface{}) error {
+func (avisess *AviSession) Delete(uri string, tenant string, params ...interface{}) error {
 	var payload, response interface{}
 	if len(params) > 0 {
 		payload = params[0]
@@ -758,13 +799,13 @@ func (avisess *AviSession) Delete(uri string, params ...interface{}) error {
 			response = params[1]
 		}
 	}
-	return avisess.restRequestInterfaceResponse("DELETE", uri, payload, response)
+	return avisess.restRequestInterfaceResponse("DELETE", uri, payload, response, tenant)
 }
 
 // GetCollectionRaw issues a GET request and returns a AviCollectionResult with unmarshaled (raw) results section.
-func (avisess *AviSession) GetCollectionRaw(uri string) (AviCollectionResult, error) {
+func (avisess *AviSession) GetCollectionRaw(uri string, tenant string) (AviCollectionResult, error) {
 	var result AviCollectionResult
-	res, rerror := avisess.restRequest("GET", uri, nil)
+	res, rerror := avisess.restRequest("GET", uri, nil, tenant)
 	if rerror != nil || res == nil {
 		return result, rerror
 	}
@@ -773,8 +814,8 @@ func (avisess *AviSession) GetCollectionRaw(uri string) (AviCollectionResult, er
 }
 
 // GetCollection performs a collection API call and unmarshals the results into objList, which should be an array type
-func (avisess *AviSession) GetCollection(uri string, objList interface{}) error {
-	result, err := avisess.GetCollectionRaw(uri)
+func (avisess *AviSession) GetCollection(uri string, objList interface{}, tenant string) error {
+	result, err := avisess.GetCollectionRaw(uri, tenant)
 	if err != nil {
 		return err
 	}
@@ -785,13 +826,13 @@ func (avisess *AviSession) GetCollection(uri string, objList interface{}) error 
 }
 
 // GetRaw performs a GET API call and returns raw data
-func (avisess *AviSession) GetRaw(uri string) ([]byte, error) {
-	return avisess.restRequest("GET", uri, nil)
+func (avisess *AviSession) GetRaw(uri string, tenant string) ([]byte, error) {
+	return avisess.restRequest("GET", uri, nil, tenant)
 }
 
 // PostRaw performs a POST API call and returns raw data
-func (avisess *AviSession) PostRaw(uri string, payload interface{}) ([]byte, error) {
-	return avisess.restRequest("POST", uri, payload)
+func (avisess *AviSession) PostRaw(uri string, payload interface{}, tenant string) ([]byte, error) {
+	return avisess.restRequest("POST", uri, payload, tenant)
 }
 
 // GetMultipartRaw performs a GET API call and returns multipart raw data (File Download)
@@ -912,7 +953,7 @@ func (avisess *AviSession) GetUri(obj string, options ...ApiOptionsParams) (stri
 	return uri, nil
 }
 
-func (avisess *AviSession) GetObject(obj string, options ...ApiOptionsParams) error {
+func (avisess *AviSession) GetObject(obj string, tenant string, options ...ApiOptionsParams) error {
 	opts := &ApiOptions{}
 	for _, opt := range options {
 		err := opt(opts)
@@ -924,7 +965,7 @@ func (avisess *AviSession) GetObject(obj string, options ...ApiOptionsParams) er
 	if err != nil {
 		return err
 	}
-	res, err := avisess.GetCollectionRaw(uri)
+	res, err := avisess.GetCollectionRaw(uri, tenant)
 	if err != nil {
 		return err
 	}
@@ -943,8 +984,14 @@ func (avisess *AviSession) GetObject(obj string, options ...ApiOptionsParams) er
 }
 
 // GetObjectByName performs GET with name filter
-func (avisess *AviSession) GetObjectByName(obj string, name string, result interface{}) error {
-	return avisess.GetObject(obj, SetName(name), SetResult(result))
+func (avisess *AviSession) GetObjectByName(obj string, name string, result interface{}, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) == 0 {
+		loc_tenant = avisess.tenant
+	} else {
+		loc_tenant = tenant[0]
+	}
+	return avisess.GetObject(obj, loc_tenant, SetName(name), SetResult(result))
 }
 
 // Utility functions

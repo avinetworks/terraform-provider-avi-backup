@@ -45,51 +45,75 @@ func (client *DebugVirtualServiceClient) getAPIPath(uuid string) string {
 }
 
 // GetAll is a collection API to get a list of DebugVirtualService objects
-func (client *DebugVirtualServiceClient) GetAll() ([]*models.DebugVirtualService, error) {
+func (client *DebugVirtualServiceClient) GetAll(tenant ...string) ([]*models.DebugVirtualService, error) {
 	var plist []*models.DebugVirtualService
-	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist, loc_tenant)
 	return plist, err
 }
 
 // Get an existing DebugVirtualService by uuid
-func (client *DebugVirtualServiceClient) Get(uuid string) (*models.DebugVirtualService, error) {
+func (client *DebugVirtualServiceClient) Get(uuid string, tenant ...string) (*models.DebugVirtualService, error) {
 	var obj *models.DebugVirtualService
-	err := client.aviSession.Get(client.getAPIPath(uuid), &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Get(client.getAPIPath(uuid), &obj, loc_tenant)
 	return obj, err
 }
 
 // GetByName - Get an existing DebugVirtualService by name
-func (client *DebugVirtualServiceClient) GetByName(name string) (*models.DebugVirtualService, error) {
+func (client *DebugVirtualServiceClient) GetByName(name string, tenant ...string) (*models.DebugVirtualService, error) {
 	var obj *models.DebugVirtualService
-	err := client.aviSession.GetObjectByName("debugvirtualservice", name, &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetObjectByName("debugvirtualservice", name, &obj, loc_tenant)
 	return obj, err
 }
 
 // GetObject - Get an existing DebugVirtualService by filters like name, cloud, tenant
 // Api creates DebugVirtualService object with every call.
-func (client *DebugVirtualServiceClient) GetObject(options ...session.ApiOptionsParams) (*models.DebugVirtualService, error) {
+func (client *DebugVirtualServiceClient) GetObject(tenant string, options ...session.ApiOptionsParams) (*models.DebugVirtualService, error) {
 	var obj *models.DebugVirtualService
+	loc_tenant := ""
+	if tenant != "" {
+		loc_tenant = tenant
+	}
 	newOptions := make([]session.ApiOptionsParams, len(options)+1)
 	for i, p := range options {
 		newOptions[i] = p
 	}
 	newOptions[len(options)] = session.SetResult(&obj)
-	err := client.aviSession.GetObject("debugvirtualservice", newOptions...)
+	err := client.aviSession.GetObject("debugvirtualservice", loc_tenant, newOptions...)
 	return obj, err
 }
 
 // Create a new DebugVirtualService object
-func (client *DebugVirtualServiceClient) Create(obj *models.DebugVirtualService) (*models.DebugVirtualService, error) {
+func (client *DebugVirtualServiceClient) Create(obj *models.DebugVirtualService, tenant ...string) (*models.DebugVirtualService, error) {
 	var robj *models.DebugVirtualService
-	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj, loc_tenant)
 	return robj, err
 }
 
 // Update an existing DebugVirtualService object
-func (client *DebugVirtualServiceClient) Update(obj *models.DebugVirtualService) (*models.DebugVirtualService, error) {
+func (client *DebugVirtualServiceClient) Update(obj *models.DebugVirtualService, tenant ...string) (*models.DebugVirtualService, error) {
 	var robj *models.DebugVirtualService
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(*obj.UUID)
-	err := client.aviSession.Put(path, obj, &robj)
+	err := client.aviSession.Put(path, obj, &robj, loc_tenant)
 	return robj, err
 }
 
@@ -97,25 +121,37 @@ func (client *DebugVirtualServiceClient) Update(obj *models.DebugVirtualService)
 // patchOp: Patch operation - add, replace, or delete
 // patch: Patch payload should be compatible with the models.DebugVirtualService
 // or it should be json compatible of form map[string]interface{}
-func (client *DebugVirtualServiceClient) Patch(uuid string, patch interface{}, patchOp string) (*models.DebugVirtualService, error) {
+func (client *DebugVirtualServiceClient) Patch(uuid string, patch interface{}, patchOp string, tenant ...string) (*models.DebugVirtualService, error) {
 	var robj *models.DebugVirtualService
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(uuid)
-	err := client.aviSession.Patch(path, patch, patchOp, &robj)
+	err := client.aviSession.Patch(path, patch, patchOp, &robj, loc_tenant)
 	return robj, err
 }
 
 // Delete an existing DebugVirtualService object with a given UUID
-func (client *DebugVirtualServiceClient) Delete(uuid string) error {
-	return client.aviSession.Delete(client.getAPIPath(uuid))
+func (client *DebugVirtualServiceClient) Delete(uuid string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	return client.aviSession.Delete(client.getAPIPath(uuid), loc_tenant)
 }
 
 // DeleteByName - Delete an existing DebugVirtualService object with a given name
-func (client *DebugVirtualServiceClient) DeleteByName(name string) error {
-	res, err := client.GetByName(name)
+func (client *DebugVirtualServiceClient) DeleteByName(name string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	res, err := client.GetByName(name, loc_tenant)
 	if err != nil {
 		return err
 	}
-	return client.Delete(*res.UUID)
+	return client.Delete(*res.UUID, loc_tenant)
 }
 
 // GetAviSession

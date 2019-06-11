@@ -8,37 +8,37 @@ package avi
 import "github.com/hashicorp/terraform/helper/schema"
 
 func dataSourceAviNetworkProfile() *schema.Resource {
-	return &schema.Resource{
-		Read: ResourceAviNetworkProfileRead,
-		Schema: map[string]*schema.Schema{
-			"connection_mirror": {
-				Type:     schema.TypeBool,
-				Computed: true,
-			},
-			"description": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"name": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"profile": {
-				Type:     schema.TypeSet,
-				Computed: true,
-				Elem:     ResourceNetworkProfileUnionSchema(),
-			},
-			"tenant_ref": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"uuid": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-		},
-	}
+    return &schema.Resource{
+        Read:   ResourceAviNetworkProfileRead,
+        Schema: map[string]*schema.Schema{
+            "connection_mirror" :{
+                Type: schema.TypeBool,
+                Computed: true,
+        },
+                    "description" :{
+                Type: schema.TypeString,
+                Computed: true,
+        },
+                    "name" :{
+                Type: schema.TypeString,
+                Optional: true,
+                Computed: true,
+        },
+                    "profile" :{
+                Type: schema.TypeSet,
+                Computed: true,
+            Elem: ResourceNetworkProfileUnionSchema(),
+        },
+                    "tenant_ref" :{
+                Type: schema.TypeString,
+                Optional: true,
+                Computed: true,
+        },
+                    "uuid" :{
+                Type: schema.TypeString,
+                Optional: true,
+                Computed: true,
+        },
+                },
+    }
 }

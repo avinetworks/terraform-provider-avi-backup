@@ -45,51 +45,75 @@ func (client *ApplicationClient) getAPIPath(uuid string) string {
 }
 
 // GetAll is a collection API to get a list of Application objects
-func (client *ApplicationClient) GetAll() ([]*models.Application, error) {
+func (client *ApplicationClient) GetAll(tenant ...string) ([]*models.Application, error) {
 	var plist []*models.Application
-	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist, loc_tenant)
 	return plist, err
 }
 
 // Get an existing Application by uuid
-func (client *ApplicationClient) Get(uuid string) (*models.Application, error) {
+func (client *ApplicationClient) Get(uuid string, tenant ...string) (*models.Application, error) {
 	var obj *models.Application
-	err := client.aviSession.Get(client.getAPIPath(uuid), &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Get(client.getAPIPath(uuid), &obj, loc_tenant)
 	return obj, err
 }
 
 // GetByName - Get an existing Application by name
-func (client *ApplicationClient) GetByName(name string) (*models.Application, error) {
+func (client *ApplicationClient) GetByName(name string, tenant ...string) (*models.Application, error) {
 	var obj *models.Application
-	err := client.aviSession.GetObjectByName("application", name, &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetObjectByName("application", name, &obj, loc_tenant)
 	return obj, err
 }
 
 // GetObject - Get an existing Application by filters like name, cloud, tenant
 // Api creates Application object with every call.
-func (client *ApplicationClient) GetObject(options ...session.ApiOptionsParams) (*models.Application, error) {
+func (client *ApplicationClient) GetObject(tenant string, options ...session.ApiOptionsParams) (*models.Application, error) {
 	var obj *models.Application
+	loc_tenant := ""
+	if tenant != "" {
+		loc_tenant = tenant
+	}
 	newOptions := make([]session.ApiOptionsParams, len(options)+1)
 	for i, p := range options {
 		newOptions[i] = p
 	}
 	newOptions[len(options)] = session.SetResult(&obj)
-	err := client.aviSession.GetObject("application", newOptions...)
+	err := client.aviSession.GetObject("application", loc_tenant, newOptions...)
 	return obj, err
 }
 
 // Create a new Application object
-func (client *ApplicationClient) Create(obj *models.Application) (*models.Application, error) {
+func (client *ApplicationClient) Create(obj *models.Application, tenant ...string) (*models.Application, error) {
 	var robj *models.Application
-	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj, loc_tenant)
 	return robj, err
 }
 
 // Update an existing Application object
-func (client *ApplicationClient) Update(obj *models.Application) (*models.Application, error) {
+func (client *ApplicationClient) Update(obj *models.Application, tenant ...string) (*models.Application, error) {
 	var robj *models.Application
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(*obj.UUID)
-	err := client.aviSession.Put(path, obj, &robj)
+	err := client.aviSession.Put(path, obj, &robj, loc_tenant)
 	return robj, err
 }
 
@@ -97,25 +121,37 @@ func (client *ApplicationClient) Update(obj *models.Application) (*models.Applic
 // patchOp: Patch operation - add, replace, or delete
 // patch: Patch payload should be compatible with the models.Application
 // or it should be json compatible of form map[string]interface{}
-func (client *ApplicationClient) Patch(uuid string, patch interface{}, patchOp string) (*models.Application, error) {
+func (client *ApplicationClient) Patch(uuid string, patch interface{}, patchOp string, tenant ...string) (*models.Application, error) {
 	var robj *models.Application
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(uuid)
-	err := client.aviSession.Patch(path, patch, patchOp, &robj)
+	err := client.aviSession.Patch(path, patch, patchOp, &robj, loc_tenant)
 	return robj, err
 }
 
 // Delete an existing Application object with a given UUID
-func (client *ApplicationClient) Delete(uuid string) error {
-	return client.aviSession.Delete(client.getAPIPath(uuid))
+func (client *ApplicationClient) Delete(uuid string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	return client.aviSession.Delete(client.getAPIPath(uuid), loc_tenant)
 }
 
 // DeleteByName - Delete an existing Application object with a given name
-func (client *ApplicationClient) DeleteByName(name string) error {
-	res, err := client.GetByName(name)
+func (client *ApplicationClient) DeleteByName(name string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	res, err := client.GetByName(name, loc_tenant)
 	if err != nil {
 		return err
 	}
-	return client.Delete(*res.UUID)
+	return client.Delete(*res.UUID, loc_tenant)
 }
 
 // GetAviSession

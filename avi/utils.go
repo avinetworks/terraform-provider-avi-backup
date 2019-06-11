@@ -281,7 +281,7 @@ func ApiCreateOrUpdate(d *schema.ResourceData, meta interface{}, objType string,
 					cloudUUID = strings.Split(cloudUUID, "#")[0]
 					log.Printf("[INFO] ApiCreateOrUpdate: using cloud %v for obj %v name %s \n",
 						cloudUUID, objType, name)
-					err = client.AviSession.GetObject(objType, session.SetName(name.(string)),
+					err = client.AviSession.GetObject(objType, session.GetTenant(), session.SetName(name.(string)),
 						session.SetResult(&existing_obj), session.SetCloudUUID(cloudUUID),
 						session.SetSkipDefault(true))
 					if err != nil {

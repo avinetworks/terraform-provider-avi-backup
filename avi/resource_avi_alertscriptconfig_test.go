@@ -1,92 +1,92 @@
 package avi
 
 import (
-	"fmt"
-	"github.com/avinetworks/sdk/go/clients"
-	"github.com/hashicorp/terraform/helper/resource"
-	"github.com/hashicorp/terraform/terraform"
-	"strings"
-	"testing"
+    "fmt"
+    "testing"
+    "strings"
+    "github.com/avinetworks/sdk/go/clients"
+    "github.com/hashicorp/terraform/helper/resource"
+    "github.com/hashicorp/terraform/terraform"
 )
 
 func TestAVIAlertScriptConfigBasic(t *testing.T) {
-	resource.Test(t, resource.TestCase{
-		PreCheck:     func() { testAccPreCheck(t) },
-		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckAVIAlertScriptConfigDestroy,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccAVIAlertScriptConfigConfig,
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckAVIAlertScriptConfigExists("avi_alertscriptconfig.testAlertScriptConfig"),
-					resource.TestCheckResourceAttr(
-						"avi_alertscriptconfig.testAlertScriptConfig", "name", "testse_grp_cleanup_old_spec_se")),
-			},
-			{
-				Config: testAccAVIAlertScriptConfigupdatedConfig,
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckAVIAlertScriptConfigExists("avi_alertscriptconfig.testAlertScriptConfig"),
-					resource.TestCheckResourceAttr(
-						"avi_alertscriptconfig.testAlertScriptConfig", "name", "testse_grp_cleanup_old_spec_se-abc")),
-			},
-		},
-	})
+    resource.Test(t, resource.TestCase{
+        PreCheck:  func() { testAccPreCheck(t) },
+        Providers: testAccProviders,
+        CheckDestroy: testAccCheckAVIAlertScriptConfigDestroy,
+        Steps: []resource.TestStep{
+            {
+                Config: testAccAVIAlertScriptConfigConfig,
+                Check: resource.ComposeTestCheckFunc(
+                    testAccCheckAVIAlertScriptConfigExists("avi_alertscriptconfig.testAlertScriptConfig"),
+                    resource.TestCheckResourceAttr(
+                        "avi_alertscriptconfig.testAlertScriptConfig", "name", "testse_grp_cleanup_old_spec_se")),
+            },
+            {
+                Config: testAccAVIAlertScriptConfigupdatedConfig,
+                Check: resource.ComposeTestCheckFunc(
+                    testAccCheckAVIAlertScriptConfigExists("avi_alertscriptconfig.testAlertScriptConfig"),
+                    resource.TestCheckResourceAttr(
+                        "avi_alertscriptconfig.testAlertScriptConfig", "name", "testse_grp_cleanup_old_spec_se-abc")),
+            },
+        },
+    })
 
 }
 
 func testAccCheckAVIAlertScriptConfigExists(resourcename string) resource.TestCheckFunc {
-	return func(s *terraform.State) error {
-		conn := testAccProvider.Meta().(*clients.AviClient).AviSession
-		var obj interface{}
-		rs, ok := s.RootModule().Resources[resourcename]
-		if !ok {
-			return fmt.Errorf("Not found: %s", resourcename)
-		}
-		if rs.Primary.ID == "" {
-			return fmt.Errorf("No AVI AlertScriptConfig ID is set")
-		}
-		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
-		uuid := strings.Split(url, "#")[0]
-		path := "api" + uuid
-		err := conn.Get(path, &obj)
-		if err != nil {
-			return err
-		}
-		return nil
-	}
+    return func(s *terraform.State) error {
+        conn := testAccProvider.Meta().(*clients.AviClient).AviSession
+        var obj interface{}
+        rs, ok := s.RootModule().Resources[resourcename]
+        if !ok {
+            return fmt.Errorf("Not found: %s", resourcename)
+        }
+        if rs.Primary.ID == "" {
+            return fmt.Errorf("No AVI AlertScriptConfig ID is set")
+        }
+        url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+        uuid := strings.Split(url, "#")[0]
+        path := "api" + uuid
+        err := conn.Get(path, &obj)
+        if err != nil {
+            return err
+        }
+        return nil
+    }
 
 }
 
 func testAccCheckAVIAlertScriptConfigDestroy(s *terraform.State) error {
-	conn := testAccProvider.Meta().(*clients.AviClient).AviSession
-	var obj interface{}
-	for _, rs := range s.RootModule().Resources {
-		if rs.Type != "avi_alertscriptconfig" {
-			continue
-		}
-		url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
-		uuid := strings.Split(url, "#")[0]
-		path := "api" + uuid
-		err := conn.Get(path, &obj)
-		if err != nil {
-			if strings.Contains(err.Error(), "404") {
-				return nil
-			}
-			return err
-		}
-		if len(obj.(map[string]interface{})) > 0 {
-			return fmt.Errorf("AVI AlertScriptConfig still exists")
-		}
-	}
-	return nil
+    conn := testAccProvider.Meta().(*clients.AviClient).AviSession
+    var obj interface{}
+    for _, rs := range s.RootModule().Resources {
+        if rs.Type != "avi_alertscriptconfig" {
+            continue
+        }
+        url := strings.SplitN(rs.Primary.ID, "/api", 2)[1]
+        uuid := strings.Split(url, "#")[0]
+        path := "api" + uuid
+        err := conn.Get(path, &obj)
+        if err != nil {
+            if strings.Contains(err.Error(), "404") {
+                return nil
+            }
+            return err
+        }
+        if len(obj.(map[string]interface{})) > 0 {
+            return fmt.Errorf("AVI AlertScriptConfig still exists")
+        }
+    }
+    return nil
 }
 
 const testAccAVIAlertScriptConfigConfig = `
 data "avi_tenant" "default_tenant"{
-        name= "admin"
+    name= "admin"
 }
 resource "avi_alertscriptconfig" "testAlertScriptConfig" {
-"action_script" = <<EOF
+	"action_script" = <<EOF
 #!/usr/bin/python
 import os
 import json
@@ -219,17 +219,17 @@ if __name__ == "__main__":
                     tenant_uuid=tenant_uuid) as session:
         cleanup_old_spec_se(se_grp_uuid, session)
 EOF
-"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
-"name" = "testse_grp_cleanup_old_spec_se"
+	"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
+	"name" = "testse_grp_cleanup_old_spec_se"
 }
 `
 
 const testAccAVIAlertScriptConfigupdatedConfig = `
 data "avi_tenant" "default_tenant"{
-        name= "admin"
+    name= "admin"
 }
 resource "avi_alertscriptconfig" "testAlertScriptConfig" {
-"action_script" = <<EOF
+	"action_script" = <<EOF
 #!/usr/bin/python
 import os
 import json
@@ -362,7 +362,7 @@ if __name__ == "__main__":
                     tenant_uuid=tenant_uuid) as session:
         cleanup_old_spec_se(se_grp_uuid, session)
 EOF
-"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
-"name" = "testse_grp_cleanup_old_spec_se-abc"
+	"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
+	"name" = "testse_grp_cleanup_old_spec_se-abc"
 }
 `

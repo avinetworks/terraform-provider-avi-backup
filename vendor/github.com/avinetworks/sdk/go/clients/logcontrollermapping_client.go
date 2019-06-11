@@ -45,51 +45,75 @@ func (client *LogControllerMappingClient) getAPIPath(uuid string) string {
 }
 
 // GetAll is a collection API to get a list of LogControllerMapping objects
-func (client *LogControllerMappingClient) GetAll() ([]*models.LogControllerMapping, error) {
+func (client *LogControllerMappingClient) GetAll(tenant ...string) ([]*models.LogControllerMapping, error) {
 	var plist []*models.LogControllerMapping
-	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist, loc_tenant)
 	return plist, err
 }
 
 // Get an existing LogControllerMapping by uuid
-func (client *LogControllerMappingClient) Get(uuid string) (*models.LogControllerMapping, error) {
+func (client *LogControllerMappingClient) Get(uuid string, tenant ...string) (*models.LogControllerMapping, error) {
 	var obj *models.LogControllerMapping
-	err := client.aviSession.Get(client.getAPIPath(uuid), &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Get(client.getAPIPath(uuid), &obj, loc_tenant)
 	return obj, err
 }
 
 // GetByName - Get an existing LogControllerMapping by name
-func (client *LogControllerMappingClient) GetByName(name string) (*models.LogControllerMapping, error) {
+func (client *LogControllerMappingClient) GetByName(name string, tenant ...string) (*models.LogControllerMapping, error) {
 	var obj *models.LogControllerMapping
-	err := client.aviSession.GetObjectByName("logcontrollermapping", name, &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetObjectByName("logcontrollermapping", name, &obj, loc_tenant)
 	return obj, err
 }
 
 // GetObject - Get an existing LogControllerMapping by filters like name, cloud, tenant
 // Api creates LogControllerMapping object with every call.
-func (client *LogControllerMappingClient) GetObject(options ...session.ApiOptionsParams) (*models.LogControllerMapping, error) {
+func (client *LogControllerMappingClient) GetObject(tenant string, options ...session.ApiOptionsParams) (*models.LogControllerMapping, error) {
 	var obj *models.LogControllerMapping
+	loc_tenant := ""
+	if tenant != "" {
+		loc_tenant = tenant
+	}
 	newOptions := make([]session.ApiOptionsParams, len(options)+1)
 	for i, p := range options {
 		newOptions[i] = p
 	}
 	newOptions[len(options)] = session.SetResult(&obj)
-	err := client.aviSession.GetObject("logcontrollermapping", newOptions...)
+	err := client.aviSession.GetObject("logcontrollermapping", loc_tenant, newOptions...)
 	return obj, err
 }
 
 // Create a new LogControllerMapping object
-func (client *LogControllerMappingClient) Create(obj *models.LogControllerMapping) (*models.LogControllerMapping, error) {
+func (client *LogControllerMappingClient) Create(obj *models.LogControllerMapping, tenant ...string) (*models.LogControllerMapping, error) {
 	var robj *models.LogControllerMapping
-	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj, loc_tenant)
 	return robj, err
 }
 
 // Update an existing LogControllerMapping object
-func (client *LogControllerMappingClient) Update(obj *models.LogControllerMapping) (*models.LogControllerMapping, error) {
+func (client *LogControllerMappingClient) Update(obj *models.LogControllerMapping, tenant ...string) (*models.LogControllerMapping, error) {
 	var robj *models.LogControllerMapping
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(*obj.UUID)
-	err := client.aviSession.Put(path, obj, &robj)
+	err := client.aviSession.Put(path, obj, &robj, loc_tenant)
 	return robj, err
 }
 
@@ -97,25 +121,37 @@ func (client *LogControllerMappingClient) Update(obj *models.LogControllerMappin
 // patchOp: Patch operation - add, replace, or delete
 // patch: Patch payload should be compatible with the models.LogControllerMapping
 // or it should be json compatible of form map[string]interface{}
-func (client *LogControllerMappingClient) Patch(uuid string, patch interface{}, patchOp string) (*models.LogControllerMapping, error) {
+func (client *LogControllerMappingClient) Patch(uuid string, patch interface{}, patchOp string, tenant ...string) (*models.LogControllerMapping, error) {
 	var robj *models.LogControllerMapping
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(uuid)
-	err := client.aviSession.Patch(path, patch, patchOp, &robj)
+	err := client.aviSession.Patch(path, patch, patchOp, &robj, loc_tenant)
 	return robj, err
 }
 
 // Delete an existing LogControllerMapping object with a given UUID
-func (client *LogControllerMappingClient) Delete(uuid string) error {
-	return client.aviSession.Delete(client.getAPIPath(uuid))
+func (client *LogControllerMappingClient) Delete(uuid string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	return client.aviSession.Delete(client.getAPIPath(uuid), loc_tenant)
 }
 
 // DeleteByName - Delete an existing LogControllerMapping object with a given name
-func (client *LogControllerMappingClient) DeleteByName(name string) error {
-	res, err := client.GetByName(name)
+func (client *LogControllerMappingClient) DeleteByName(name string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	res, err := client.GetByName(name, loc_tenant)
 	if err != nil {
 		return err
 	}
-	return client.Delete(*res.UUID)
+	return client.Delete(*res.UUID, loc_tenant)
 }
 
 // GetAviSession

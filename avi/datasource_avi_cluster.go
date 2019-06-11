@@ -8,38 +8,38 @@ package avi
 import "github.com/hashicorp/terraform/helper/schema"
 
 func dataSourceAviCluster() *schema.Resource {
-	return &schema.Resource{
-		Read: ResourceAviClusterRead,
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"nodes": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem:     ResourceClusterNodeSchema(),
-			},
-			"rejoin_nodes_automatically": {
-				Type:     schema.TypeBool,
-				Computed: true,
-			},
-			"tenant_ref": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"uuid": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"virtual_ip": {
-				Type:     schema.TypeSet,
-				Computed: true,
-				Elem:     ResourceIpAddrSchema(),
-			},
-		},
-	}
+    return &schema.Resource{
+        Read:   ResourceAviClusterRead,
+        Schema: map[string]*schema.Schema{
+            "name" :{
+                Type: schema.TypeString,
+                Optional: true,
+                Computed: true,
+        },
+                    "nodes" :{
+                Type: schema.TypeList,
+                Computed: true,
+            Elem: ResourceClusterNodeSchema(),
+        },
+                    "rejoin_nodes_automatically" :{
+                Type: schema.TypeBool,
+                Computed: true,
+        },
+                    "tenant_ref" :{
+                Type: schema.TypeString,
+                Optional: true,
+                Computed: true,
+        },
+                    "uuid" :{
+                Type: schema.TypeString,
+                Optional: true,
+                Computed: true,
+        },
+                    "virtual_ip" :{
+                Type: schema.TypeSet,
+                Computed: true,
+            Elem: ResourceIpAddrSchema(),
+        },
+                },
+    }
 }

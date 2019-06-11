@@ -45,51 +45,75 @@ func (client *ErrorPageBodyClient) getAPIPath(uuid string) string {
 }
 
 // GetAll is a collection API to get a list of ErrorPageBody objects
-func (client *ErrorPageBodyClient) GetAll() ([]*models.ErrorPageBody, error) {
+func (client *ErrorPageBodyClient) GetAll(tenant ...string) ([]*models.ErrorPageBody, error) {
 	var plist []*models.ErrorPageBody
-	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist, loc_tenant)
 	return plist, err
 }
 
 // Get an existing ErrorPageBody by uuid
-func (client *ErrorPageBodyClient) Get(uuid string) (*models.ErrorPageBody, error) {
+func (client *ErrorPageBodyClient) Get(uuid string, tenant ...string) (*models.ErrorPageBody, error) {
 	var obj *models.ErrorPageBody
-	err := client.aviSession.Get(client.getAPIPath(uuid), &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Get(client.getAPIPath(uuid), &obj, loc_tenant)
 	return obj, err
 }
 
 // GetByName - Get an existing ErrorPageBody by name
-func (client *ErrorPageBodyClient) GetByName(name string) (*models.ErrorPageBody, error) {
+func (client *ErrorPageBodyClient) GetByName(name string, tenant ...string) (*models.ErrorPageBody, error) {
 	var obj *models.ErrorPageBody
-	err := client.aviSession.GetObjectByName("errorpagebody", name, &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetObjectByName("errorpagebody", name, &obj, loc_tenant)
 	return obj, err
 }
 
 // GetObject - Get an existing ErrorPageBody by filters like name, cloud, tenant
 // Api creates ErrorPageBody object with every call.
-func (client *ErrorPageBodyClient) GetObject(options ...session.ApiOptionsParams) (*models.ErrorPageBody, error) {
+func (client *ErrorPageBodyClient) GetObject(tenant string, options ...session.ApiOptionsParams) (*models.ErrorPageBody, error) {
 	var obj *models.ErrorPageBody
+	loc_tenant := ""
+	if tenant != "" {
+		loc_tenant = tenant
+	}
 	newOptions := make([]session.ApiOptionsParams, len(options)+1)
 	for i, p := range options {
 		newOptions[i] = p
 	}
 	newOptions[len(options)] = session.SetResult(&obj)
-	err := client.aviSession.GetObject("errorpagebody", newOptions...)
+	err := client.aviSession.GetObject("errorpagebody", loc_tenant, newOptions...)
 	return obj, err
 }
 
 // Create a new ErrorPageBody object
-func (client *ErrorPageBodyClient) Create(obj *models.ErrorPageBody) (*models.ErrorPageBody, error) {
+func (client *ErrorPageBodyClient) Create(obj *models.ErrorPageBody, tenant ...string) (*models.ErrorPageBody, error) {
 	var robj *models.ErrorPageBody
-	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj, loc_tenant)
 	return robj, err
 }
 
 // Update an existing ErrorPageBody object
-func (client *ErrorPageBodyClient) Update(obj *models.ErrorPageBody) (*models.ErrorPageBody, error) {
+func (client *ErrorPageBodyClient) Update(obj *models.ErrorPageBody, tenant ...string) (*models.ErrorPageBody, error) {
 	var robj *models.ErrorPageBody
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(*obj.UUID)
-	err := client.aviSession.Put(path, obj, &robj)
+	err := client.aviSession.Put(path, obj, &robj, loc_tenant)
 	return robj, err
 }
 
@@ -97,25 +121,37 @@ func (client *ErrorPageBodyClient) Update(obj *models.ErrorPageBody) (*models.Er
 // patchOp: Patch operation - add, replace, or delete
 // patch: Patch payload should be compatible with the models.ErrorPageBody
 // or it should be json compatible of form map[string]interface{}
-func (client *ErrorPageBodyClient) Patch(uuid string, patch interface{}, patchOp string) (*models.ErrorPageBody, error) {
+func (client *ErrorPageBodyClient) Patch(uuid string, patch interface{}, patchOp string, tenant ...string) (*models.ErrorPageBody, error) {
 	var robj *models.ErrorPageBody
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(uuid)
-	err := client.aviSession.Patch(path, patch, patchOp, &robj)
+	err := client.aviSession.Patch(path, patch, patchOp, &robj, loc_tenant)
 	return robj, err
 }
 
 // Delete an existing ErrorPageBody object with a given UUID
-func (client *ErrorPageBodyClient) Delete(uuid string) error {
-	return client.aviSession.Delete(client.getAPIPath(uuid))
+func (client *ErrorPageBodyClient) Delete(uuid string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	return client.aviSession.Delete(client.getAPIPath(uuid), loc_tenant)
 }
 
 // DeleteByName - Delete an existing ErrorPageBody object with a given name
-func (client *ErrorPageBodyClient) DeleteByName(name string) error {
-	res, err := client.GetByName(name)
+func (client *ErrorPageBodyClient) DeleteByName(name string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	res, err := client.GetByName(name, loc_tenant)
 	if err != nil {
 		return err
 	}
-	return client.Delete(*res.UUID)
+	return client.Delete(*res.UUID, loc_tenant)
 }
 
 // GetAviSession

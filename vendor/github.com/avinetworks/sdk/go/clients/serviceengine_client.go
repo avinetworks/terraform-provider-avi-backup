@@ -45,51 +45,75 @@ func (client *ServiceEngineClient) getAPIPath(uuid string) string {
 }
 
 // GetAll is a collection API to get a list of ServiceEngine objects
-func (client *ServiceEngineClient) GetAll() ([]*models.ServiceEngine, error) {
+func (client *ServiceEngineClient) GetAll(tenant ...string) ([]*models.ServiceEngine, error) {
 	var plist []*models.ServiceEngine
-	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetCollection(client.getAPIPath(""), &plist, loc_tenant)
 	return plist, err
 }
 
 // Get an existing ServiceEngine by uuid
-func (client *ServiceEngineClient) Get(uuid string) (*models.ServiceEngine, error) {
+func (client *ServiceEngineClient) Get(uuid string, tenant ...string) (*models.ServiceEngine, error) {
 	var obj *models.ServiceEngine
-	err := client.aviSession.Get(client.getAPIPath(uuid), &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Get(client.getAPIPath(uuid), &obj, loc_tenant)
 	return obj, err
 }
 
 // GetByName - Get an existing ServiceEngine by name
-func (client *ServiceEngineClient) GetByName(name string) (*models.ServiceEngine, error) {
+func (client *ServiceEngineClient) GetByName(name string, tenant ...string) (*models.ServiceEngine, error) {
 	var obj *models.ServiceEngine
-	err := client.aviSession.GetObjectByName("serviceengine", name, &obj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.GetObjectByName("serviceengine", name, &obj, loc_tenant)
 	return obj, err
 }
 
 // GetObject - Get an existing ServiceEngine by filters like name, cloud, tenant
 // Api creates ServiceEngine object with every call.
-func (client *ServiceEngineClient) GetObject(options ...session.ApiOptionsParams) (*models.ServiceEngine, error) {
+func (client *ServiceEngineClient) GetObject(tenant string, options ...session.ApiOptionsParams) (*models.ServiceEngine, error) {
 	var obj *models.ServiceEngine
+	loc_tenant := ""
+	if tenant != "" {
+		loc_tenant = tenant
+	}
 	newOptions := make([]session.ApiOptionsParams, len(options)+1)
 	for i, p := range options {
 		newOptions[i] = p
 	}
 	newOptions[len(options)] = session.SetResult(&obj)
-	err := client.aviSession.GetObject("serviceengine", newOptions...)
+	err := client.aviSession.GetObject("serviceengine", loc_tenant, newOptions...)
 	return obj, err
 }
 
 // Create a new ServiceEngine object
-func (client *ServiceEngineClient) Create(obj *models.ServiceEngine) (*models.ServiceEngine, error) {
+func (client *ServiceEngineClient) Create(obj *models.ServiceEngine, tenant ...string) (*models.ServiceEngine, error) {
 	var robj *models.ServiceEngine
-	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj)
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	err := client.aviSession.Post(client.getAPIPath(""), obj, &robj, loc_tenant)
 	return robj, err
 }
 
 // Update an existing ServiceEngine object
-func (client *ServiceEngineClient) Update(obj *models.ServiceEngine) (*models.ServiceEngine, error) {
+func (client *ServiceEngineClient) Update(obj *models.ServiceEngine, tenant ...string) (*models.ServiceEngine, error) {
 	var robj *models.ServiceEngine
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(*obj.UUID)
-	err := client.aviSession.Put(path, obj, &robj)
+	err := client.aviSession.Put(path, obj, &robj, loc_tenant)
 	return robj, err
 }
 
@@ -97,25 +121,37 @@ func (client *ServiceEngineClient) Update(obj *models.ServiceEngine) (*models.Se
 // patchOp: Patch operation - add, replace, or delete
 // patch: Patch payload should be compatible with the models.ServiceEngine
 // or it should be json compatible of form map[string]interface{}
-func (client *ServiceEngineClient) Patch(uuid string, patch interface{}, patchOp string) (*models.ServiceEngine, error) {
+func (client *ServiceEngineClient) Patch(uuid string, patch interface{}, patchOp string, tenant ...string) (*models.ServiceEngine, error) {
 	var robj *models.ServiceEngine
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
 	path := client.getAPIPath(uuid)
-	err := client.aviSession.Patch(path, patch, patchOp, &robj)
+	err := client.aviSession.Patch(path, patch, patchOp, &robj, loc_tenant)
 	return robj, err
 }
 
 // Delete an existing ServiceEngine object with a given UUID
-func (client *ServiceEngineClient) Delete(uuid string) error {
-	return client.aviSession.Delete(client.getAPIPath(uuid))
+func (client *ServiceEngineClient) Delete(uuid string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	return client.aviSession.Delete(client.getAPIPath(uuid), loc_tenant)
 }
 
 // DeleteByName - Delete an existing ServiceEngine object with a given name
-func (client *ServiceEngineClient) DeleteByName(name string) error {
-	res, err := client.GetByName(name)
+func (client *ServiceEngineClient) DeleteByName(name string, tenant ...string) error {
+	loc_tenant := ""
+	if len(tenant) != 0 {
+		loc_tenant = tenant[0]
+	}
+	res, err := client.GetByName(name, loc_tenant)
 	if err != nil {
 		return err
 	}
-	return client.Delete(*res.UUID)
+	return client.Delete(*res.UUID, loc_tenant)
 }
 
 // GetAviSession
