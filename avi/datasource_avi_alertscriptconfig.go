@@ -8,28 +8,28 @@ package avi
 import "github.com/hashicorp/terraform/helper/schema"
 
 func dataSourceAviAlertScriptConfig() *schema.Resource {
-    return &schema.Resource{
-        Read:   ResourceAviAlertScriptConfigRead,
-        Schema: map[string]*schema.Schema{
-            "action_script" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "name" :{
-                Type: schema.TypeString,
-                Optional: true,
-                Computed: true,
-        },
-                    "tenant_ref" :{
-                Type: schema.TypeString,
-                Optional: true,
-                Computed: true,
-        },
-                    "uuid" :{
-                Type: schema.TypeString,
-                Optional: true,
-                Computed: true,
-        },
-                },
-    }
+	return &schema.Resource{
+		Read: ResourceAviAlertScriptConfigRead,
+		Schema: map[string]*schema.Schema{
+			"action_script": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"name": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+			},
+			"tenant_ref": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+			},
+			"uuid": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+			},
+		},
+	}
 }

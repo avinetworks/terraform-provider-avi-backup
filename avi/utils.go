@@ -281,7 +281,7 @@ func ApiCreateOrUpdate(d *schema.ResourceData, meta interface{}, objType string,
 					cloudUUID = strings.Split(cloudUUID, "#")[0]
 					log.Printf("[INFO] ApiCreateOrUpdate: using cloud %v for obj %v name %s \n",
 						cloudUUID, objType, name)
-					err = client.AviSession.GetObject(objType, session.GetTenant(), session.SetName(name.(string)),
+					err = client.AviSession.GetObject(objType, client.AviSession.GetTenant(), session.SetName(name.(string)),
 						session.SetResult(&existing_obj), session.SetCloudUUID(cloudUUID),
 						session.SetSkipDefault(true))
 					if err != nil {
@@ -290,7 +290,7 @@ func ApiCreateOrUpdate(d *schema.ResourceData, meta interface{}, objType string,
 				} else {
 					log.Printf("[INFO] ApiCreateOrUpdate: reading obj %v name %s \n",
 						objType, name)
-					err = client.AviSession.GetObject(objType, session.SetName(name.(string)),
+					err = client.AviSession.GetObject(objType, client.AviSession.GetTenant(), session.SetName(name.(string)),
 						session.SetResult(&existing_obj), session.SetSkipDefault(true))
 					if err != nil {
 						log.Printf("[ERROR] ApiCreateOrUpdate: GET Error %v path %v id %v\n", err, path, d.Id())
@@ -379,11 +379,11 @@ func ApiRead(d *schema.ResourceData, meta interface{}, objType string, s map[str
 			cloudUUID = strings.Split(cloudUUID, "#")[0]
 			log.Printf("[DEBUG] ApiRead using cloud %v obj %v name %v\n", cloudUUID,
 				objType, name)
-			err = client.AviSession.GetObject(objType, session.SetName(name.(string)),
+			err = client.AviSession.GetObject(objType, client.AviSession.GetTenant(), session.SetName(name.(string)),
 				session.SetResult(&obj), session.SetCloudUUID(cloudUUID), session.SetSkipDefault(true))
 		} else {
 			log.Printf("[DEBUG] ApiRead using name %v \n", name)
-			err = client.AviSession.GetObject(objType, session.SetName(name.(string)),
+			err = client.AviSession.GetObject(objType, client.AviSession.GetTenant(), session.SetName(name.(string)),
 				session.SetResult(&obj), session.SetSkipDefault(true))
 		}
 		if err != nil {

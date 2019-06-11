@@ -111,12 +111,13 @@ func ResourceAviFileServiceUpdate(d *schema.ResourceData, meta interface{}) erro
 func ResourceAviFileServiceDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*clients.AviClient)
 	local_file := d.Get("local_file").(string)
+	sess_tenant := client.AviSession.GetTenant()
 	switch upload := d.Get("upload").(bool); upload {
 	case true:
 		switch uri := d.Get("uri").(string); uri {
 		case "license":
 			path := "/api/" + uri + "/" + d.Id()
-			err := client.AviSession.Delete(path)
+			err := client.AviSession.Delete(path, sess_tenant)
 			if err != nil {
 				log.Printf("[ERROR] ResourceAviFileServiceDelete %v Deleting file of path %v\n", err, path)
 			}
@@ -124,7 +125,7 @@ func ResourceAviFileServiceDelete(d *schema.ResourceData, meta interface{}) erro
 			uri := strings.Split(d.Get("uri").(string), "?")[0]
 			path := "/api/fileservice?uri=controller://" + uri + "/" + d.Id()
 			log.Printf("[DEBUG] ResourceAviFileServiceDelete deleting file using fileservice API status path %v\n", path)
-			err := client.AviSession.Delete(path)
+			err := client.AviSession.Delete(path, sess_tenant)
 			if err != nil {
 				log.Printf("[ERROR] ResourceAviFileServiceDelete %v Deleting file of path %v\n", err, path)
 				return err

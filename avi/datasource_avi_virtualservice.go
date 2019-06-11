@@ -8,348 +8,348 @@ package avi
 import "github.com/hashicorp/terraform/helper/schema"
 
 func dataSourceAviVirtualService() *schema.Resource {
-    return &schema.Resource{
-        Read:   ResourceAviVirtualServiceRead,
-        Schema: map[string]*schema.Schema{
-            "active_standby_se_tag" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "allow_invalid_client_cert" :{
-                Type: schema.TypeBool,
-                Computed: true,
-        },
-                    "analytics_policy" :{
-                Type: schema.TypeSet,
-                Computed: true,
-            Elem: ResourceAnalyticsPolicySchema(),
-        },
-                    "analytics_profile_ref" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "apic_contract_graph" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "application_profile_ref" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "bulk_sync_kvcache" :{
-                Type: schema.TypeBool,
-                Computed: true,
-        },
-                    "client_auth" :{
-                Type: schema.TypeSet,
-                Computed: true,
-            Elem: ResourceHTTPClientAuthenticationParamsSchema(),
-        },
-                    "close_client_conn_on_config_update" :{
-                Type: schema.TypeBool,
-                Computed: true,
-        },
-                    "cloud_config_cksum" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "cloud_ref" :{
-                Type: schema.TypeString,
-                Optional: true,
-                Computed: true,
-        },
-                    "cloud_type" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "connections_rate_limit" :{
-                Type: schema.TypeSet,
-                Computed: true,
-            Elem: ResourceRateProfileSchema(),
-        },
-                    "content_rewrite" :{
-                Type: schema.TypeSet,
-                Computed: true,
-            Elem: ResourceContentRewriteProfileSchema(),
-        },
-                    "created_by" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "delay_fairness" :{
-                Type: schema.TypeBool,
-                Computed: true,
-        },
-                    "description" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "dns_info" :{
-                Type: schema.TypeList,
-                Computed: true,
-            Elem: ResourceDnsInfoSchema(),
-        },
-                    "dns_policies" :{
-                Type: schema.TypeList,
-                Computed: true,
-            Elem: ResourceDnsPoliciesSchema(),
-        },
-                    "east_west_placement" :{
-                Type: schema.TypeBool,
-                Computed: true,
-        },
-                    "enable_autogw" :{
-                Type: schema.TypeBool,
-                Computed: true,
-        },
-                    "enable_rhi" :{
-                Type: schema.TypeBool,
-                Computed: true,
-        },
-                    "enable_rhi_snat" :{
-                Type: schema.TypeBool,
-                Computed: true,
-        },
-                    "enabled" :{
-                Type: schema.TypeBool,
-                Computed: true,
-        },
-                    "error_page_profile_ref" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "flow_dist" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "flow_label_type" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "fqdn" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "host_name_xlate" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "http_policies" :{
-                Type: schema.TypeList,
-                Computed: true,
-            Elem: ResourceHTTPPoliciesSchema(),
-        },
-                    "ign_pool_net_reach" :{
-                Type: schema.TypeBool,
-                Computed: true,
-        },
-                    "l4_policies" :{
-                Type: schema.TypeList,
-                Computed: true,
-            Elem: ResourceL4PoliciesSchema(),
-        },
-                    "limit_doser" :{
-                Type: schema.TypeBool,
-                Computed: true,
-        },
-                    "max_cps_per_client" :{
-                Type: schema.TypeInt,
-                Computed: true,
-        },
-                    "microservice_ref" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "min_pools_up" :{
-                Type: schema.TypeInt,
-                Computed: true,
-        },
-                    "name" :{
-                Type: schema.TypeString,
-                Optional: true,
-                Computed: true,
-        },
-                    "network_profile_ref" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "network_security_policy_ref" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "nsx_securitygroup" :{
-                Type: schema.TypeList,
-                Computed: true,
-            Elem:&schema.Schema{Type: schema.TypeString},
-        },
-                    "performance_limits" :{
-                Type: schema.TypeSet,
-                Computed: true,
-            Elem: ResourcePerformanceLimitsSchema(),
-        },
-                    "pool_group_ref" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "pool_ref" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "remove_listening_port_on_vs_down" :{
-                Type: schema.TypeBool,
-                Computed: true,
-        },
-                    "requests_rate_limit" :{
-                Type: schema.TypeSet,
-                Computed: true,
-            Elem: ResourceRateProfileSchema(),
-        },
-                    "saml_sp_config" :{
-                Type: schema.TypeSet,
-                Computed: true,
-            Elem: ResourceSAMLSPConfigSchema(),
-        },
-                    "scaleout_ecmp" :{
-                Type: schema.TypeBool,
-                Computed: true,
-        },
-                    "se_group_ref" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "security_policy_ref" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "server_network_profile_ref" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "service_metadata" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "service_pool_select" :{
-                Type: schema.TypeList,
-                Computed: true,
-            Elem: ResourceServicePoolSelectorSchema(),
-        },
-                    "services" :{
-                Type: schema.TypeList,
-                Computed: true,
-            Elem: ResourceServiceSchema(),
-        },
-                    "sideband_profile" :{
-                Type: schema.TypeSet,
-                Computed: true,
-            Elem: ResourceSidebandProfileSchema(),
-        },
-                    "snat_ip" :{
-                Type: schema.TypeList,
-                Computed: true,
-            Elem: ResourceIpAddrSchema(),
-        },
-                    "ssl_key_and_certificate_refs" :{
-                Type: schema.TypeList,
-                Computed: true,
-            Elem:&schema.Schema{Type: schema.TypeString},
-        },
-                    "ssl_profile_ref" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "ssl_profile_selectors" :{
-                Type: schema.TypeList,
-                Computed: true,
-            Elem: ResourceSSLProfileSelectorSchema(),
-        },
-                    "ssl_sess_cache_avg_size" :{
-                Type: schema.TypeInt,
-                Computed: true,
-        },
-                    "sso_policy_ref" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "static_dns_records" :{
-                Type: schema.TypeList,
-                Computed: true,
-            Elem: ResourceDnsRecordSchema(),
-        },
-                    "tenant_ref" :{
-                Type: schema.TypeString,
-                Optional: true,
-                Computed: true,
-        },
-                    "topology_policies" :{
-                Type: schema.TypeList,
-                Computed: true,
-            Elem: ResourceDnsPoliciesSchema(),
-        },
-                    "traffic_clone_profile_ref" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "traffic_enabled" :{
-                Type: schema.TypeBool,
-                Computed: true,
-        },
-                    "type" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "use_bridge_ip_as_vip" :{
-                Type: schema.TypeBool,
-                Computed: true,
-        },
-                    "use_vip_as_snat" :{
-                Type: schema.TypeBool,
-                Computed: true,
-        },
-                    "uuid" :{
-                Type: schema.TypeString,
-                Optional: true,
-                Computed: true,
-        },
-                    "vh_domain_name" :{
-                Type: schema.TypeList,
-                Computed: true,
-            Elem:&schema.Schema{Type: schema.TypeString},
-        },
-                    "vh_parent_vs_uuid" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "vip" :{
-                Type: schema.TypeList,
-                Computed: true,
-            Elem: ResourceVipSchema(),
-        },
-                    "vrf_context_ref" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "vs_datascripts" :{
-                Type: schema.TypeList,
-                Computed: true,
-            Elem: ResourceVSDataScriptsSchema(),
-        },
-                    "vsvip_cloud_config_cksum" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "vsvip_ref" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "waf_policy_ref" :{
-                Type: schema.TypeString,
-                Computed: true,
-        },
-                    "weight" :{
-                Type: schema.TypeInt,
-                Computed: true,
-        },
-                },
-    }
+	return &schema.Resource{
+		Read: ResourceAviVirtualServiceRead,
+		Schema: map[string]*schema.Schema{
+			"active_standby_se_tag": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"allow_invalid_client_cert": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"analytics_policy": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceAnalyticsPolicySchema(),
+			},
+			"analytics_profile_ref": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"apic_contract_graph": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"application_profile_ref": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"bulk_sync_kvcache": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"client_auth": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceHTTPClientAuthenticationParamsSchema(),
+			},
+			"close_client_conn_on_config_update": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"cloud_config_cksum": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"cloud_ref": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+			},
+			"cloud_type": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"connections_rate_limit": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceRateProfileSchema(),
+			},
+			"content_rewrite": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceContentRewriteProfileSchema(),
+			},
+			"created_by": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"delay_fairness": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"description": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"dns_info": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceDnsInfoSchema(),
+			},
+			"dns_policies": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceDnsPoliciesSchema(),
+			},
+			"east_west_placement": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"enable_autogw": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"enable_rhi": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"enable_rhi_snat": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"enabled": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"error_page_profile_ref": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"flow_dist": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"flow_label_type": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"fqdn": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"host_name_xlate": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"http_policies": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceHTTPPoliciesSchema(),
+			},
+			"ign_pool_net_reach": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"l4_policies": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceL4PoliciesSchema(),
+			},
+			"limit_doser": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"max_cps_per_client": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"microservice_ref": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"min_pools_up": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"name": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+			},
+			"network_profile_ref": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"network_security_policy_ref": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"nsx_securitygroup": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
+			},
+			"performance_limits": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourcePerformanceLimitsSchema(),
+			},
+			"pool_group_ref": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"pool_ref": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"remove_listening_port_on_vs_down": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"requests_rate_limit": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceRateProfileSchema(),
+			},
+			"saml_sp_config": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceSAMLSPConfigSchema(),
+			},
+			"scaleout_ecmp": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"se_group_ref": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"security_policy_ref": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"server_network_profile_ref": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"service_metadata": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"service_pool_select": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceServicePoolSelectorSchema(),
+			},
+			"services": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceServiceSchema(),
+			},
+			"sideband_profile": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceSidebandProfileSchema(),
+			},
+			"snat_ip": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceIpAddrSchema(),
+			},
+			"ssl_key_and_certificate_refs": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
+			},
+			"ssl_profile_ref": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"ssl_profile_selectors": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceSSLProfileSelectorSchema(),
+			},
+			"ssl_sess_cache_avg_size": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"sso_policy_ref": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"static_dns_records": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceDnsRecordSchema(),
+			},
+			"tenant_ref": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+			},
+			"topology_policies": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceDnsPoliciesSchema(),
+			},
+			"traffic_clone_profile_ref": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"traffic_enabled": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"type": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"use_bridge_ip_as_vip": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"use_vip_as_snat": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"uuid": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+			},
+			"vh_domain_name": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
+			},
+			"vh_parent_vs_uuid": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"vip": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceVipSchema(),
+			},
+			"vrf_context_ref": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"vs_datascripts": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem:     ResourceVSDataScriptsSchema(),
+			},
+			"vsvip_cloud_config_cksum": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"vsvip_ref": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"waf_policy_ref": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"weight": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+		},
+	}
 }

@@ -5,129 +5,126 @@
  */
 package avi
 
-
 import (
-    "log"
-    "strings"
-    "github.com/avinetworks/sdk/go/clients"
-    "github.com/hashicorp/terraform/helper/schema"
+	"github.com/avinetworks/sdk/go/clients"
+	"github.com/hashicorp/terraform/helper/schema"
+	"log"
+	"strings"
 )
+
 func ResourceHTTPPolicySetSchema() map[string]*schema.Schema {
-    return map[string]*schema.Schema{
-             "cloud_config_cksum" :{
-                             Type: schema.TypeString, 
-                             Optional: true,
-                                                                                                                                                                                                    },
-             "created_by" :{
-                             Type: schema.TypeString, 
-                             Optional: true,
-                                                                                                                                                                                                    },
-             "description" :{
-                             Type: schema.TypeString, 
-                             Optional: true,
-                                                                                                                                                                                                    },
-             "http_request_policy" :{
-                             Type: schema.TypeSet, 
-                             Optional: true,
-                                                                                                                                                                         Elem: ResourceHTTPRequestPolicySchema(),
-                                                        },
-             "http_response_policy" :{
-                             Type: schema.TypeSet, 
-                             Optional: true,
-                                                                                                                                                                         Elem: ResourceHTTPResponsePolicySchema(),
-                                                        },
-             "http_security_policy" :{
-                             Type: schema.TypeSet, 
-                             Optional: true,
-                                                                                                                                                                         Elem: ResourceHTTPSecurityPolicySchema(),
-                                                        },
-             "is_internal_policy" :{
-                             Type: schema.TypeBool, 
-                             Optional: true,
-                                                         Default: false,
-                                                                                                                                                                        },
-             "name" :{
-                             Type: schema.TypeString, 
-                             Required: true,
-                                                                                                                },
-             "tenant_ref" :{
-                             Type: schema.TypeString, 
-                             Optional: true,
-                                                                                                                                            Computed:  true,
-                                                                                    },
-             "uuid" :{
-                             Type: schema.TypeString, 
-                             Optional: true,
-                                                                                    Computed:  true,
-                                                                                    },
-        }
+	return map[string]*schema.Schema{
+		"cloud_config_cksum": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"created_by": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"description": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"http_request_policy": {
+			Type:     schema.TypeSet,
+			Optional: true,
+			Elem:     ResourceHTTPRequestPolicySchema(),
+		},
+		"http_response_policy": {
+			Type:     schema.TypeSet,
+			Optional: true,
+			Elem:     ResourceHTTPResponsePolicySchema(),
+		},
+		"http_security_policy": {
+			Type:     schema.TypeSet,
+			Optional: true,
+			Elem:     ResourceHTTPSecurityPolicySchema(),
+		},
+		"is_internal_policy": {
+			Type:     schema.TypeBool,
+			Optional: true,
+			Default:  false,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"tenant_ref": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"uuid": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+	}
 }
 
-
 func resourceAviHTTPPolicySet() *schema.Resource {
-    return &schema.Resource{
-        Create: resourceAviHTTPPolicySetCreate,
-        Read:   ResourceAviHTTPPolicySetRead,
-        Update: resourceAviHTTPPolicySetUpdate,
-        Delete: resourceAviHTTPPolicySetDelete,
-        Schema: ResourceHTTPPolicySetSchema(),
-        Importer: &schema.ResourceImporter{
-                State: ResourceHTTPPolicySetImporter,
-        },
-    }
+	return &schema.Resource{
+		Create: resourceAviHTTPPolicySetCreate,
+		Read:   ResourceAviHTTPPolicySetRead,
+		Update: resourceAviHTTPPolicySetUpdate,
+		Delete: resourceAviHTTPPolicySetDelete,
+		Schema: ResourceHTTPPolicySetSchema(),
+		Importer: &schema.ResourceImporter{
+			State: ResourceHTTPPolicySetImporter,
+		},
+	}
 }
 
 func ResourceHTTPPolicySetImporter(d *schema.ResourceData, m interface{}) ([]*schema.ResourceData, error) {
-    s := ResourceHTTPPolicySetSchema()
-    return ResourceImporter(d, m, "httppolicyset", s)
+	s := ResourceHTTPPolicySetSchema()
+	return ResourceImporter(d, m, "httppolicyset", s)
 }
 
 func ResourceAviHTTPPolicySetRead(d *schema.ResourceData, meta interface{}) error {
-    s := ResourceHTTPPolicySetSchema()
-    err := ApiRead(d, meta, "httppolicyset", s)
-    if err != nil {
-        log.Printf("[ERROR] in reading object %v\n", err)
-    }
-    return err
+	s := ResourceHTTPPolicySetSchema()
+	err := ApiRead(d, meta, "httppolicyset", s)
+	if err != nil {
+		log.Printf("[ERROR] in reading object %v\n", err)
+	}
+	return err
 }
 
 func resourceAviHTTPPolicySetCreate(d *schema.ResourceData, meta interface{}) error {
-    s := ResourceHTTPPolicySetSchema()
-    err := ApiCreateOrUpdate(d, meta, "httppolicyset", s)
-        if err == nil {
-        err = ResourceAviHTTPPolicySetRead(d, meta)
-    }
-    return err
+	s := ResourceHTTPPolicySetSchema()
+	err := ApiCreateOrUpdate(d, meta, "httppolicyset", s)
+	if err == nil {
+		err = ResourceAviHTTPPolicySetRead(d, meta)
+	}
+	return err
 }
 
 func resourceAviHTTPPolicySetUpdate(d *schema.ResourceData, meta interface{}) error {
-    s := ResourceHTTPPolicySetSchema()
-    var err error
-    err = ApiCreateOrUpdate(d, meta, "httppolicyset", s)
-    if err == nil {
-        err = ResourceAviHTTPPolicySetRead(d, meta)
-    }
-    return err
+	s := ResourceHTTPPolicySetSchema()
+	var err error
+	err = ApiCreateOrUpdate(d, meta, "httppolicyset", s)
+	if err == nil {
+		err = ResourceAviHTTPPolicySetRead(d, meta)
+	}
+	return err
 }
 
 func resourceAviHTTPPolicySetDelete(d *schema.ResourceData, meta interface{}) error {
-    objType := "httppolicyset"
-    if ApiDeleteSystemDefaultCheck(d) {
-        return nil
-    }
-    client := meta.(*clients.AviClient)
-    uuid := d.Get("uuid").(string)
-    sess_tenant := client.AviSession.GetTenant()
-    if uuid != "" {
-        path := "api/" + objType + "/" + uuid
-        err := client.AviSession.Delete(path, sess_tenant)
-        if err != nil && !(strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "204") || strings.Contains(err.Error(), "403")) {
-            log.Println("[INFO] resourceAviHTTPPolicySetDelete not found")
-            return err
-        }
-        d.SetId("")
-    }
-    return nil
+	objType := "httppolicyset"
+	if ApiDeleteSystemDefaultCheck(d) {
+		return nil
+	}
+	client := meta.(*clients.AviClient)
+	uuid := d.Get("uuid").(string)
+	sess_tenant := client.AviSession.GetTenant()
+	if uuid != "" {
+		path := "api/" + objType + "/" + uuid
+		err := client.AviSession.Delete(path, sess_tenant)
+		if err != nil && !(strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "204") || strings.Contains(err.Error(), "403")) {
+			log.Println("[INFO] resourceAviHTTPPolicySetDelete not found")
+			return err
+		}
+		d.SetId("")
+	}
+	return nil
 }
-
-

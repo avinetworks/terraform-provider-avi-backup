@@ -99,9 +99,10 @@ func resourceAviServiceEnginePolicyDelete(d *schema.ResourceData, meta interface
 	}
 	client := meta.(*clients.AviClient)
 	uuid := d.Get("uuid").(string)
+	sess_tenant := client.AviSession.GetTenant()
 	if uuid != "" {
 		path := "api/" + objType + "/" + uuid
-		err := client.AviSession.Delete(path)
+		err := client.AviSession.Delete(path, sess_tenant)
 		if err != nil && !(strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "204") || strings.Contains(err.Error(), "403")) {
 			log.Println("[INFO] resourceAviServiceEnginePolicyDelete not found")
 			return err
