@@ -180,13 +180,13 @@ func (avisess *AviSession) SwitchTenant(tenant string) (error) {
 }
 
 //GetTenant Gets tenant from the avisession.
-func (avisess *AviSession) GetTenant() (string) {
-	return avisess.tenant
+func (avisess *AviSession) GetTenant() (string, error) {
+	return avisess.tenant, nil
 }
 
 //GetTenant Gets tenant from the avisession.
-func GetTenant() (string, error) {
-	return func(avisess *AviSession) error {
+func GetTenant() func(*AviSession) error{
+	return func(avisess *AviSession) error{
 		return avisess.GetTenant()
 	}
 }
