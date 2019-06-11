@@ -179,8 +179,13 @@ func (avisess *AviSession) SwitchTenant(tenant string) (error) {
 	return nil
 }
 
-//GetTenant Sets tenant into the avisession.
+//GetTenant Gets tenant from the avisession.
 func (avisess *AviSession) GetTenant() (string) {
+	return avisess.tenant
+}
+
+//GetTenant Gets tenant from the avisession.
+func GetTenant() (string) {
 	return avisess.tenant
 }
 
