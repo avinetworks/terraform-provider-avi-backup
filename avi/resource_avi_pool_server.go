@@ -341,6 +341,7 @@ func resourceAviServerReadApi(d *schema.ResourceData, meta interface{}) (error, 
 
 func resourceAviServerDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*clients.AviClient)
+	sess_tenant := client.AviSession.GetTenant()
 	err, pUUID, poolObj, pserver := resourceAviServerReadApi(d, meta)
 	log.Printf("[DEBUG] pool %v %v server %v", pUUID, poolObj.Name, d.Id())
 	if pserver != nil {
@@ -350,7 +351,7 @@ func resourceAviServerDelete(d *schema.ResourceData, meta interface{}) error {
 		var servers = make([]models.Server, 1)
 		servers[0] = *pserver
 		patchPool["servers"] = servers
-		err = client.AviSession.Patch(uri, patchPool, "delete", response)
+		err = client.AviSession.Patch(uri, patchPool, "delete", response, sess_tenant)
 		log.Printf("[INFO] pool %v server %v deleted err %v", patchPool, d.Id(), err)
 	}
 	d.SetId("")
