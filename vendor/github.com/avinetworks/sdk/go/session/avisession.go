@@ -185,8 +185,10 @@ func (avisess *AviSession) GetTenant() (string) {
 }
 
 //GetTenant Gets tenant from the avisession.
-func GetTenant() (string) {
-	return avisess.tenant
+func GetTenant() (string, error) {
+	return func(avisess *AviSession) error {
+		return avisess.GetTenant()
+	}
 }
 
 func (avisess *AviSession) initiateSession() error {
