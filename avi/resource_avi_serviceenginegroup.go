@@ -183,7 +183,7 @@ func ResourceServiceEngineGroupSchema() map[string]*schema.Schema {
 		"disable_tso": {
 			Type:     schema.TypeBool,
 			Optional: true,
-			Default:  true,
+			Default:  false,
 		},
 		"disk_per_se": {
 			Type:     schema.TypeInt,
@@ -440,36 +440,6 @@ func ResourceServiceEngineGroupSchema() map[string]*schema.Schema {
 		"name": {
 			Type:     schema.TypeString,
 			Required: true,
-		},
-		"nat_flow_tcp_closed_timeout": {
-			Type:     schema.TypeInt,
-			Optional: true,
-			Default:  5,
-		},
-		"nat_flow_tcp_established_timeout": {
-			Type:     schema.TypeInt,
-			Optional: true,
-			Default:  300,
-		},
-		"nat_flow_tcp_half_closed_timeout": {
-			Type:     schema.TypeInt,
-			Optional: true,
-			Default:  30,
-		},
-		"nat_flow_tcp_handshake_timeout": {
-			Type:     schema.TypeInt,
-			Optional: true,
-			Default:  10,
-		},
-		"nat_flow_udp_noresponse_timeout": {
-			Type:     schema.TypeInt,
-			Optional: true,
-			Default:  10,
-		},
-		"nat_flow_udp_response_timeout": {
-			Type:     schema.TypeInt,
-			Optional: true,
-			Default:  30,
 		},
 		"non_significant_log_throttle": {
 			Type:     schema.TypeInt,

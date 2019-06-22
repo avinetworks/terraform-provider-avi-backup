@@ -118,12 +118,6 @@ In addition to all arguments above, the following attributes are exported:
 * `minimum_connection_memory` - Indicates the percent of memory reserved for connections.
 * `n_log_streaming_threads` - Number of threads to use for log streaming.
 * `name` - Name of the object.
-* `nat_flow_tcp_closed_timeout` - Idle timeout in seconds for nat tcp flows in closed state.
-* `nat_flow_tcp_established_timeout` - Idle timeout in seconds for nat tcp flows in established state.
-* `nat_flow_tcp_half_closed_timeout` - Idle timeout in seconds for nat tcp flows in half closed state.
-* `nat_flow_tcp_handshake_timeout` - Idle timeout in seconds for nat tcp flows in handshake state.
-* `nat_flow_udp_noresponse_timeout` - Idle timeout in seconds for nat udp flows in noresponse state.
-* `nat_flow_udp_response_timeout` - Idle timeout in seconds for nat udp flows in response state.
 * `non_significant_log_throttle` - This setting limits the number of non-significant logs generated per second per core on this se.
 * `num_dispatcher_cores` - Number of dispatcher cores (0,1,2,4,8 or 16).
 * `num_flow_cores_sum_changes_to_ignore` - Number of changes in num flow cores sum to ignore.

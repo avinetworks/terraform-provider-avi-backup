@@ -83,22 +83,22 @@ func testAccCheckAVIUserAccountProfileDestroy(s *terraform.State) error {
 
 const testAccAVIUserAccountProfileConfig = `
 resource "avi_useraccountprofile" "testUserAccountProfile" {
-"max_concurrent_sessions" = "0"
-"account_lock_timeout" = "30"
-"max_login_failure_count" = "20"
-"max_password_history_count" = "0"
-"credentials_timeout_threshold" = "0"
-"name" = "testDefault-User-Account-Profile"
+	"max_concurrent_sessions" = "0"
+	"account_lock_timeout" = "30"
+	"max_login_failure_count" = "20"
+	"max_password_history_count" = "0"
+	"credentials_timeout_threshold" = "0"
+	"name" = "testDefault-User-Account-Profile"
 }
 `
 
 const testAccAVIUserAccountProfileupdatedConfig = `
 resource "avi_useraccountprofile" "testUserAccountProfile" {
-"max_concurrent_sessions" = "0"
-"account_lock_timeout" = "30"
-"max_login_failure_count" = "20"
-"max_password_history_count" = "0"
-"credentials_timeout_threshold" = "0"
-"name" = "testDefault-User-Account-Profile-abc"
+	"max_concurrent_sessions" = "0"
+	"account_lock_timeout" = "30"
+	"max_login_failure_count" = "20"
+	"max_password_history_count" = "0"
+	"credentials_timeout_threshold" = "0"
+	"name" = "testDefault-User-Account-Profile-abc"
 }
 `

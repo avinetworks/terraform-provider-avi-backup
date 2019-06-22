@@ -1,0 +1,75 @@
+# Object files
+*.o
+*.swp
+*.swo
+# Libraries
+*.lib
+*.a
+
+# Editor Artifacts
+*~
+.ropeproject
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.orig
+*.rej
+*.egg
+
+# dev environment files
+tags
+TAGS
+*.tags
+*.tgz
+cscope*
+
+# python 
+*.pyc
+*.pyo
+.cproject
+.project
+.pydevproject
+.metafiles*
+*.BAK
+.DS_Store
+._.DS_Store
+debug.txt
+CMAKE_BUILD_DIR
+.coverage
+
+#os x
+._.DS_Store
+
+# SDK output files
+python/avi/sdk/utils/f5_converter/parsedUnmatched.txt
+python/avi/sdk/utils/f5_converter/Output.json
+python/avi/sdk/utils/f5_converterOutput.json
+python/avi/sdk/utils/f5_converterparseUnmatched.txt
+python/avi/sdk/utils/f5_converterskipedConversion.json
+
+python/avi/sdk/utils/f5_converter/output/
+python/avi/f5_converter/output/
+python/avi/netscaler_converter/output/
+python/avi/netscaler_converter/test/test_output/
+.idea/
+python/avi/migrationtools/output/
+python/avi/migrationtools/f5_converter/output/
+python/avi/migrationtools/netscaler_converter/output/
+
+
+#gss config files
+python/avi/migrationtools/gss_convertor/sample/
+python/avi/migrationtools/gss_convertor/Conversion_status.xlsx
+python/avi/migrationtools/gss_convertor/log
+python/avi/migrationtools/gss_convertor/out
+python/avi/migrationtools/gss_convertor/input
+vscode
+output/

@@ -83,28 +83,28 @@ func testAccCheckAVIVrfContextDestroy(s *terraform.State) error {
 
 const testAccAVIVrfContextConfig = `
 data "avi_tenant" "default_tenant"{
-        name= "admin"
+    name= "admin"
 }
 data "avi_cloud" "default_cloud" {
-        name= "Default-Cloud"
+    name= "Default-Cloud"
 }
 resource "avi_vrfcontext" "testVrfContext" {
-"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
-"cloud_ref" = "${data.avi_cloud.default_cloud.id}"
-"name" = "testglobal"
+	"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
+	"cloud_ref" = "${data.avi_cloud.default_cloud.id}"
+	"name" = "testglobal"
 }
 `
 
 const testAccAVIVrfContextupdatedConfig = `
 data "avi_tenant" "default_tenant"{
-        name= "admin"
+    name= "admin"
 }
 data "avi_cloud" "default_cloud" {
-        name= "Default-Cloud"
+    name= "Default-Cloud"
 }
 resource "avi_vrfcontext" "testVrfContext" {
-"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
-"cloud_ref" = "${data.avi_cloud.default_cloud.id}"
-"name" = "testglobal-abc"
+	"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
+	"cloud_ref" = "${data.avi_cloud.default_cloud.id}"
+	"name" = "testglobal-abc"
 }
 `

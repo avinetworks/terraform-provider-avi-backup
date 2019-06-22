@@ -83,22 +83,22 @@ func testAccCheckAVIErrorPageBodyDestroy(s *terraform.State) error {
 
 const testAccAVIErrorPageBodyConfig = `
 data "avi_tenant" "default_tenant"{
-        name= "admin"
+    name= "admin"
 }
 resource "avi_errorpagebody" "testErrorPageBody" {
-"error_page_body" = "<!DOCTYPE html><html><head></head><body><div><p> Please contact our technical support</p></div></body></html>"
-"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
-"name" = "testCustom-Error-Page"
+	"error_page_body" = "<!DOCTYPE html><html><head></head><body><div><p> Please contact our technical support</p></div></body></html>"
+	"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
+	"name" = "testCustom-Error-Page"
 }
 `
 
 const testAccAVIErrorPageBodyupdatedConfig = `
 data "avi_tenant" "default_tenant"{
-        name= "admin"
+    name= "admin"
 }
 resource "avi_errorpagebody" "testErrorPageBody" {
-"error_page_body" = "<!DOCTYPE html><html><head></head><body><div><p> Please contact our technical support</p></div></body></html>"
-"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
-"name" = "testCustom-Error-Page-abc"
+	"error_page_body" = "<!DOCTYPE html><html><head></head><body><div><p> Please contact our technical support</p></div></body></html>"
+	"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
+	"name" = "testCustom-Error-Page-abc"
 }
 `

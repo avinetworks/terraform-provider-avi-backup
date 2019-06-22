@@ -83,24 +83,24 @@ func testAccCheckAVIAutoScaleLaunchConfigDestroy(s *terraform.State) error {
 
 const testAccAVIAutoScaleLaunchConfigConfig = `
 data "avi_tenant" "default_tenant"{
-        name= "admin"
+    name= "admin"
 }
 resource "avi_autoscalelaunchconfig" "testAutoScaleLaunchConfig" {
-"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
-"image_id" = "default"
-"use_external_asg" = true
-"name" = "testdefault-autoscalelaunchconfig"
+	"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
+	"image_id" = "default"
+	"use_external_asg" = true
+	"name" = "testdefault-autoscalelaunchconfig"
 }
 `
 
 const testAccAVIAutoScaleLaunchConfigupdatedConfig = `
 data "avi_tenant" "default_tenant"{
-        name= "admin"
+    name= "admin"
 }
 resource "avi_autoscalelaunchconfig" "testAutoScaleLaunchConfig" {
-"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
-"image_id" = "default"
-"use_external_asg" = true
-"name" = "testdefault-autoscalelaunchconfig-abc"
+	"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
+	"image_id" = "default"
+	"use_external_asg" = true
+	"name" = "testdefault-autoscalelaunchconfig-abc"
 }
 `

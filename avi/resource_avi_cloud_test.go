@@ -83,38 +83,38 @@ func testAccCheckAVICloudDestroy(s *terraform.State) error {
 
 const testAccAVICloudConfig = `
 data "avi_tenant" "default_tenant"{
-        name= "admin"
+    name= "admin"
 }
 resource "avi_cloud" "testCloud" {
-"vtype" = "CLOUD_NONE"
-"license_tier" = "ENTERPRISE_18"
-"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
-"dhcp_enabled" = false
-"state_based_dns_registration" = true
-"prefer_static_routes" = false
-"license_type" = "LIC_CORES"
-"mtu" = "1500"
-"apic_mode" = false
-"enable_vip_static_routes" = false
-"name" = "testDefault-Cloud"
+	"vtype" = "CLOUD_NONE"
+	"license_tier" = "ENTERPRISE_18"
+	"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
+	"dhcp_enabled" = false
+	"state_based_dns_registration" = true
+	"prefer_static_routes" = false
+	"license_type" = "LIC_CORES"
+	"mtu" = "1500"
+	"apic_mode" = false
+	"enable_vip_static_routes" = false
+	"name" = "testDefault-Cloud"
 }
 `
 
 const testAccAVICloudupdatedConfig = `
 data "avi_tenant" "default_tenant"{
-        name= "admin"
+    name= "admin"
 }
 resource "avi_cloud" "testCloud" {
-"vtype" = "CLOUD_NONE"
-"license_tier" = "ENTERPRISE_18"
-"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
-"dhcp_enabled" = false
-"state_based_dns_registration" = true
-"prefer_static_routes" = false
-"license_type" = "LIC_CORES"
-"mtu" = "1500"
-"apic_mode" = false
-"enable_vip_static_routes" = false
-"name" = "testDefault-Cloud-abc"
+	"vtype" = "CLOUD_NONE"
+	"license_tier" = "ENTERPRISE_18"
+	"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
+	"dhcp_enabled" = false
+	"state_based_dns_registration" = true
+	"prefer_static_routes" = false
+	"license_type" = "LIC_CORES"
+	"mtu" = "1500"
+	"apic_mode" = false
+	"enable_vip_static_routes" = false
+	"name" = "testDefault-Cloud-abc"
 }
 `

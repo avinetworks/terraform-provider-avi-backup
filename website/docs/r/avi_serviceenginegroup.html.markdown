@@ -111,12 +111,6 @@ The following arguments are supported:
 * `min_se` - (Optional) Minimum number of services engines in this group (relevant for se autorebalance only).
 * `minimum_connection_memory` - (Optional) Indicates the percent of memory reserved for connections.
 * `n_log_streaming_threads` - (Optional) Number of threads to use for log streaming.
-* `nat_flow_tcp_closed_timeout` - (Optional) Idle timeout in seconds for nat tcp flows in closed state.
-* `nat_flow_tcp_established_timeout` - (Optional) Idle timeout in seconds for nat tcp flows in established state.
-* `nat_flow_tcp_half_closed_timeout` - (Optional) Idle timeout in seconds for nat tcp flows in half closed state.
-* `nat_flow_tcp_handshake_timeout` - (Optional) Idle timeout in seconds for nat tcp flows in handshake state.
-* `nat_flow_udp_noresponse_timeout` - (Optional) Idle timeout in seconds for nat udp flows in noresponse state.
-* `nat_flow_udp_response_timeout` - (Optional) Idle timeout in seconds for nat udp flows in response state.
 * `non_significant_log_throttle` - (Optional) This setting limits the number of non-significant logs generated per second per core on this se.
 * `num_dispatcher_cores` - (Optional) Number of dispatcher cores (0,1,2,4,8 or 16).
 * `num_flow_cores_sum_changes_to_ignore` - (Optional) Number of changes in num flow cores sum to ignore.

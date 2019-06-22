@@ -83,10 +83,10 @@ func testAccCheckAVIAlertScriptConfigDestroy(s *terraform.State) error {
 
 const testAccAVIAlertScriptConfigConfig = `
 data "avi_tenant" "default_tenant"{
-        name= "admin"
+    name= "admin"
 }
 resource "avi_alertscriptconfig" "testAlertScriptConfig" {
-"action_script" = <<EOF
+	"action_script" = <<EOF
 #!/usr/bin/python
 import os
 import json
@@ -219,17 +219,17 @@ if __name__ == "__main__":
                     tenant_uuid=tenant_uuid) as session:
         cleanup_old_spec_se(se_grp_uuid, session)
 EOF
-"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
-"name" = "testse_grp_cleanup_old_spec_se"
+	"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
+	"name" = "testse_grp_cleanup_old_spec_se"
 }
 `
 
 const testAccAVIAlertScriptConfigupdatedConfig = `
 data "avi_tenant" "default_tenant"{
-        name= "admin"
+    name= "admin"
 }
 resource "avi_alertscriptconfig" "testAlertScriptConfig" {
-"action_script" = <<EOF
+	"action_script" = <<EOF
 #!/usr/bin/python
 import os
 import json
@@ -362,7 +362,7 @@ if __name__ == "__main__":
                     tenant_uuid=tenant_uuid) as session:
         cleanup_old_spec_se(se_grp_uuid, session)
 EOF
-"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
-"name" = "testse_grp_cleanup_old_spec_se-abc"
+	"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
+	"name" = "testse_grp_cleanup_old_spec_se-abc"
 }
 `
