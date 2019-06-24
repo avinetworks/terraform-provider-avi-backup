@@ -7,23 +7,31 @@ package avi
 
 import "github.com/hashicorp/terraform/helper/schema"
 
-func dataSourceAviSSOPolicy() *schema.Resource {
+func dataSourceAviNetworkService() *schema.Resource {
 	return &schema.Resource{
-		Read: ResourceAviSSOPolicyRead,
+		Read: ResourceAviNetworkServiceRead,
 		Schema: map[string]*schema.Schema{
-			"authentication_policy": {
-				Type:     schema.TypeSet,
+			"cloud_ref": {
+				Type:     schema.TypeString,
+				Optional: true,
 				Computed: true,
-				Elem:     ResourceAuthenticationPolicySchema(),
-			},
-			"authorization_policy": {
-				Type:     schema.TypeSet,
-				Computed: true,
-				Elem:     ResourceAuthorizationPolicySchema(),
 			},
 			"name": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Computed: true,
+			},
+			"routing_service": {
+				Type:     schema.TypeSet,
+				Computed: true,
+				Elem:     ResourceRoutingServiceSchema(),
+			},
+			"se_group_ref": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"service_type": {
+				Type:     schema.TypeString,
 				Computed: true,
 			},
 			"tenant_ref": {
@@ -31,13 +39,13 @@ func dataSourceAviSSOPolicy() *schema.Resource {
 				Optional: true,
 				Computed: true,
 			},
-			"type": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
 			"uuid": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Computed: true,
+			},
+			"vrf_ref": {
+				Type:     schema.TypeString,
 				Computed: true,
 			},
 		},
