@@ -44,12 +44,6 @@ data "avi_vrfcontext" "global_vrf" {
   cloud_ref = "${data.avi_cloud.default_cloud.id}"
 }
 
-
-data "avi_wafpolicy" "waf_app_policy" {
-  name= "waf_app_policy"
-  tenant_ref= "${data.avi_tenant.default_tenant.id}"
-}
-
 resource "avi_networkprofile" "test_networkprofile" {
   name= "terraform-network-profile"
   tenant_ref= "${data.avi_tenant.default_tenant.id}"
