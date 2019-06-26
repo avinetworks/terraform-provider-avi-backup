@@ -59,20 +59,27 @@ resource "avi_virtualservice" "waf_vs" {
   tenant_ref= "${data.avi_tenant.default_tenant.id}"
   vsvip_ref = "${avi_vsvip.vip_waf_app.id}"
   services {
-    port= 80
+    port= 443
     enable_ssl= true
-    port_range_end= 80
+    port_range_end= 443
   }
+  application_profile_ref = "${data.avi_applicationprofile.system_https_profile.id}"
   cloud_type = "CLOUD_VCENTER"
   ssl_key_and_certificate_refs= ["${data.avi_sslkeyandcertificate.system_default_cert.id}"]
   ssl_profile_ref= "${data.avi_sslprofile.system_standard_sslprofile.id}"
   waf_policy_ref = "${avi_wafpolicy.waf_app_learning_policy.id}"
+  analytics_policy {
+    metrics_realtime_update {
+      enabled= true
+      duration= 0
+    }
+  }
 }
 
 resource "avi_vsvip" "vip_waf_app" {
   name= "vip_waf_app"
   vip {
-    vip_id= "0"
+    vip_id= "1"
     ip_address {
       type= "V4",
       addr= "10.90.64.243",
@@ -136,11 +143,11 @@ resource "avi_poolgroup" "waf_app_pg" {
   tenant_ref = "${data.avi_tenant.default_tenant.id}"
   members = {
     pool_ref = "${avi_pool.waf_pool_v1.id}"
-    ratio    = 99
+    ratio    = 100
   }
   members = {
     pool_ref = "${avi_pool.waf_pool_v2.id}"
-    ratio    = 1
+    ratio    = 100
   }
 }
 
@@ -154,6 +161,9 @@ resource "avi_pool" "waf_pool_v1" {
     type= "FAIL_ACTION_CLOSE_CONN"
   }
   ignore_servers= true
+  analytics_policy {
+    enable_realtime_metrics= true
+  }
 }
 
 // autoscaling enabled pool of application instances with version 2
@@ -166,6 +176,9 @@ resource "avi_pool" "waf_pool_v2" {
     type= "FAIL_ACTION_CLOSE_CONN"
   }
   ignore_servers= true
+  analytics_policy {
+    enable_realtime_metrics= true
+  }
 }
 
 // Version 1 of the application (in-service)

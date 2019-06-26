@@ -15,10 +15,10 @@ variable "avi_version" {
 
 variable "avi_app_server_v1" {
   type = "string"
-  default = "10.90.64.64"
+  default = "10.90.64.63"
 }
 
 variable "avi_app_server_v2" {
   type = "string"
-  default = "10.90.64.65"
+  default = "10.90.64.64"
 }
