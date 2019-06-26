@@ -44,6 +44,11 @@ data "avi_vrfcontext" "global_vrf" {
   cloud_ref = "${data.avi_cloud.default_cloud.id}"
 }
 
+data "avi_wafpolicy" "waf_app_learning_policy" {
+  name= "waf_app_learning_policy"
+}
+
+
 resource "avi_networkprofile" "test_networkprofile" {
   name= "terraform-network-profile"
   tenant_ref= "${data.avi_tenant.default_tenant.id}"
@@ -67,7 +72,7 @@ resource "avi_virtualservice" "waf_vs" {
   cloud_type = "CLOUD_VCENTER"
   ssl_key_and_certificate_refs= ["${data.avi_sslkeyandcertificate.system_default_cert.id}"]
   ssl_profile_ref= "${data.avi_sslprofile.system_standard_sslprofile.id}"
-  waf_policy_ref = "${avi_wafpolicy.waf_app_learning_policy.id}"
+  waf_policy_ref = "${data.avi_wafpolicy.waf_app_learning_policy.id}"
   analytics_policy {
     metrics_realtime_update {
       enabled= true
@@ -88,24 +93,9 @@ resource "avi_vsvip" "vip_waf_app" {
   tenant_ref= "${data.avi_tenant.default_tenant.id}"
 }
 
-// WAF policy enabled with simple learning profile and custom CRS rule
-resource "avi_wafpolicy" "waf_app_learning_policy" {
-  name= "waf_app_learning_policy"
-  post_crs_groups {
-    rules {
-      index= 0,
-      rule= "SecRule REQUEST_URI \"@beginsWith /wafblah1\" \"id:'100001',phase:1,log,deny,status:410,msg:'AVI TEST Access waf Rules Denied',tag:'t11',tag:'t12'\""
-    }
-    index= 1
-    name= "g1"
-  }
-  mode= "WAF_MODE_ENFORCEMENT",
-  waf_profile_ref= "${avi_wafprofile.waf_learning_profile.id}",
-}
-
-// WAF profile with learning enabled
-resource "avi_wafprofile" "waf_learning_profile" {
-  name= "waf_learning_profile"
+/*// WAF profile with learning enabled
+resource "avi_wafprofile" "waf_learning_profile1" {
+  name= "waf_learning_profile1"
   config {
     learning_params {
       enable_per_uri_learning = true
@@ -129,7 +119,7 @@ resource "avi_wafprofile" "waf_learning_profile" {
   config {
     client_request_max_body_size= 1024
   }
-}
+}*/
 
 resource "avi_healthmonitor" "test_hm_1" {
   name = "terraform-monitor"
@@ -145,10 +135,11 @@ resource "avi_poolgroup" "waf_app_pg" {
     pool_ref = "${avi_pool.waf_pool_v1.id}"
     ratio    = 100
   }
+  /*
   members = {
     pool_ref = "${avi_pool.waf_pool_v2.id}"
     ratio    = 100
-  }
+  }*/
 }
 
 // autoscaling enabled pool of application instances with version 1
