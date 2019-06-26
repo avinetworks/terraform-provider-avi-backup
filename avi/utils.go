@@ -123,30 +123,30 @@ func SetDefaultsInAPIRes(api_res interface{}, d_local interface{}, s map[string]
 					varray2 := api_res.(map[string]interface{})[k].([]interface{})
 					//getting schema for nested object.
 					s2, err := s[k]
-					var src, dst []interface{}
+					var dst, src []interface{}
 					//As err returned is boolean value
 					if !err {
 						log.Printf("[ERROR] SetDefaultsInAPIRes in fetching k %v err %v", k, err)
 					}
 					if len(varray2) > len(v.([]interface{})) {
-						src = varray2
-						dst = v.([]interface{})
-					} else {
-						src = v.([]interface{})
 						dst = varray2
+						src = v.([]interface{})
+					} else {
+						dst = v.([]interface{})
+						src = varray2
 					}
-					for x, y := range dst {
+					for x, y := range src {
 						switch s2.Elem.(type) {
 						default:
 						case *schema.Resource:
-							obj, err := SetDefaultsInAPIRes(src[x], y, s2.Elem.(*schema.Resource).Schema)
+							obj, err := SetDefaultsInAPIRes(dst[x], y, s2.Elem.(*schema.Resource).Schema)
 							if err != nil {
 								log.Printf("[ERROR] SetDefaultsInAPIRes err %v in x %v y %v", err, x, y)
 							} else {
 								objList = append(objList, obj)
 							}
 						case *schema.Schema:
-							objList = append(objList, dst[x])
+							objList = append(objList, src[x])
 						}
 					}
 				}
