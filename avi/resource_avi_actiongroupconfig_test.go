@@ -83,26 +83,26 @@ func testAccCheckAVIActionGroupConfigDestroy(s *terraform.State) error {
 
 const testAccAVIActionGroupConfigConfig = `
 data "avi_tenant" "default_tenant"{
-        name= "admin"
+    name= "admin"
 }
 resource "avi_actiongroupconfig" "testActionGroupConfig" {
-"level" = "ALERT_HIGH"
-"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
-"autoscale_trigger_notification" = false
-"external_only" = false
-"name" = "testSystem-Alert-Level-High"
+	"level" = "ALERT_HIGH"
+	"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
+	"autoscale_trigger_notification" = false
+	"external_only" = false
+	"name" = "testSystem-Alert-Level-High"
 }
 `
 
 const testAccAVIActionGroupConfigupdatedConfig = `
 data "avi_tenant" "default_tenant"{
-        name= "admin"
+    name= "admin"
 }
 resource "avi_actiongroupconfig" "testActionGroupConfig" {
-"level" = "ALERT_HIGH"
-"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
-"autoscale_trigger_notification" = false
-"external_only" = false
-"name" = "testSystem-Alert-Level-High-abc"
+	"level" = "ALERT_HIGH"
+	"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
+	"autoscale_trigger_notification" = false
+	"external_only" = false
+	"name" = "testSystem-Alert-Level-High-abc"
 }
 `

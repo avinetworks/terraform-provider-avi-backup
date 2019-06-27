@@ -83,76 +83,76 @@ func testAccCheckAVIStringGroupDestroy(s *terraform.State) error {
 
 const testAccAVIStringGroupConfig = `
 data "avi_tenant" "default_tenant"{
-        name= "admin"
+    name= "admin"
 }
 resource "avi_stringgroup" "testStringGroup" {
-"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
-"kv" {
-"key" = "text/html"
+	"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
+	"kv" {
+	"key" = "text/html"
 }
 "kv" {
-"key" = "text/xml"
+	"key" = "text/xml"
 }
 "kv" {
-"key" = "text/plain"
+	"key" = "text/plain"
 }
 "kv" {
-"key" = "text/css"
+	"key" = "text/css"
 }
 "kv" {
-"key" = "text/javascript"
+	"key" = "text/javascript"
 }
 "kv" {
-"key" = "application/javascript"
+	"key" = "application/javascript"
 }
 "kv" {
-"key" = "application/x-javascript"
+	"key" = "application/x-javascript"
 }
 "kv" {
-"key" = "application/xml"
+	"key" = "application/xml"
 }
 "kv" {
-"key" = "application/pdf"
+	"key" = "application/pdf"
 }
-"type" = "SG_TYPE_STRING"
-"name" = "testSystem-Compressible-Content-Types"
+	"type" = "SG_TYPE_STRING"
+	"name" = "testSystem-Compressible-Content-Types"
 }
 `
 
 const testAccAVIStringGroupupdatedConfig = `
 data "avi_tenant" "default_tenant"{
-        name= "admin"
+    name= "admin"
 }
 resource "avi_stringgroup" "testStringGroup" {
-"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
-"kv" {
-"key" = "text/html"
+	"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
+	"kv" {
+	"key" = "text/html"
 }
 "kv" {
-"key" = "text/xml"
+	"key" = "text/xml"
 }
 "kv" {
-"key" = "text/plain"
+	"key" = "text/plain"
 }
 "kv" {
-"key" = "text/css"
+	"key" = "text/css"
 }
 "kv" {
-"key" = "text/javascript"
+	"key" = "text/javascript"
 }
 "kv" {
-"key" = "application/javascript"
+	"key" = "application/javascript"
 }
 "kv" {
-"key" = "application/x-javascript"
+	"key" = "application/x-javascript"
 }
 "kv" {
-"key" = "application/xml"
+	"key" = "application/xml"
 }
 "kv" {
-"key" = "application/pdf"
+	"key" = "application/pdf"
 }
-"type" = "SG_TYPE_STRING"
-"name" = "testSystem-Compressible-Content-Types-abc"
+	"type" = "SG_TYPE_STRING"
+	"name" = "testSystem-Compressible-Content-Types-abc"
 }
 `

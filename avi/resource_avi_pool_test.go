@@ -83,58 +83,64 @@ func testAccCheckAVIPoolDestroy(s *terraform.State) error {
 
 const testAccAVIPoolConfig = `
 data "avi_tenant" "default_tenant"{
-        name= "admin"
+    name= "admin"
 }
 data "avi_cloud" "default_cloud" {
-        name= "Default-Cloud"
+    name= "Default-Cloud"
+}
+data "avi_healthmonitor" "default_monitor" {
+    name= "System-HTTP"
 }
 resource "avi_pool" "testPool" {
-"ignore_servers" = false
-"name" = "testPool"
-"health_monitor_refs" = ["/api/healthmonitor/?name=System-HTTP"]
-"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
-"servers" {
-"ip" {
-"type" = "V4"
-"addr" = "10.90.64.66"
+	"ignore_servers" = false
+	"name" = "testPool"
+	"health_monitor_refs" = ["${data.avi_healthmonitor.default_monitor.id}"]
+	"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
+	"servers" {
+	"ip" {
+		"type" = "V4"
+		"addr" = "10.90.64.66"
+	}
+	"hostname" = "10.90.64.66"
+	"ratio" = "1"
+	"port" = "8080"
+	"enabled" = true
 }
-"hostname" = "10.90.64.66"
-"ratio" = "1"
-"port" = "8080"
-"enabled" = true
-}
-"cloud_ref" = "${data.avi_cloud.default_cloud.id}"
-"fail_action" {
-"type" = "FAIL_ACTION_CLOSE_CONN"
-}
+	"cloud_ref" = "${data.avi_cloud.default_cloud.id}"
+	"fail_action" {
+		"type" = "FAIL_ACTION_CLOSE_CONN"
+	}
 }
 `
 
 const testAccAVIPoolupdatedConfig = `
 data "avi_tenant" "default_tenant"{
-        name= "admin"
+    name= "admin"
 }
 data "avi_cloud" "default_cloud" {
-        name= "Default-Cloud"
+    name= "Default-Cloud"
+}
+data "avi_healthmonitor" "default_monitor" {
+    name= "System-HTTP"
 }
 resource "avi_pool" "testPool" {
-"ignore_servers" = false
-"name" = "testPool-abc"
-"health_monitor_refs" = ["/api/healthmonitor/?name=System-HTTP"]
-"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
-"servers" {
-"ip" {
-"type" = "V4"
-"addr" = "10.90.64.66"
+	"ignore_servers" = false
+	"name" = "testPool-abc"
+	"health_monitor_refs" = ["${data.avi_healthmonitor.default_monitor.id}"]
+	"tenant_ref" = "${data.avi_tenant.default_tenant.id}"
+	"servers" {
+	"ip" {
+		"type" = "V4"
+		"addr" = "10.90.64.66"
+	}
+	"hostname" = "10.90.64.66"
+	"ratio" = "1"
+	"port" = "8080"
+	"enabled" = true
 }
-"hostname" = "10.90.64.66"
-"ratio" = "1"
-"port" = "8080"
-"enabled" = true
-}
-"cloud_ref" = "${data.avi_cloud.default_cloud.id}"
-"fail_action" {
-"type" = "FAIL_ACTION_CLOSE_CONN"
-}
+	"cloud_ref" = "${data.avi_cloud.default_cloud.id}"
+	"fail_action" {
+		"type" = "FAIL_ACTION_CLOSE_CONN"
+	}
 }
 `
