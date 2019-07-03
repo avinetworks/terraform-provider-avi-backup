@@ -325,10 +325,10 @@ func ResourceAviPoolRead(d *schema.ResourceData, meta interface{}) error {
 	s := ResourcePoolSchema()
 	err := ApiRead(d, meta, "pool", s)
 	if err != nil {
-		log.Printf("[ERROR] in reading object %v\n", err)
+		log.Printf("[ERROR] ResourceAviPoolRead in reading object %v\n", err)
 	} else {
 		if ignoreServers, ok := d.GetOk("ignore_servers"); ok {
-			log.Printf("[DEBUG] ignore_servers %v so clearing servers\n", ignoreServers)
+			log.Printf("[DEBUG] ResourceAviPoolRead ignore_servers %v so clearing servers\n", ignoreServers)
 			d.Set("servers", nil)
 			d.Set("ignore_servers", ignoreServers.(bool))
 		}
