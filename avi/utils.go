@@ -436,6 +436,7 @@ func ApiRead(d *schema.ResourceData, meta interface{}, objType string, s map[str
 }
 
 func ResourceImporter(d *schema.ResourceData, meta interface{}, objType string, s map[string]*schema.Schema) ([]*schema.ResourceData, error) {
+	log.Printf("[DEBUG] ResourceImporter obuType%v id %v\n", objType, d.Id())
 	if d.Id() != "" {
 		// return the ID based import
 		return []*schema.ResourceData{d}, nil
