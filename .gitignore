@@ -14,3 +14,7 @@
 .glide/
 
 .idea/
+
+#MACOSX
+.DS_Store
+
