@@ -54,35 +54,18 @@ resource "google_compute_image" "gcp_controller_custom_image" {
 
 locals {
   // How many controller should we make
-  controllers = "${var.controller_count == "1" ? "1" : (var.controller_count >= "3" ? "3" : "1")}"
-  // Is network ip given
-  givenNetworkIP = "${length(var.network_ip) == local.controllers ? 1 : 0}"
-  // Is service account given 
-  serviceAccountGiven = "${var.email == "not-given" ? 0 : 1}"
-  // Meaning no service account and no network ip
-  nosa_nonetip = "${local.serviceAccountGiven ? 0 : local.givenNetworkIP ? 0 : 1}"
-  // Meaning no service account but given network ip
-  nosa_netip = "${local.serviceAccountGiven ? 0 : local.givenNetworkIP ? 1 : 0}"
-  // Meaning given service account nut no network ip
-  sa_nonetip = "${local.serviceAccountGiven ? local.givenNetworkIP ? 0 : 1 : 0}"
-  // Meaning given service account and network ip
-  sa_netip = "${local.serviceAccountGiven ? local.givenNetworkIP ? 1 : 0 : 0}"
-}
-
-output "acutal_avi_controller" {
-  value = "${local.nosa_nonetip ? "avi_controller_nosa_nonetip" : local.nosa_netip ? "avi_controller_nosa_netip" : local.sa_nonetip ? "avi_controller_sa_nonetip" : "avi_controller_sa_netip"}"
+  controllers = "${var.controller_count >= "3" ? 3 : 1}"
 }
 
 // Create our VM(s)
-resource "google_compute_instance" "avi_controller_nosa_nonetip" {
-  count                     = "${local.nosa_nonetip ? local.controllers : 0}"
+resource "google_compute_instance" "avi_controller" {
+  count                     = "${local.controllers}"
   name                      = "${var.controller_name}-${count.index}"
   project                   = "${var.project_id}"
   machine_type              = "${var.machine_type}"
   allow_stopping_for_update = true
   zone                      = "${var.zone}"
   tags                      = ["avi-controller-firewall-rules"]
-
   boot_disk {
     initialize_params {
       size  = "${var.boot_disk_size}"
@@ -95,92 +78,16 @@ resource "google_compute_instance" "avi_controller_nosa_nonetip" {
     network            = "${var.network}"
     subnetwork         = "${var.subnetwork}"
     subnetwork_project = "${var.subnetwork_project == "not-given" ? "${var.project_id}" : "${var.subnetwork_project}"}"
+    network_ip         = "${length(var.network_ip) == local.controllers ? var.network_ip[count.index] : null}"
   }
-}
 
-resource "google_compute_instance" "avi_controller_nosa_netip" {
-  count                     = "${local.nosa_netip ? local.controllers : 0}"
-  name                      = "${var.controller_name}-${count.index}"
-  project                   = "${var.project_id}"
-  machine_type              = "${var.machine_type}"
-  allow_stopping_for_update = true
-  zone                      = "${var.zone}"
-  tags                      = ["avi-controller-firewall-rules"]
-
-  boot_disk {
-    initialize_params {
-      size  = "${var.boot_disk_size}"
-      type  = "pd-ssd"
-      image = "${google_compute_image.gcp_controller_custom_image.self_link}"
+  // have to add optional service account email
+  dynamic "service_account" {
+    for_each = "${var.email != "not-given" ? list("${var.email}") : []}"
+    content {
+      scopes = ["compute-rw", "storage-rw"]
+      email  = "${var.email}"
     }
-  }
-
-  network_interface {
-    network            = "${var.network}"
-    subnetwork         = "${var.subnetwork}"
-    subnetwork_project = "${var.subnetwork_project == "not-given" ? "${var.project_id}" : "${var.subnetwork_project}"}"
-    network_ip         = "${var.network_ip[count.index]}"
-  }
-}
-
-resource "google_compute_instance" "avi_controller_sa_nonetip" {
-  count                     = "${local.sa_nonetip ? local.controllers : 0}"
-  name                      = "${var.controller_name}-${count.index}"
-  project                   = "${var.project_id}"
-  machine_type              = "${var.machine_type}"
-  allow_stopping_for_update = true
-  zone                      = "${var.zone}"
-  tags                      = ["avi-controller-firewall-rules"]
-
-  boot_disk {
-    initialize_params {
-      size  = "${var.boot_disk_size}"
-      type  = "pd-ssd"
-      image = "${google_compute_image.gcp_controller_custom_image.self_link}"
-    }
-  }
-
-  network_interface {
-    network            = "${var.network}"
-    subnetwork         = "${var.subnetwork}"
-    subnetwork_project = "${var.subnetwork_project == "not-given" ? "${var.project_id}" : "${var.subnetwork_project}"}"
-  }
-
-  service_account {
-    scopes = ["compute-rw", "storage-rw"]
-    email  = "${var.email}"
-  }
-}
-
-resource "google_compute_instance" "avi_controller_sa_netip" {
-  count = "${local.sa_netip ? local.controllers : 0}"
-
-  name                      = "${var.controller_name}-${count.index}"
-  project                   = "${var.project_id}"
-  machine_type              = "${var.machine_type}"
-  allow_stopping_for_update = true
-  zone                      = "${var.zone}"
-  tags                      = ["avi-controller-firewall-rules"]
-
-  boot_disk {
-    initialize_params {
-      size  = "${var.boot_disk_size}"
-      type  = "pd-ssd"
-      image = "${google_compute_image.gcp_controller_custom_image.self_link}"
-    }
-  }
-
-  network_interface {
-    network            = "${var.network}"
-    subnetwork         = "${var.subnetwork}"
-    subnetwork_project = "${var.subnetwork_project == "not-given" ? "${var.project_id}" : "${var.subnetwork_project}"}"
-
-    network_ip = "${var.network_ip[count.index]}"
-  }
-
-  service_account {
-    scopes = ["compute-rw", "storage-rw"]
-    email  = "${var.email}"
   }
 }
 
