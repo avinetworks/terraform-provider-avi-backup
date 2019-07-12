@@ -6,10 +6,11 @@
 package avi
 
 import (
-	"github.com/avinetworks/sdk/go/clients"
-	"github.com/hashicorp/terraform/helper/schema"
 	"log"
 	"strings"
+
+	"github.com/avinetworks/sdk/go/clients"
+	"github.com/hashicorp/terraform/helper/schema"
 )
 
 func ResourceServiceEngineGroupSchema() map[string]*schema.Schema {
@@ -20,11 +21,6 @@ func ResourceServiceEngineGroupSchema() map[string]*schema.Schema {
 			Computed: true,
 		},
 		"active_standby": {
-			Type:     schema.TypeBool,
-			Optional: true,
-			Default:  false,
-		},
-		"advertise_backend_networks": {
 			Type:     schema.TypeBool,
 			Optional: true,
 			Default:  false,
@@ -220,21 +216,6 @@ func ResourceServiceEngineGroupSchema() map[string]*schema.Schema {
 			Default:  false,
 		},
 		"enable_multi_lb": {
-			Type:     schema.TypeBool,
-			Optional: true,
-			Default:  false,
-		},
-		"enable_routing": {
-			Type:     schema.TypeBool,
-			Optional: true,
-			Default:  false,
-		},
-		"enable_vip_on_all_interfaces": {
-			Type:     schema.TypeBool,
-			Optional: true,
-			Default:  true,
-		},
-		"enable_vmac": {
 			Type:     schema.TypeBool,
 			Optional: true,
 			Default:  false,
@@ -515,11 +496,6 @@ func ResourceServiceEngineGroupSchema() map[string]*schema.Schema {
 			Optional: true,
 			Default:  true,
 		},
-		"se_bandwidth_type": {
-			Type:     schema.TypeString,
-			Optional: true,
-			Computed: true,
-		},
 		"se_deprovision_delay": {
 			Type:     schema.TypeInt,
 			Optional: true,
@@ -620,11 +596,6 @@ func ResourceServiceEngineGroupSchema() map[string]*schema.Schema {
 			Type:     schema.TypeInt,
 			Optional: true,
 			Default:  1501,
-		},
-		"se_routing": {
-			Type:     schema.TypeBool,
-			Optional: true,
-			Default:  true,
 		},
 		"se_sb_dedicated_core": {
 			Type:     schema.TypeBool,
