@@ -13,24 +13,23 @@
 
 // Configure the Google Cloud provider
 provider "google" {
-  credentials = "${file("${var.credential_file}")}"
+  credentials = file(var.credential_file)
 }
 
 // Creating network project role
 resource "google_project_iam_custom_role" "network_project_role" {
-  role_id     = "${var.network_role_id}"
-  project     = "${var.network_project_id}"
+  role_id     = var.network_role_id
+  project     = var.network_project_id
   title       = "AVI Network Project Role"
   description = "Access to resources required for operations in Network Project"
   stage       = "ALPHA"
   permissions = ["compute.networks.get", "compute.networks.list", "compute.networks.updatePolicy", "compute.regions.get", "compute.routes.create", "compute.routes.delete", "compute.routes.list", "compute.subnetworks.get", "compute.subnetworks.list", "compute.subnetworks.use"]
 }
 
-
 // Creating service engine project role
 resource "google_project_iam_custom_role" "se_project_role" {
-  role_id     = "${var.se_role_id}"
-  project     = "${var.se_project_id}"
+  role_id     = var.se_role_id
+  project     = var.se_project_id
   title       = "AVI Service Engine Project Role"
   description = "Access to resources required for operations on Service Engines and Virtual Services"
   stage       = "ALPHA"
@@ -39,8 +38,8 @@ resource "google_project_iam_custom_role" "se_project_role" {
 
 // Creating storage project role
 resource "google_project_iam_custom_role" "storage_project_role" {
-  role_id     = "${var.storage_role_id}"
-  project     = "${var.storage_project_id}"
+  role_id     = var.storage_role_id
+  project     = var.storage_project_id
   title       = "AVI Storage Project Role"
   description = "Access to resources required for operations on GCS Buckets and Objects"
   stage       = "ALPHA"
@@ -49,25 +48,26 @@ resource "google_project_iam_custom_role" "storage_project_role" {
 
 // Getting our service account (sa)
 data "google_service_account" "sa" {
-  account_id = "${var.sa_account_id}"
-  project    = "${var.sa_account_project}"
+  account_id = var.sa_account_id
+  project    = var.sa_account_project
 }
 
 // Adding it to our new project(s) with respective custom role
 resource "google_project_iam_member" "network" {
-  project = "${var.network_project_id}"
+  project = var.network_project_id
   role    = "projects/${var.network_project_id}/roles/${var.network_role_id}"
   member  = "serviceAccount:${data.google_service_account.sa.email}"
 }
 
 resource "google_project_iam_member" "se" {
-  project = "${var.se_project_id}"
+  project = var.se_project_id
   role    = "projects/${var.se_project_id}/roles/${var.se_role_id}"
   member  = "serviceAccount:${data.google_service_account.sa.email}"
 }
 
 resource "google_project_iam_member" "storage" {
-  project = "${var.storage_project_id}"
+  project = var.storage_project_id
   role    = "projects/${var.storage_project_id}/roles/${var.storage_role_id}"
   member  = "serviceAccount:${data.google_service_account.sa.email}"
 }
+
